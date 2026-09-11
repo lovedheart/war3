@@ -468,7 +468,12 @@ function snapshotWorld(w: World): Snapshot {
     tick: w.tick,
     units,
     buildings,
-    resources: ps.slice(1, 3).map((p) => ({ player: p.id, gold: p.gold / 65536, lumber: p.lumber / 65536, supplyUsed: p.supplyUsed, supplyCap: p.supplyCap, upkeep: p.upkeep })),
+    // Only the two contested seats are reported; reporting all 13 would add a
+    // constant tail of empty rows to every hash and every UI frame.
+    resources: ps
+      .slice(1, 3)
+      .filter((p) => p !== undefined)
+      .map((p) => ({ player: p.id, gold: p.gold / 65536, lumber: p.lumber / 65536, supplyUsed: p.supplyUsed, supplyCap: p.supplyCap, upkeep: p.upkeep })),
   };
 }
 

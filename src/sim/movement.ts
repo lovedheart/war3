@@ -19,6 +19,9 @@ import { advance, ordersOf } from './orders.js';
 
 const DT = ff(1) / 30; // one tick in seconds, fixed
 
+/** How long a unit holds an obstacle-avoidance heading once it starts one. */
+const RETREAT_TICKS = 10;
+
 interface S {
   transform: { get(e: Eid): { x: Fixed; y: Fixed; radius: Fixed; facing: number; w: number; h: number } | undefined };
   movement: { get(e: Eid): { speed: Fixed; vx: Fixed; vy: Fixed; fly: boolean; mass: Fixed; ox: Fixed; oy: Fixed; turnRate: number } | undefined };
@@ -48,6 +51,23 @@ export function moveSystem(w: World, _tick: number): void {
     }
     const o = ordersOf(w, e as Eid);
     if (!o) continue;
+    // While a unit is walking round an obstacle it holds its retreat heading,
+    // so it commits to the detour instead of re-aiming at the wall every tick.
+    if (o.retreatTicks > 0 && (o.retreatX || o.retreatY)) {
+      o.retreatTicks--;
+      const rlen = fsqrt(fmul(o.retreatX, o.retreatX) + fmul(o.retreatY, o.retreatY));
+      if (rlen) {
+        m.vx = fdiv(fmul(o.retreatX, m.speed), rlen);
+        m.vy = fdiv(fmul(o.retreatY, m.speed), rlen);
+        t.facing = angleSteps(o.retreatX, o.retreatY);
+        t.x += fmul(m.vx, DT);
+        t.y += fmul(m.vy, DT);
+        continue;
+      }
+      o.retreatTicks = 0;
+    } else {
+      o.retreatTicks = 0;
+    }
     let dx = 0;
     let dy = 0;
     switch (o.current.kind) {
@@ -94,8 +114,20 @@ export function moveSystem(w: World, _tick: number): void {
           const ddx = wx - t.x;
           const ddy = wy - t.y;
           if (fmul(ddx, ddx) + fmul(ddy, ddy) > fmul(rng, rng)) {
-            dx = ddx;
-            dy = ddy;
+            // Never steer into impassable ground: a worker beside a tree's
+            // reserved tile would otherwise keep a velocity the terrain clamp
+            // cancels every tick and vibrate in place forever.
+            const step = steerAroundTerrain(terr, t, wx, wy, m.speed);
+            dx = step.x;
+            dy = step.y;
+            // Commit to the detour: when we had to move away from the waypoint,
+            // hold that heading for a stretch so we clear the obstacle instead
+            // of turning straight back into it on the next tick.
+            if (step.x * ddx + step.y * ddy < 0) {
+              o.retreatX = step.x;
+              o.retreatY = step.y;
+              o.retreatTicks = RETREAT_TICKS;
+            }
           } else if (hasWaypoint) {
             // arrived at the waypoint; clear it so the economy system can advance
             o.current.tx = 0;
@@ -142,36 +174,65 @@ export function moveSystem(w: World, _tick: number): void {
         const tx2 = Math.floor(fn(t.x));
         const ty2 = Math.floor(fn(t.y));
         if (!terr.isWalkable(tx2, ty2)) {
-          // Prefer sliding along the axis we are mostly moving on; only fall
-          // back to the perpendicular nudge when that axis is fully blocked.
-          const ax = Math.abs(m.vx), ay = Math.abs(m.vy);
-          const tryX = (): boolean => {
-            const right = terr.isWalkable(tx2 + 1, ty2);
-            const left = terr.isWalkable(tx2 - 1, ty2);
-            if (right && (!left || m.vx >= 0)) {
-              t.x = ff(tx2 + 1) + ff(0.5);
-              return true;
-            }
-            if (left) {
-              t.x = ff(tx2 - 1) + ff(0.5);
-              return true;
-            }
-            return false;
+          // Candidate slides. A naive slide snaps the unit onto a tile centre
+          // that can sit on the side it was trying to leave, so the very next
+          // tick walks it back into the blocked cell — an endless loop that
+          // freezes the unit in place. Accept a candidate only when it lands on
+          // walkable ground AND moves us away from where we started this tick.
+          // Reference position: where we were at the START of this tick, before
+          // phase B integrated the velocity. Slides are judged against this so a
+          // candidate that merely retraces the blocked step is rejected.
+          const sx = t.x;
+          const sy = t.y;
+          const ax = Math.abs(m.vx);
+          const ay = Math.abs(m.vy);
+          type Slide = { run: () => void; ok: () => boolean };
+          const slideX = (dir: number): Slide => ({
+            run: () => (t.x = ff(tx2 + dir) + ff(0.5)),
+            ok: () => terr.isWalkable(tx2 + dir, ty2) && Math.abs(t.x - sx) >= ff(0.4),
+          });
+          const slideY = (dir: number): Slide => ({
+            run: () => (t.y = ff(ty2 + dir) + ff(0.5)),
+            ok: () => terr.isWalkable(tx2, ty2 + dir) && Math.abs(t.y - sy) >= ff(0.4),
+          });
+          // Order by how well each candidate agrees with the direction we are
+          // actually heading, preferring the dominant axis. The old fixed order
+          // could pick a slide that ran *against* the velocity, undoing itself
+          // on the next tick and freezing the unit against a corner.
+          const score = (sl: Slide): number => {
+            const bx = t.x;
+            const by = t.y;
+            sl.run();
+            const dx = t.x - bx;
+            const dy = t.y - by;
+            t.x = bx;
+            t.y = by;
+            return (dx === 0 ? 0 : (dx > 0 ? m.vx : -m.vx)) + (dy === 0 ? 0 : (dy > 0 ? m.vy : -m.vy));
           };
-          const tryY = (): boolean => {
-            const down = terr.isWalkable(tx2, ty2 + 1);
-            const up = terr.isWalkable(tx2, ty2 - 1);
-            if (down && (!up || m.vy >= 0)) {
-              t.y = ff(ty2 + 1) + ff(0.5);
-              return true;
+          const cands: Slide[] = ax >= ay ? [slideX(1), slideX(-1), slideY(1), slideY(-1)] : [slideY(1), slideY(-1), slideX(1), slideX(-1)];
+          const scored = cands.map((sl) => ({ sl, s: score(sl) }));
+          const seen = new Set<string>();
+          const slides: Slide[] = [];
+          for (const c of scored) {
+            if (c.s <= 0 || seen.has(String(c.s))) continue;
+            seen.add(String(c.s));
+            slides.push(c.sl);
+          }
+          let nudged = false;
+          for (const sl of slides) {
+            const bx = t.x;
+            const by = t.y;
+            sl.run();
+            const fx = Math.floor(fn(t.x));
+            const fy = Math.floor(fn(t.y));
+            if (!terr.isWalkable(fx, fy) || !sl.ok()) {
+              t.x = bx;
+              t.y = by;
+              continue;
             }
-            if (up) {
-              t.y = ff(ty2 - 1) + ff(0.5);
-              return true;
-            }
-            return false;
-          };
-          const nudged = ax >= ay ? (tryX() || tryY()) : (tryY() || tryX());
+            nudged = true;
+            break;
+          }
           if (!nudged) {
             t.x = o_anchor_x(w, e as Eid, t);
             t.y = o_anchor_y(w, e as Eid, t);
@@ -258,3 +319,156 @@ export function withinLeash(o: { anchorX: Fixed; anchorY: Fixed }, x: Fixed, y: 
 }
 
 export { DEFAULT_ATTACK_POINT };
+
+
+/**
+ * Direction toward (wx,wy) with the component that would push us into
+ * impassable ground dropped. Keeps workers from pinning against tree tiles and
+ * cliff corners, where the terrain clamp would otherwise cancel all motion.
+ */
+/**
+ * Direction toward (wx,wy) with any component that would push us into
+ * impassable ground dropped, so a unit never grinds against a wall. Without
+ * this a worker beside a tree's reserved tile keeps a full velocity that the
+ * terrain clamp cancels every tick, freezing it in place forever.
+ */
+/**
+ * Direction toward (wx,wy) that does not aim straight into a wall. A unit whose
+ * target sits on impassable ground (a tree's reserved tile) would otherwise keep
+ * a full velocity that the terrain clamp cancels every tick, so it would vibrate
+ * in place forever. When the direct heading is blocked we take a perpendicular
+ * detour; the candidate order is fixed so this stays deterministic.
+ */
+/**
+ * Direction toward (wx,wy) that does not aim into impassable ground. A unit
+ * whose target sits on a blocked tile (a tree's reserved tile) would otherwise
+ * keep a velocity the terrain clamp cancels every tick and vibrate in place
+ * forever. Candidate order is fixed so this stays deterministic.
+ */
+/**
+ * Direction toward (wx,wy) that does not aim into impassable ground. A unit
+ * whose target sits on a blocked tile (a tree's reserved tile) would otherwise
+ * keep a velocity the terrain clamp cancels every tick and vibrate in place
+ * forever. Candidate order is fixed so this stays deterministic.
+ */
+/**
+ * Direction toward (wx,wy) that does not aim into impassable ground. A unit
+ * whose target sits on a blocked tile (a tree's reserved tile) would otherwise
+ * keep a velocity the terrain clamp cancels every tick and vibrate in place
+ * forever. Candidate order is fixed so this stays deterministic.
+ */
+/**
+ * Direction toward (wx,wy) that does not aim into impassable ground. A unit
+ * whose target sits on a blocked tile (a tree's reserved tile) would otherwise
+ * keep a velocity the terrain clamp cancels every tick and vibrate in place
+ * forever. Candidate order is fixed so this stays deterministic.
+ */
+/**
+ * Direction toward (wx,wy) that does not aim into impassable ground. A unit
+ * whose target sits on a blocked tile (a tree's reserved tile) would otherwise
+ * keep a velocity the terrain clamp cancels every tick and vibrate in place
+ * forever. Candidate order is fixed so this stays deterministic.
+ */
+/**
+ * Direction toward (wx,wy) that does not aim into impassable ground. A unit
+ * whose target sits on a blocked tile (a tree's reserved tile) would otherwise
+ * keep a velocity the terrain clamp cancels every tick and vibrate in place
+ * forever. Candidate order is fixed so this stays deterministic.
+ */
+/**
+ * Direction toward (wx,wy) that does not aim into impassable ground. A unit
+ * whose target sits on a blocked tile (a tree's reserved tile) would otherwise
+ * keep a velocity the terrain clamp cancels every tick and vibrate in place
+ * forever. Candidate order is fixed so this stays deterministic.
+ */
+/**
+ * Direction toward (wx,wy) that does not aim into impassable ground. A unit
+ * whose target sits on a blocked tile (a tree's reserved tile) would otherwise
+ * keep a velocity the terrain clamp cancels every tick and vibrate in place
+ * forever. Candidate order is fixed so this stays deterministic.
+ */
+/**
+ * Direction toward (wx,wy) that does not aim into impassable ground. A unit
+ * whose target sits on a blocked tile (a tree's reserved tile) would otherwise
+ * keep a velocity the terrain clamp cancels every tick and vibrate in place
+ * forever. Candidate order is fixed so this stays deterministic.
+ */
+/**
+ * Direction toward (wx,wy) that does not aim into impassable ground. A unit
+ * whose target sits on a blocked tile (a tree's reserved tile) would otherwise
+ * keep a velocity the terrain clamp cancels every tick and vibrate in place
+ * forever. Candidate order is fixed so this stays deterministic.
+ */
+/**
+ * Direction toward (wx,wy) that does not aim into impassable ground. A unit
+ * whose target sits on a blocked tile (a tree's reserved tile) would otherwise
+ * keep a velocity the terrain clamp cancels every tick and vibrate in place
+ * forever. Candidate order is fixed so this stays deterministic.
+ */
+function steerAroundTerrain(
+  terr: { isWalkable(tx: number, ty: number): boolean } | null,
+  t: { x: Fixed; y: Fixed },
+  wx: Fixed,
+  wy: Fixed,
+  speed: Fixed,
+): { x: Fixed; y: Fixed } {
+  const ddx = wx - t.x;
+  const ddy = wy - t.y;
+  if (!terr || (!ddx && !ddy)) return { x: ddx, y: ddy };
+  // Probe where one tick of travel would land us (same integration phase B
+  // performs) — a whole-tile probe skips over the cell we actually hit.
+  const len = fsqrt(fmul(ddx, ddx) + fmul(ddy, ddy));
+  if (!len) return { x: ddx, y: ddy };
+  const ux = fdiv(ddx, len);
+  const uy = fdiv(ddy, len);
+  const step = fmul(speed, DT);
+  const nx = t.x + fmul(ux, step);
+  const ny = t.y + fmul(uy, step);
+  if (terr.isWalkable(Math.floor(fn(nx)), Math.floor(fn(ny)))) return { x: ddx, y: ddy };
+  // Blocked ahead. Slide along whichever axis is open — the wall runs along the
+  // blocked axis, so moving along the other one skirts it. When both axes are
+  // blocked we are in a pocket; back off along either, deterministic order.
+  const sx = ddx >= 0 ? 1 : -1;
+  const sy = ddy >= 0 ? 1 : -1;
+  const slideX = terr.isWalkable(Math.floor(fn(t.x + fmul(ff(sx), step))), Math.floor(fn(t.y)));
+  const slideY = terr.isWalkable(Math.floor(fn(t.x)), Math.floor(fn(t.y + fmul(ff(sy), step))));
+  if (slideX && !slideY) return { x: ff(sx), y: 0 };
+  if (slideY && !slideX) return { x: 0, y: ff(sy) };
+  if (slideX && slideY) {
+    // Both open: take whichever closes on the goal more.
+    return Math.abs(fmul(ddx, ux)) >= Math.abs(fmul(ddy, uy)) ? { x: ff(sx), y: 0 } : { x: 0, y: ff(sy) };
+  }
+  // Pocket (both axes blocked ahead): look a few steps down each candidate
+  // direction (fixed order: forward X, forward Y, back X, back Y) and take the
+  // one that actually makes progress toward the waypoint. The lookahead is
+  // what rounds a corner — backing straight out of the pocket just ping-pongs.
+  const LOOKAHEAD = 8;
+  const gainX = fmul(ff(sx * LOOKAHEAD), ux);
+  const gainY = fmul(ff(sy * LOOKAHEAD), uy);
+  let bestX = 0;
+  let bestY = 0;
+  let bestScore = 0;
+  for (const c of [
+    [ff(sx), 0 as Fixed],
+    [0 as Fixed, ff(sy)],
+    [ff(-sx), 0 as Fixed],
+    [0 as Fixed, ff(-sy)],
+  ] as ReadonlyArray<readonly [Fixed, Fixed]>) {
+    let px = t.x;
+    let py = t.y;
+    let k = 0;
+    for (; k < LOOKAHEAD; k++) {
+      px += c[0];
+      py += c[1];
+      if (!terr.isWalkable(Math.floor(fn(px)), Math.floor(fn(py)))) break;
+    }
+    if (k === 0) continue; // first step already blocked
+    const score = (c[0] ? gainX : gainY) + k;
+    if (score > bestScore) {
+      bestScore = score;
+      bestX = c[0];
+      bestY = c[1];
+    }
+  }
+  return { x: bestX, y: bestY };
+}

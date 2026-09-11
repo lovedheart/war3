@@ -155,6 +155,10 @@ export interface OrderSlot {
 export interface COrders {
   current: OrderSlot;
   queue: OrderSlot[];
+  /** Heading held while walking round an obstacle (0 when not retreating). */
+  retreatX: Fixed;
+  retreatY: Fixed;
+  retreatTicks: number;
   /** last position where an explicit order was given (return-to-anchor) */
   anchorX: Fixed;
   anchorY: Fixed;
@@ -305,7 +309,7 @@ export function makeStores(reg: {
     armor: reg.register(new Store<CArmor>('armor', () => ({ value: 0, type: 'unarmored' }))),
     stats: reg.register(new Store<CUnitStats>('stats', () => ({ str: 10, agi: 10, int: 10, primary: 'str', level: 1, xp: 0, isHero: false, id: '', race: 'neutral', upgradeTo: null, trainingDoneTick: 0 }))),
     movement: reg.register(new Store<CMovement>('movement', () => ({ speed: ff(2.5), vx: 0, vy: 0, turnRate: 4096, fly: false, mass: ff(1), ox: 0, oy: 0 }))),
-    orders: reg.register(new Store<COrders>('orders', () => ({ current: { kind: 'none', targetEid: 0xffffffff, tx: 0, ty: 0, mode: 0, param: '' }, queue: [], anchorX: 0, anchorY: 0, acquireTarget: 0xffffffff, engagedFrom: 0, holdPosition: false }))),
+    orders: reg.register(new Store<COrders>('orders', () => ({ current: { kind: 'none', targetEid: 0xffffffff, tx: 0, ty: 0, mode: 0, param: '' }, queue: [], retreatX: 0, retreatY: 0, retreatTicks: 0, anchorX: 0, anchorY: 0, acquireTarget: 0xffffffff, engagedFrom: 0, holdPosition: false }))),
     attack: reg.register(new Store<CAttackState>('attack', () => ({ cooldownLeft: 0, swing: 0, target: 0xffffffff, approaching: false }))),
     abilities: reg.register(new Store<CAbilities>('abilities', () => ({ slots: [], arming: null }))),
     buffs: reg.register(new Store<CBuffs>('buffs', () => ({ list: [] }))),

@@ -272,7 +272,11 @@ class SkirmishAi implements AiController {
       };
       const cargo = st.cargo.get(wk.eid);
       const order = st.orders.get(wk.eid);
-      if (!cargo || !order) continue;
+      if (!cargo || !order) {
+        // No cargo/order component at all (freshly spawned unit): task it.
+        if (this.debug) console.log(`[assign] t=${tick} ${(wk.eid >>> 0).toString(16)} NO-COMPONENTS`);
+        continue;
+      }
 
       // Mid-carry: leave the trip alone, just tally which line it belongs to.
       if (cargo.carrying !== 'none') {
@@ -305,6 +309,23 @@ class SkirmishAi implements AiController {
             // still under our project: leave the builder alone
             continue;
           }
+        }
+      }
+
+      // Freshly trained units idle at the rally point until tasked. The sim's
+      // bootstrap only covers the starting workers, so task them here.
+      if (order.current.kind === 'none') {
+        // A finished construction site leaves the builder on `none/farm` —
+        // send it back to resources. A freshly trained unit is `none` with no
+        // param at all; task it too.
+        const kind0: 'gold' | 'wood' = gold < wantGold ? 'gold' : 'wood';
+        const src0 = this.pickSource(kind0, wk, mines, woods, home);
+        if (src0 && this.issue({ k: 'harvest', player: this.me, worker: wk.eid, target: src0.eid, kind: kind0 })) {
+          this.orderedAt.set(wk.eid, tick);
+          this.workerSeen.delete(wk.eid);
+          if (kind0 === 'gold') gold++;
+          else wood++;
+          continue;
         }
       }
 
@@ -413,32 +434,47 @@ class SkirmishAi implements AiController {
     if (slack < each * 2 || this.supplyShortfall(built, res)) {
       const farm = this.plan.supplies[0];
       if (farm && !this.sites.has(farm)) {
-        if (this.tryBuild(tick, farm, workers, home, res)) return;
-        // Cannot afford a farm yet: hoard, do not spend on tech chains.
-        if (res.gold < (this.gd.buildings.get(farm)?.cost.gold ?? 80)) return;
+        const fd = this.gd.buildings.get(farm);
+        // Keep the farm's price in reserve instead of stalling the whole tech
+        // chain whenever we are momentarily under supply pressure.
+        const need = fd?.cost.gold ?? 80;
+        const needW = fd?.cost.lumber ?? 20;
+        // Only hoard for the farm if we are close to affording it; otherwise
+        // let the tech chain proceed and buy the farm when supply truly binds.
+        if (res.gold >= need || slack >= each || this.canAfford(res, need, needW)) {
+          if (this.tryBuild(tick, farm, workers, home, res)) return;
+        }
       }
     }
 
     // 2. Follow the tech chain, one open project at a time. If the next step
     // is unaffordable, keep scanning: an affordable, prerequisite-satisfied
     // building further down the chain is better than hoarding idle gold.
-    let waiting = false;
+    // But if we are sitting on real money and nothing has been started, the
+    // chain itself is stuck — buy a farm instead of hoarding forever.
+    if (res.gold > 2 * (this.gd.buildings.get(this.plan.supplies[0] ?? '')?.cost.gold ?? 80) && this.sites.size === 0 && slack < each * 4) {
+      const farm = this.plan.supplies[0];
+      if (farm && this.tryBuild(tick, farm, workers, home, res)) return;
+    }
     for (const id of this.plan.buildChain) {
       const def = this.gd.buildings.get(id);
       if (!def) continue;
-      if (def.requiresBuilding && !(owned.get(def.requiresBuilding) ?? 0) && !this.sites.has(def.requiresBuilding)) continue;
+      // Prerequisites may be satisfied by the town hall's implicit role or by
+      // any structure that upgrades INTO this one (hall tiers, tower tiers).
+      const prereqOk =
+        !def.requiresBuilding ||
+        def.requiresBuilding === this.plan.townHall ||
+        (owned.get(def.requiresBuilding) ?? 0) > 0 ||
+        this.sites.has(def.requiresBuilding) ||
+        [...owned.keys()].some((oid) => this.gd.buildings.get(oid)?.upgradeTo === id);
+      if (!prereqOk) continue;
       const have = owned.get(id) ?? 0;
       const wanted = this.wantCount(id, built, res);
       if (have >= wanted) continue;
       if (this.blockedUntil.get(id) && this.blockedUntil.get(id)! > tick) continue;
-      if (!this.canAfford(res, def.cost.gold, def.cost.lumber)) {
-        waiting = true;
-        continue;
-      }
+      if (!this.canAfford(res, def.cost.gold, def.cost.lumber)) continue;
       if (this.tryBuild(tick, id, workers, home, res)) return;
-      waiting = true;
     }
-    void waiting;
 
     // 3. Hall upgrade (town hall -> keep -> castle) once the chain is covered.
     const hall = built.find((b) => b.id === this.plan.townHall || this.plan.hallUpgrades.includes(b.id));
@@ -593,7 +629,8 @@ class SkirmishAi implements AiController {
     void reserve; // workers always funded first; farms are bought by buildStuff from the remainder
     if (wd && workers < this.prof.maxWorkers && res.supplyUsed + (wd.cost.popUpkeep ?? 1) <= res.supplyCap) {
       const hall = built.find((b) => this.plan.townHall === b.id || this.plan.hallUpgrades.includes(b.id));
-      if (hall && this.canAfford(res, wd.cost.gold, wd.cost.lumber)) {
+      const hq = hall ? (this.game.world.stores.building as unknown as { get(e: number): { trainQueue: unknown[] } | undefined }).get(hall.eid)?.trainQueue?.length ?? 0 : 0;
+      if (hall && hq < 2 && this.canAfford(res, wd.cost.gold, wd.cost.lumber)) {
         // One command per plan cycle, and workers get priority — otherwise we
         // blow the entire gold reserve in a single frame.
         if (this.issue({ k: 'train', player: this.me, building: hall.eid, unitId: this.plan.worker })) return;
@@ -846,6 +883,11 @@ class SkirmishAi implements AiController {
   /** The single mutation point of this entire module. */
   private issue(cmd: Command): boolean {
     const before = cmd.k === 'build' ? new Set(this.game.world.live as readonly number[]) : null;
+    if (this.debug && cmd.k === 'build') {
+      const r = this.game.snapshot().resources.find((x) => x.player === this.me);
+      const d = this.gd.buildings.get(cmd.buildingId);
+      console.log(`[issue] t=${this.game.world.tick} build ${cmd.buildingId} at ${fn(cmd.at.x)},${fn(cmd.at.y)} have g=${Math.round(r?.gold ?? -1)} w=${Math.round(r?.lumber ?? -1)} cost g=${d?.cost.gold} w=${d?.cost.lumber}`);
+    }
     this.game.command(cmd);
     if (before) {
       for (const e of this.game.world.live as readonly number[]) {

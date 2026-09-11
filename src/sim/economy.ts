@@ -205,10 +205,18 @@ function harvestTick(
   const tree = s.tree.get(src);
   if (!mine && !tree) return;
 
-  if (dist(t.x, t.y, st.x, st.y) > ff(1.8)) {
+  const reach = tree ? ff(2.6) : ff(1.8);
+  if (dist(t.x, t.y, st.x, st.y) > reach) {
     c.phase = 0; // walking: the gather timer only runs at the source
-    steer(o, st.x, st.y);
+    // Trees sit on reserved (non-walkable) tiles, so steering straight at the
+    // centre pins the worker against the trunk; aim at a standable neighbour.
+    const wp = tree ? treeStandSpot(w, st.x, st.y) : { x: st.x, y: st.y };
+    steer(o, wp.x, wp.y);
     return;
+  }
+  if (tree && dist(t.x, t.y, st.x, st.y) > ff(1.8)) {
+    // Within chopping reach but not at the centre: stop nudging and work.
+    clearWaypoint(o);
   }
   if (c.phase > 0) {
     c.phase--; // still filling this load
@@ -399,3 +407,21 @@ function applyTechEffects(w: World, techId: string): void {
 }
 
 export { fn };
+
+/**
+ * A walkable tile adjacent to a harvesting target. Trees occupy a reserved
+ * (non-walkable) tile, so steering straight at their centre would pin the
+ * worker against it. Deterministic: candidates are scanned in fixed order.
+ */
+function treeStandSpot(w: World, tx: Fixed, ty: Fixed): { x: Fixed; y: Fixed } {
+  const terr = w.terrain;
+  if (terr && !terr.isWalkable(Math.floor(fn(tx)), Math.floor(fn(ty)))) {
+    const cand: [number, number][] = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, 1], [1, -1], [-1, -1]];
+    for (const [dx, dy] of cand) {
+      const x = Math.floor(fn(tx)) + dx;
+      const y = Math.floor(fn(ty)) + dy;
+      if (terr.isWalkable(x, y)) return { x: ff(x) + ff(0.5), y: ff(y) + ff(0.5) };
+    }
+  }
+  return { x: tx, y: ty };
+}
