@@ -12,6 +12,10 @@ export const FP_SCALE = 1 << FP_SHIFT; // 65536
 export const FP_ONE = FP_SCALE;
 export const FP_HALF = FP_SCALE >> 1;
 
+/** Fixed-point saturates at int32 bounds; see ff(). */
+export const INT_MAX = 2147483647;
+export const INT_MIN = -2147483648;
+
 export type Fixed = number; // integer, always a multiple relationship of 1/65536
 
 const CACHE_BITS = 9;
@@ -29,7 +33,12 @@ export function fi(n: number): Fixed {
 
 /** Convert a JS number (possibly fractional) to fixed. Use only at load time. */
 export function ff(n: number): Fixed {
-  return Math.round(n * FP_SCALE) | 0;
+  const v = Math.round(n * FP_SCALE);
+  // `| 0` wraps past int32, which would silently turn e.g. a 100k-gold
+  // threshold into a negative number and invert every comparison against it.
+  if (v > INT_MAX) return INT_MAX;
+  if (v < INT_MIN) return INT_MIN;
+  return v | 0;
 }
 
 /** Convert fixed to a JS number. NEVER use inside the sim loop for state. */
