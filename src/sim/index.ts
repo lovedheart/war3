@@ -395,6 +395,12 @@ export function createGame(opts: GameOptions): Game {
   };
   const spec = opts.players.map((p) => ({ race: p.race, name: p.name, startGold: p.startGold, startLumber: p.startLumber }));
   const w = createSkirmishWorld({ seed: opts.seed, mapJson: json, players: spec });
+  // Replay metadata (render-side only; never read by systems or stateHash).
+  (w.world as unknown as { replayOpts: { seed: number; size?: number; players: GameOptions['players'] } }).replayOpts = {
+    seed: opts.seed,
+    size: opts.size,
+    players: opts.players.map((p) => ({ id: p.id, race: p.race, name: p.name, startGold: p.startGold, startLumber: p.startLumber })),
+  };
   const grid = new PathGrid(gen.terrain);
   const quad = new QuadTree(0, 0, ff(gen.terrain.width), ff(gen.terrain.height), 8);
   const fog = new FogOfWar(gen.terrain.width, gen.terrain.height, 13);

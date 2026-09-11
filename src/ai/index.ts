@@ -120,6 +120,30 @@ class SkirmishAi implements AiController {
   private underAttackUntil = 0;
   private lastDefenderCount = 0;
   private dead = false;
+  /**
+   * Commands queued on a recent tick, awaiting the sim's verdict. Commands
+   * apply one tick after `issue()` (queueCommand -> drainCommands), and every
+   * rejection surfaces as a bus `log` event from `fail()` in commandApply.
+   * We settle this queue at the start of each update: when an error message
+   * names our verb, the command was rejected and we park its responsible key
+   * in `blockedUntil` so the planner stops hammering the same failure every
+   * plan tick.
+   */
+  private readonly pendingVerify: { tick: number; k: string; key: string }[] = [];
+  /** attribution counters, exposed for tests */
+  readonly verifyStats = { issued: 0, checked: 0, failed: 0, unattributed: 0 };
+  /** failure log lines seen since the last settle + attribution decision */
+  private logFailures: { msg: string; ours: boolean; key?: string }[] = [];
+  /** >0 while we sit inside our own game.command() call */
+  private inCommand = 0;
+  /** commands observed on the queue that we did not issue (campaign scripts) */
+  private foreignQueued = 0;
+  private scriptSeen = false;
+  /** verb/key of the command currently inside game.command() (nesting only) */
+  private inFlightVerb = '';
+  private inFlightKey = '';
+
+  private unsubLog: (() => void) | null = null;
 
   constructor(
     private readonly game: Game,
@@ -134,6 +158,45 @@ class SkirmishAi implements AiController {
     this.plan = planFor(this.gd, race);
     this.prof = PROFILES[difficulty] ?? PROFILES.normal;
     this.nextWaveTick = this.prof.firstWave;
+    // Listen for sim rejections (fail() -> bus 'log' at level 'warn'; the
+    // only other emitter is 'info'). The message never names a player, so we
+    // snapshot our own queue at emit time and attribute only against it.
+    const bus = (this.game.world as unknown as {
+      bus: { on(evt: string, cb: (e: { level: string; msg: string }) => void): () => void };
+    }).bus;
+    this.unsubLog = bus.on('log', (e) => {
+      if (e.level === 'info') return;
+      // fail() names no player, so attribution is deliberately conservative.
+      // (a) Inside our own game.command() call a nested drain may have
+      //     applied and rejected the command in flight -> attribute to it.
+      // (b) At a plain update tick our previous-tick commands were just
+      //     drained: a failure is ours only when EXACTLY ONE of them matches
+      //     the verb. Commands issued on the current tick are not drained
+      //     yet and can never absorb someone else's rejection.
+      const verb = e.msg.slice(0, e.msg.indexOf(':'));
+      if (this.inCommand > 0) {
+        const ours = verb === this.inFlightVerb && !!this.inFlightKey;
+        this.logFailures.push({ msg: e.msg, ours, key: ours ? this.inFlightKey : undefined });
+        return;
+      }
+      // A plain update tick. Two very different worlds share this callback:
+      //   * Skirmish (no scripts): every queued command is drained at the
+      //     START of the next update, so a failure seen then belongs to a
+      //     previous-tick command — ours if it is the only one for its verb.
+      //   * Campaign (scripts drive the sim from bus listeners): failures
+      //     fire mid-update, long before any settle, while stale entries sit
+      //     in the queue. There we must attribute ONLY to a command issued on
+      //     the current tick (a script may have drained it already), never to
+      //     leftovers from earlier ticks.
+      // `scriptSeen` distinguishes the two without touching sim code.
+      if (this.scriptSeen) {
+        const infl = this.pendingVerify.filter((p) => p.k === verb && p.tick === this.game.world.tick);
+        this.logFailures.push({ msg: e.msg, ours: infl.length === 1, key: infl.length === 1 ? infl[0].key : undefined });
+        return;
+      }
+      const cands = this.pendingVerify.filter((p) => p.k === verb && p.tick === this.game.world.tick - 1);
+      this.logFailures.push({ msg: e.msg, ours: cands.length === 1, key: cands.length === 1 ? cands[0].key : undefined });
+    });
   }
 
   get state(): AiState {
@@ -142,6 +205,10 @@ class SkirmishAi implements AiController {
 
   destroy(): void {
     this.dead = true;
+    if (this.unsubLog) {
+      this.unsubLog();
+      this.unsubLog = null;
+    }
   }
 
   /* ------------------------------------------------------------------ */
@@ -155,6 +222,15 @@ class SkirmishAi implements AiController {
     if (this.dead) return;
     const w = this.game.world;
     const tick = w.tick;
+    // Campaign scripts inject Commands straight into the queue. Anything in
+    // the queue that is not ours marks this match as script-driven, where a
+    // mid-update failure cannot be blamed on our stale pending entries.
+    const q = (w as unknown as { commandQueue: { cmd: { player?: number } }[] }).commandQueue;
+    for (const e of q) if (e.cmd.player !== undefined && e.cmd.player !== this.me) this.foreignQueued++;
+    if (this.foreignQueued > 0) this.scriptSeen = true;
+    // Commands queued last tick were just applied by drainCommands: notice
+    // any rejections and park their keys before planning again.
+    this.settleVerifications(tick);
     this.intel.observe(tick);
 
     // Cheap every-tick work only; the expensive planning runs on a throttle.
@@ -677,6 +753,8 @@ class SkirmishAi implements AiController {
     const ud = this.gd.units.get(pick.unitId)!;
     if (res.supplyUsed + (ud.cost.popUpkeep ?? 1) > res.supplyCap) return;
     if (!this.canAfford(res, ud.cost.gold, ud.cost.lumber)) return;
+    const bt = this.blockedUntil.get(`train:${pick.unitId}`);
+    if (bt && bt > tick) return; // sim rejected this unit recently: back off
     this.issue({ k: 'train', player: this.me, building: pick.building.eid, unitId: pick.unitId });
   }
 
@@ -912,6 +990,12 @@ class SkirmishAi implements AiController {
   private lastBuiltEntity: number | undefined = undefined;
 
   /** The single mutation point of this entire module. */
+  /** True while cmd belongs to this seat (verification must ignore others'). */
+  private mineCmd(cmd: Command): boolean {
+    const p = (cmd as { player?: number }).player;
+    return p === undefined || p === this.me;
+  }
+
   private issue(cmd: Command): boolean {
     const before = cmd.k === 'build' ? new Set(this.game.world.live as readonly number[]) : null;
     if (this.debug && cmd.k === 'build') {
@@ -919,7 +1003,34 @@ class SkirmishAi implements AiController {
       const d = this.gd.buildings.get(cmd.buildingId);
       console.log(`[issue] t=${this.game.world.tick} build ${cmd.buildingId} at ${fn(cmd.at.x)},${fn(cmd.at.y)} have g=${Math.round(r?.gold ?? -1)} w=${Math.round(r?.lumber ?? -1)} cost g=${d?.cost.gold} w=${d?.cost.lumber}`);
     }
-    this.game.command(cmd);
+    // Track what is in flight DURING the queue call so the bus callback can
+    // tell our own rejection (fired synchronously by a nested drain) apart
+    // from another seat's failure landing in the same window.
+    // A bus listener may run a NESTED sim update inside game.command()
+    // (campaign levels do exactly that), which drains and rejects THIS command
+    // synchronously. Mark the nesting so fail() fired inside it is ours; any
+    // other failure on the bus belongs to another seat or a script.
+    // game.command() may run a NESTED sim update (campaign levels drive the
+    // sim from a bus listener), which drains and rejects THIS command before
+    // returning. Mark the nesting so the bus callback attributes correctly.
+    const tickBefore = this.game.world.tick;
+    const prevVerb = this.inFlightVerb;
+    const prevKey = this.inFlightKey;
+    this.inCommand++;
+    this.inFlightVerb = cmd.k;
+    this.inFlightKey = this.mineCmd(cmd) ? this.verifyKey(cmd) : '';
+    try {
+      this.game.command(cmd);
+    } finally {
+      this.inCommand--;
+      this.inFlightVerb = prevVerb;
+      this.inFlightKey = prevKey;
+    }
+    if (this.game.world.tick > tickBefore) {
+      // A nested sim update ran inside game.command(): our command was already
+      // drained and judged there. Settle now, while the verdict is fresh.
+      this.settleVerifications(this.game.world.tick);
+    }
     if (before) {
       for (const e of this.game.world.live as readonly number[]) {
         if (!before.has(e)) {
@@ -928,6 +1039,77 @@ class SkirmishAi implements AiController {
         }
       }
     }
+    // Remember the command so next tick's settle() can notice a sim rejection.
+    if (this.mineCmd(cmd)) {
+      this.verifyStats.issued++;
+      this.pendingVerify.push({
+      tick: this.game.world.tick,
+      k: cmd.k,
+      key: this.verifyKey(cmd),
+    });
+    }
     return true;
+  }
+
+  /** The blockedUntil-style key a rejected command should park. */
+  private verifyKey(cmd: Command): string {
+    switch (cmd.k) {
+      case 'build': return cmd.buildingId;
+      case 'train': return `train:${cmd.unitId}`;
+      case 'research': return cmd.techId;
+      case 'harvest': return `harvest:${cmd.worker >>> 0}`;
+      default: return `${cmd.k}:${this.me}`;
+    }
+  }
+
+  /**
+   * One tick after issue, drainCommands has run: match any failure log that
+   * names one of our queued verbs against the pending queue and park the
+   * responsible key. Failures we cannot attribute (someone else's command)
+   * are counted and ignored.
+   */
+  private settleVerifications(tick: number): void {
+    // Retire pending entries older than two ticks (settled or lost in a burst).
+    for (let i = 0; i < this.pendingVerify.length; i++) {
+      if (tick - this.pendingVerify[i].tick > 2) { this.pendingVerify.splice(i, 1); i--; }
+    }
+    if (!this.logFailures.length) {
+      // No failure was logged since the last settle, so every queued command
+      // older than one tick applied cleanly: count and retire them. Entries
+      // issued on the current tick are judged on the NEXT settle (drain
+      // happens at the start of that tick), so keep them.
+      for (let i = 0; i < this.pendingVerify.length; i++) {
+        if (tick - this.pendingVerify[i].tick > 1) {
+          this.verifyStats.checked++;
+          this.pendingVerify.splice(i, 1);
+          i--;
+        }
+      }
+      return;
+    }
+    for (const f of this.logFailures) {
+      const verb = f.msg.slice(0, f.msg.indexOf(':'));
+      if (!f.ours) {
+        // Not ours: the bus is global and fail() names no player, so any
+        // failure outside our own command call (another seat, a campaign
+        // script) is counted and never parked on our keys.
+        this.verifyStats.unattributed++;
+        continue;
+      }
+      // Ours: the oldest pending entry of the matching verb is the one that
+      // was applied and rejected (drain order == queue order).
+      const idx = this.pendingVerify.findIndex((p) => p.k === verb && (f.key === undefined || p.key === f.key));
+      if (idx < 0) {
+        this.verifyStats.unattributed++;
+        continue;
+      }
+      const key = this.pendingVerify[idx].key;
+      this.verifyStats.checked++;
+      this.verifyStats.failed++;
+      const backoff = verb === 'build' || verb === 'train' || verb === 'research' ? 4 * SEC : 10 * SEC;
+      this.blockedUntil.set(key, tick + backoff);
+      this.pendingVerify.splice(idx, 1);
+    }
+    this.logFailures.length = 0;
   }
 }

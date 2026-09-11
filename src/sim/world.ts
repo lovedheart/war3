@@ -124,11 +124,17 @@ export class World {
   }
 
   queueCommand(cmd: Command): void {
-    this.commandQueue.push({ tick: this.tick + 1, cmd });
+    const q = { tick: this.tick + 1, cmd };
+    this.commandQueue.push(q);
+    // Append-only record of everything that entered the queue, for replays.
+    // Pure bookkeeping (never read by systems), so stateHash is untouched.
+    this.commandLog.push(q);
   }
 
   /** Commands applied at the start of the next tick (before systems). */
   readonly commandQueue: { tick: number; cmd: Command }[] = [];
+  /** Every command ever queued, in order — the replay recording. */
+  readonly commandLog: { tick: number; cmd: Command }[] = [];
   /** Handler installed by src/sim/command.ts */
   applyCommand: ((w: World, cmd: Command) => void) | null = null;
 

@@ -16,6 +16,8 @@ import type { PlacementRequest, PendingTarget } from '../ui/commandcard.js';
 import type { SelectableEntity } from '../input/select.js';
 import { isHeroId } from '../render/draw/spec.js';
 import { getGameData } from '../data/index.js';
+import { startLevel, updateLevel, loadLevel, listLevels } from '../campaign/index.js';
+import { ReplayPlayer } from './replay.js';
 
 export interface AppOptions {
   canvas: HTMLCanvasElement;
@@ -25,6 +27,12 @@ export interface AppOptions {
   /** which player this client controls */
   viewer?: number;
   debug?: boolean;
+  /** play a campaign level instead of a generated skirmish map */
+  campaign?: { levelId: string };
+  /** fired once when the level resolves (campaign mode only) */
+  onOutcome?: (outcome: 'win' | 'lose', levelId: string) => void;
+  /** replay playback of a recorded match (see app/replay.ts ReplayRecording) */
+  replay?: import('./replay.js').ReplayRecording;
 }
 
 export interface App {
@@ -35,6 +43,8 @@ export interface App {
   /** HUD minimap hook: jump the camera to a spot given in game units. */
   jumpTo(xUnits: number, yUnits: number): void;
   readonly hud: Hud;
+  /** campaign mode only: the level being played and its outcome once resolved */
+  readonly campaign?: { levelId: string; outcome: 'win' | 'lose' | null };
   destroy(): void;
 }
 
@@ -65,7 +75,12 @@ function gameOptions(opts: AppOptions): GameOptions {
 export function createApp(opts: AppOptions): App {
   const canvas = opts.canvas;
   const viewer = opts.viewer ?? 1;
-  const game = createGame(gameOptions(opts));
+  const campaign = opts.campaign ? { levelId: opts.campaign.levelId, outcome: null as 'win' | 'lose' | null } : undefined;
+  const game = opts.campaign
+    ? startLevel(opts.campaign.levelId, opts.seed ?? 12345)
+    : opts.replay
+      ? new ReplayPlayer(opts.replay).game
+      : createGame(gameOptions(opts));
 
   const renderer = new Renderer({ canvas, debug: opts.debug });
   const viewW = (canvas as unknown as { clientWidth?: number }).clientWidth || 1280;
@@ -154,11 +169,39 @@ export function createApp(opts: AppOptions): App {
     pendingRef.value = null;
   }
 
+  /** Freeze the level, announce the result, and point at the next one. */
+  function finishCampaign(r: 'win' | 'lose'): void {
+    if (!campaign) return;
+    campaign.outcome = r;
+    loop.setPaused(true);
+    const id = campaign.levelId;
+    if (r === 'win') {
+      const ids = listLevels().map((l) => l.id);
+      const next = ids[ids.indexOf(id) + 1];
+      hud.alert(next ? `胜利！下一关：${loadLevel(next).title}` : '战役全胜！', false);
+      console.log(`[campaign] ${id} WIN${next ? ` -> next ${next}` : ''}`);
+    } else {
+      hud.alert('战败……重整旗鼓，再来一次。', true);
+      console.log(`[campaign] ${id} LOSE`);
+    }
+    opts.onOutcome?.(r, id);
+  }
+
   const loop = new FixedStepLoop({
     update: (ticks) => {
       for (let i = 0; i < ticks; i++) {
         input.pump();
-        game.update(1);
+        if (campaign) {
+          // Campaign levels advance through their scripted track (enemy waves
+          // and policy) instead of the bare skirmish tick. Once resolved the
+          // world freezes: no further ticks run until the host restarts it.
+          if (campaign.outcome === null) {
+            const r = updateLevel(game);
+            if (r) finishCampaign(r);
+          }
+        } else {
+          game.update(1);
+        }
       }
     },
     render: (alpha) => {
@@ -188,6 +231,7 @@ export function createApp(opts: AppOptions): App {
     input,
     loop,
     hud,
+    ...(campaign ? { campaign } : {}),
     jumpTo(xUnits: number, yUnits: number) {
       renderer.centerOn(ff(xUnits), ff(yUnits));
       syncView(game, renderer);
