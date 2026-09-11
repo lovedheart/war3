@@ -10,7 +10,7 @@
  *    no Date.now, no wall-clock reads. Same seed => same Command stream.
  *  - Fixed-point discipline: never `>>`/`|0` a product; compare with fn().
  */
-import { Fixed, ff, fn } from '../core/fixed.js';
+import { Fixed, ff, fn, fmul } from '../core/fixed.js';
 import { Rng } from '../core/rng.js';
 import type { Game } from '../sim/index.js';
 import type { Command, MoveMode, Vec2F } from '../sim/commandTypes.js';
@@ -67,6 +67,14 @@ interface UnitView {
 function view(u: { eid: number; id: string; x: number; y: number; hp: number }): UnitView {
   return { eid: u.eid, id: u.id, x: ff(u.x), y: ff(u.y), hp: u.hp };
 }
+
+/** Squared distance in fixed point — avoids fsqrt and stays deterministic. */
+function fdist2(ax: Fixed, ay: Fixed, bx: Fixed, by: Fixed): Fixed {
+  const dx = ax - bx;
+  const dy = ay - by;
+  return fmul(dx, dx) + fmul(dy, dy);
+}
+
 
 interface Site {
   buildingId: string;
@@ -300,7 +308,22 @@ class SkirmishAi implements AiController {
 
       const harvesting = order.current.kind === 'harvest';
       const onGold = order.current.param === 'gold';
-      const alive = harvesting ? this.sourceAlive(order.current.targetEid, onGold ? 'gold' : 'wood', onGold ? mines : woods) : false;
+      let alive = harvesting ? this.sourceAlive(order.current.targetEid, onGold ? 'gold' : 'wood', onGold ? mines : woods) : false;
+      // The sim's own return trip can end just outside its drop radius: it
+      // clears the waypoint at ~2.2 tiles, steers, arrives at the 1.4-tile
+      // movement radius, clears again — and shuttles in place earning nothing.
+      // Detect that (empty + no waypoint + closer to home than to the source)
+      // and re-issue so the trip restarts.
+      if (harvesting && alive && cargo.carrying === 'none') {
+        const cur = (this.game.world.stores.orders as unknown as { get(e: number): { current: { tx?: number; ty?: number } } }).get(wk.eid)?.current;
+        const noWp = !cur?.tx && !cur?.ty;
+        const srcT = (this.game.world.stores.transform as unknown as { get(e: number): { x: Fixed; y: Fixed } | undefined }).get(order.current.targetEid);
+        if (noWp && srcT) {
+          const dHome2 = fdist2(wk.x, wk.y, home.x, home.y);
+          const dSrc2 = fdist2(wk.x, wk.y, srcT.x, srcT.y);
+          if (dSrc2 > fmul(ff(1.8), ff(1.8)) && dHome2 < dSrc2) alive = false; // stalled
+        }
+      }
       if (harvesting && alive) {
         // The sim steers this trip itself (source <-> drop-off). Re-issuing the
         // harvest order would clear the waypoint mid-trip and strand the unit,
@@ -394,7 +417,10 @@ class SkirmishAi implements AiController {
       }
     }
 
-    // 2. Follow the tech chain, one open project at a time.
+    // 2. Follow the tech chain, one open project at a time. If the next step
+    // is unaffordable, keep scanning: an affordable, prerequisite-satisfied
+    // building further down the chain is better than hoarding idle gold.
+    let waiting = false;
     for (const id of this.plan.buildChain) {
       const def = this.gd.buildings.get(id);
       if (!def) continue;
@@ -403,10 +429,14 @@ class SkirmishAi implements AiController {
       const wanted = this.wantCount(id, built, res);
       if (have >= wanted) continue;
       if (this.blockedUntil.get(id) && this.blockedUntil.get(id)! > tick) continue;
-      if (!this.canAfford(res, def.cost.gold, def.cost.lumber)) return; // wait, do not skip ahead
-      this.tryBuild(tick, id, workers, home, res);
-      return;
+      if (!this.canAfford(res, def.cost.gold, def.cost.lumber)) {
+        waiting = true;
+        continue;
+      }
+      if (this.tryBuild(tick, id, workers, home, res)) return;
+      waiting = true;
     }
+    void waiting;
 
     // 3. Hall upgrade (town hall -> keep -> castle) once the chain is covered.
     const hall = built.find((b) => b.id === this.plan.townHall || this.plan.hallUpgrades.includes(b.id));
@@ -476,7 +506,6 @@ class SkirmishAi implements AiController {
     // A worker standing at a construction site must stay there: the sim only
     // advances progress while a builder is adjacent. Never pull one away.
     for (const w of workers) {
-      if (busy.has(w.eid)) continue;
       const o = (this.game.world.stores.orders as unknown as { get(e: number): { current: { kind: string } } | undefined }).get(w.eid);
       if (o && o.current.kind === 'build') continue;
       return w;
