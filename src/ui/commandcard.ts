@@ -11,14 +11,17 @@ import type { Game } from '../sim/index.js';
 import type { PlayerState } from '../sim/player.js';
 import { paintIcon } from './icons.js';
 import { abilityTip, buildingTip, techTip, unitTip, type TipLine } from './tooltip.js';
+import { needsAim } from './aim.js';
 
 /** A command missing only its destination, handed to the app for point-picking. */
 export interface PendingTarget {
-  k: 'move' | 'rally';
+  k: 'move' | 'rally' | 'ability';
   player: number;
   units?: number[];
   entity?: number;
   mode: MoveMode;
+  /** set when k === 'ability' */
+  abilityId?: string;
 }
 
 export interface PlacementRequest {
@@ -459,6 +462,7 @@ export class CommandCard {
       const def = gd.abilities.get(a.id) ?? gd.abilityDefs.get(a.id);
       const manaShort = (p ? 0 : 0) + (a.manaCost > 0 && rec.mpMax <= 0 ? 1 : 0);
       const cdLeft = Math.max(0, a.readyAt - this.tick) / TICK_RATE;
+      const aimed = needsAim(def);
       const b = this.obtain();
       this.configure(b, {
         id: a.id,
@@ -467,7 +471,15 @@ export class CommandCard {
         off: cdLeft > 0 || manaShort > 0,
         why: manaShort ? 'Not enough mana' : cdLeft > 0 ? 'Ability on cooldown' : undefined,
         tip: () => abilityTip(gd, a.id, manaShort > 0, cdLeft, a.level),
-        act: () => this.o.dispatch({ k: 'ability', player: viewer, caster: rec.eid, abilityId: a.id, target: null }),
+        // Ground-targeted spells (blizzard, holy light…) need a point the card
+        // cannot know; ask the app to resolve one, exactly like build placement.
+        act: () => {
+          if (aimed && this.o.requestTarget) {
+            this.o.requestTarget({ k: 'ability', player: viewer, units: [rec.eid], entity: rec.eid, mode: 'move', abilityId: a.id });
+            return;
+          }
+          this.o.dispatch({ k: 'ability', player: viewer, caster: rec.eid, abilityId: a.id, target: null });
+        },
       });
     }
     // basic orders round out the card

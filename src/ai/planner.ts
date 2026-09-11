@@ -58,14 +58,19 @@ export function planFor(gd: GameData, race: string): BuildPlan {
   // Only keep buildings that actually do something for us: train, research,
   // supply, upgrade a hall, or attack. Shipyards on a land-only map and empty
   // shells would otherwise eat the whole budget.
-  const useful = mine.filter(
-    (b) =>
-      (b.trains ?? []).some((id) => gd.units.get(id)?.race === race) ||
-      (b.researches ?? []).length > 0 ||
-      b.supplyProvided > 0 ||
-      !!b.upgradeTo ||
-      !!b.attack,
-  );
+  const useful = mine.filter((b) => {
+    // A building is worth starting only if it trains a real combat unit of our
+    // race, researches something, or upgrades an existing structure we can
+    // actually reach. Pure towers (no train, no research) are a land-only-map
+    // gold sink; farms are handled by the supply logic.
+    const trainsArmy = (b.trains ?? []).some((id) => {
+      const u = gd.units.get(id);
+      return !!u && u.race === race && !u.isHero && u.id !== worker;
+    });
+    if (trainsArmy || (b.researches ?? []).length > 0) return true;
+    if (b.supplyProvided > 0 || !!b.upgradeTo) return false;
+    return false;
+  });
   const chain = new Set(useful.map((b) => b.id));
 
   let guard = 0;

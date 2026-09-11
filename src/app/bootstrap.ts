@@ -148,6 +148,7 @@ export function createApp(opts: AppOptions): App {
     } else {
       const p = pend.partial;
       if (p.k === 'move') game.command({ k: 'move', player: viewer, units: p.units ?? [], to: atWorld, mode: p.mode });
+      else if (p.k === 'ability') game.command({ k: 'ability', player: viewer, caster: p.entity ?? 0xffffffff, abilityId: p.abilityId ?? '', target: null, at: atWorld });
       else game.command({ k: 'rally', player: viewer, entity: p.entity ?? 0xffffffff, at: atWorld });
     }
     pendingRef.value = null;
