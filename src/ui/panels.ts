@@ -179,6 +179,11 @@ export class InfoPanel {
   private slots: HTMLElement[] = [];
   private slotCtx: (CanvasRenderingContext2D | null)[] = [];
   private slotKey: string[] = [];
+  /** the entity the tray currently belongs to, and the slot awaiting a target */
+  private ownerEid = 0xffffffff;
+  /** hero under the cross-hair while a give is armed (set by the app) */
+  targetEid: number | null = null;
+  private pendingSlot = -1;
 
   constructor(private h: PanelHost) {}
 
@@ -234,6 +239,8 @@ export class InfoPanel {
       this.slots.push(s);
       this.slotCtx.push(c.getContext?.('2d') ?? null);
       this.slotKey.push('');
+      this.bindSlot(i, s);
+      this.bindSlotUse(i, s);
       tray.appendChild(s);
     }
     this.tray = tray;
@@ -245,7 +252,60 @@ export class InfoPanel {
   private tray!: HTMLElement;
 
   /** @param sel entity records pulled from the sim (read-only) */
+  /**
+   * Item slots are click-then-click: first click arms a slot, the next click on
+   * another slot gives it, and Alt-click drops it at the hero's feet. Everything
+   * goes out as a Command — the panel never touches the sim.
+   */
+  private bindSlot(i: number, el: HTMLElement): void {
+    const doc = this.h.doc as unknown as { defaultView?: unknown };
+    void doc;
+    const anyEl = el as unknown as { addEventListener?: (t: string, f: (e: unknown) => void) => void };
+    anyEl.addEventListener?.('click', (ev: unknown) => this.onSlotClick(i, ev));
+  }
+
+  private onSlotClick(i: number, ev: unknown): void {
+    const e = ev as { altKey?: boolean; shiftKey?: boolean };
+    // Read the item off the live frame, not the paint cache: slotKey stays ''
+    // when the icon was already baked for this id.
+    const item = this.currentItems?.[i] ?? '';
+    if (!item) {
+      this.pendingSlot = -1;
+      return;
+    }
+    if (e.altKey) {
+      this.h.dispatch({ k: 'itemDrop', player: this.h.viewer, unit: this.ownerEid, slot: i, at: { x: 0, y: 0 } });
+      this.pendingSlot = -1;
+      return;
+    }
+    if (this.pendingSlot < 0 || this.pendingSlot === i) {
+      this.pendingSlot = i;
+      this.h.alert(`已选择物品槽 ${i + 1}：再点另一格赠送，Alt+点击丢弃`);
+      return;
+    }
+    // Give the item to the hero currently under the cursor (or back to self if
+    // the same hero is still selected); the sim enforces range and free slots.
+    const to = this.targetEid ?? this.ownerEid;
+    this.h.dispatch({ k: 'itemGive', player: this.h.viewer, from: this.ownerEid, slot: this.pendingSlot, to });
+    this.pendingSlot = -1;
+  }
+
+  /** Double-click uses the item (consumables / charges). */
+  private bindSlotUse(i: number, el: HTMLElement): void {
+    const anyEl = el as unknown as { addEventListener?: (t: string, f: () => void) => void };
+    anyEl.addEventListener?.('dblclick', () => {
+      const item = this.slotKey[i]?.split(':')[0] ?? '';
+      if (!item) return;
+      this.h.dispatch({ k: 'itemUse', player: this.h.viewer, unit: this.ownerEid, slot: i, target: null });
+    });
+  }
+
+  private currentItems: (string | null)[] | null = null;
+
   frame(info: SelInfo | null): void {
+    this.ownerEid = info?.eid ?? 0xffffffff;
+    this.currentItems = info?.items ?? null;
+    if (!info) this.pendingSlot = -1;
     const hide = (on: boolean) => {
       this.root.style.visibility = on ? 'hidden' : 'visible';
     };
@@ -310,6 +370,8 @@ export class InfoPanel {
 }
 
 export interface SelInfo {
+  /** entity the info panel describes; item actions must target exactly this */
+  eid?: number;
   id: string;
   name: string;
   count: number;

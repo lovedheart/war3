@@ -10,7 +10,7 @@
  *    no Date.now, no wall-clock reads. Same seed => same Command stream.
  *  - Fixed-point discipline: never `>>`/`|0` a product; compare with fn().
  */
-import { Fixed, ff, fi, fn } from '../core/fixed.js';
+import { Fixed, ff, fn } from '../core/fixed.js';
 import { Rng } from '../core/rng.js';
 import type { Game } from '../sim/index.js';
 import type { Command, MoveMode, Vec2F } from '../sim/commandTypes.js';
@@ -55,9 +55,24 @@ const INTEL_AGE = 20 * SEC;
 /** A building site older than this with no progress gets re-assigned. */
 const STALL_LIMIT = 25 * SEC;
 
+interface UnitView {
+  eid: number;
+  id: string;
+  /** game units */
+  x: Fixed;
+  y: Fixed;
+  hp: number;
+}
+
+function view(u: { eid: number; id: string; x: number; y: number; hp: number }): UnitView {
+  return { eid: u.eid, id: u.id, x: ff(u.x), y: ff(u.y), hp: u.hp };
+}
+
 interface Site {
   buildingId: string;
   worker: number;
+  /** construction-site entity (created by the sim when we issued build) */
+  siteEid?: number;
   x: Fixed;
   y: Fixed;
   startedTick: number;
@@ -79,10 +94,15 @@ class SkirmishAi implements AiController {
   private lastPlan = -9999;
   /** eid -> tick we last issued it an order (throttle) */
   private readonly orderedAt = new Map<number, number>();
+  /** worker eid -> last position where it was seen moving (stuck detector) */
+  private readonly workerSeen = new Map<number, { pos: string; tick: number }>();
   /** in-flight construction we are waiting on */
   private readonly sites = new Map<string, Site>();
   /** buildings we already tried and failed to place */
   private readonly blockedUntil = new Map<string, number>();
+  /** construction site -> last observed progress / when it stopped moving */
+  private readonly siteProgress = new Map<number, number>();
+  private readonly siteStalledAt = new Map<number, number>();
   /** tech ids queued or done */
   private readonly techTried = new Set<string>();
   private nextWaveTick = 0;
@@ -147,9 +167,9 @@ class SkirmishAi implements AiController {
     if (!res) return;
 
     const home = this.homeOf(built);
-    const workers = mine.filter((u) => u.id === this.plan.worker);
-    const army = mine.filter((u) => u.id !== this.plan.worker && !this.isBuilding(u.eid));
-    const heroes = mine.filter((u) => this.isHero(u.id));
+    const workers = mine.filter((u) => u.id === this.plan.worker).map(view);
+    const army = mine.filter((u) => u.id !== this.plan.worker && !this.isBuilding(u.eid)).map(view);
+    const heroes = mine.filter((u) => this.isHero(u.id)).map(view);
 
     this.decideState(tick, res, army, built, workers.length);
     this.assignWorkers(tick, workers, built, res);
@@ -162,7 +182,7 @@ class SkirmishAi implements AiController {
   }
 
   /** State machine: economy -> expand -> aggro -> finish, defend on intrusion. */
-  private decideState(tick: number, res: { supplyUsed: number }, army: { eid: number }[], built: { id: string }[], workerCount: number): void {
+  private decideState(tick: number, res: { gold: number; supplyUsed: number }, army: { eid: number }[], built: { id: string }[], workerCount: number): void {
     const threats = this.intel.hostiles(4 * SEC, tick).filter((t) => this.nearHome(t.x, t.y) && this.game.fog.isVisibleTile(Math.floor(fn(t.x)), Math.floor(fn(t.y)), this.me));
     if (threats.length > 0) {
       this._state = 'defend';
@@ -219,87 +239,159 @@ class SkirmishAi implements AiController {
 
   /* ---------------------------- economy ------------------------------ */
 
-  private assignWorkers(tick: number, workers: { eid: number; x: number; y: number; hp: number }[], built: { eid: number; id: string }[], res: { gold: number; lumber: number; supplyUsed: number }): void {
+  private assignWorkers(
+    tick: number,
+    workers: UnitView[],
+    built: { eid: number; id: string }[],
+    _res: { gold: number; lumber: number; supplyUsed: number; supplyCap: number },
+  ): void {
     const home = this.homeOf(built);
     const mines = this.intel.sources('gold').filter((m) => m.capacity > 0);
-    const woods = this.intel.sources('wood');
+    const woods = this.intel.sources('wood').filter((m) => m.capacity > 0);
     if (!mines.length && !woods.length) return;
 
-    // How many workers each resource should have: 3-5 per live mine, rest wood.
-    const wantGold = Math.min(workers.length, mines.length * 4);
-    let goldIdx = 0;
-    let woodIdx = 0;
-    let idle = 0;
+    // Target split: 3-5 per live mine on gold, everyone else cutting trees.
+    const wantGold = Math.max(2, Math.min(workers.length - 1, mines.length * 4));
+    let gold = 0;
+    let wood = 0;
 
     for (const wk of workers) {
-      const cargo = (this.game.world.stores.cargo as unknown as { get(e: number): { carrying: string; sourceEid: number } | undefined }).get(wk.eid);
-      const order = (this.game.world.stores.orders as unknown as { get(e: number): { current: { kind: string; targetEid: number; param: string } } | undefined }).get(wk.eid);
-      if (!order || !cargo) continue;
+      const st = this.game.world.stores as unknown as {
+        cargo: { get(e: number): { carrying: string; sourceEid: number } | undefined };
+        orders: { get(e: number): { current: { kind: string; targetEid: number; param: string } } | undefined };
+      };
+      const cargo = st.cargo.get(wk.eid);
+      const order = st.orders.get(wk.eid);
+      if (!cargo || !order) continue;
 
-      // Workers on a build site stay put until it completes.
-      if (order.current.kind === 'build') continue;
+      // Mid-carry: leave the trip alone, just tally which line it belongs to.
+      if (cargo.carrying !== 'none') {
+        if (cargo.carrying === 'gold') gold++;
+        else wood++;
+        continue;
+      }
 
-      const busyHarvesting = order.current.kind === 'harvest' || order.current.kind === 'return';
-      const srcIsGold = order.current.param === 'gold';
-      const wanted = busyHarvesting ? (srcIsGold ? goldIdx < wantGold : woodIdx < workers.length - wantGold) : goldIdx < wantGold;
-      const kind: 'gold' | 'wood' = wanted ? 'gold' : 'wood';
-      if (wanted) srcIsGold ? goldIdx++ : woodIdx++;
-      else kind === 'gold' ? goldIdx++ : woodIdx++;
+      // Building something. Construction only advances while a builder stands
+      // next to the site, so a worker pulled off a site freezes it forever.
+      // Keep every builder on its site until it is built or genuinely stuck.
+      if (order.current.kind === 'build') {
+        const siteEid = order.current.targetEid;
+        const bld = (this.game.world.stores as unknown as { building: { get(e: number): { progress: number; built: boolean } | undefined } }).building.get(siteEid);
+        if (!bld || bld.built) {
+          this.sites.delete(this.plannedOf(siteEid));
+          // fall through: the site is gone, give the worker a real job
+        } else {
+          const last = this.siteProgress.get(siteEid);
+          if (last === undefined || bld.progress < last) {
+            this.siteProgress.set(siteEid, bld.progress);
+            this.siteStalledAt.set(siteEid, tick);
+          } else if (tick - (this.siteStalledAt.get(siteEid) ?? tick) > 10 * SEC) {
+            this.sites.delete(this.plannedOf(siteEid));
+            this.siteProgress.delete(siteEid);
+            this.siteStalledAt.delete(siteEid);
+            // fall through: reassign this worker to resources
+          }
+          if (!this.sites.has(this.plannedOf(siteEid))) {
+            // still under our project: leave the builder alone
+            continue;
+          }
+        }
+      }
 
-      // Only re-steer idle/stale workers — never yank one mid-trip.
-      const stale = tick - (this.orderedAt.get(wk.eid) ?? -9999) > 8 * SEC;
-      if (busyHarvesting && !stale) continue;
+      const harvesting = order.current.kind === 'harvest';
+      const onGold = order.current.param === 'gold';
+      const alive = harvesting ? this.sourceAlive(order.current.targetEid, onGold ? 'gold' : 'wood', onGold ? mines : woods) : false;
+      if (harvesting && alive) {
+        // The sim steers this trip itself (source <-> drop-off). Re-issuing the
+        // harvest order would clear the waypoint mid-trip and strand the unit,
+        // so leave it alone — unless it has stopped making progress.
+        if (tick - (this.orderedAt.get(wk.eid) ?? -9999) > STALL_LIMIT) {
+          const seen = this.workerSeen.get(wk.eid);
+          const here = `${Math.floor(fn(wk.x))},${Math.floor(fn(wk.y))}`;
+          if (seen?.pos === here && tick - seen.tick > STALL_LIMIT) {
+            this.workerSeen.delete(wk.eid); // frozen: fall through and re-task
+          } else {
+            if (!seen || seen.pos !== here) this.workerSeen.set(wk.eid, { pos: here, tick });
+            if (onGold) gold++;
+            else wood++;
+            continue;
+          }
+        } else {
+          if (onGold) gold++;
+          else wood++;
+          continue;
+        }
+      }
 
+      // Idle, stranded on a dead source, or frozen in place: give it a job now.
+      const kind: 'gold' | 'wood' = gold < wantGold ? 'gold' : 'wood';
       const source = this.pickSource(kind, wk, mines, woods, home);
       if (!source) continue;
       if (this.issue({ k: 'harvest', player: this.me, worker: wk.eid, target: source.eid, kind })) {
         this.orderedAt.set(wk.eid, tick);
-        this.intel.markScouted(ff(wk.x), ff(wk.y));
+        this.workerSeen.delete(wk.eid);
+        if (kind === 'gold') gold++;
+        else wood++;
       }
-      idle++;
     }
-    void idle;
-    void res;
+  }
+
+  /** Which planned project owns a given construction-site entity? */
+  private plannedOf(eid: number): string {
+    for (const [id, s] of this.sites) if (s.siteEid === eid) return id;
+    return '';
+  }
+
+  /** Does this worker's current source still exist and hold resources? */
+  private sourceAlive(eid: number, kind: 'gold' | 'wood', pool: ReturnType<Intel['sources']>): boolean {
+    if (eid === undefined || eid < 0 || eid === 0xffffffff) return false;
+    const live = pool.find((m) => m.eid === eid);
+    if (live) return live.capacity > 0;
+    // Not in our visible/explored source list at all: check existence only.
+    const st = this.game.world.stores as unknown as { mine: { get(e: number): unknown }; tree: { get(e: number): unknown } };
+    return !!(kind === 'gold' ? st.mine.get(eid) : st.tree.get(eid));
   }
 
   private pickSource(
     kind: 'gold' | 'wood',
-    wk: { eid: number; x: number; y: number },
+    wk: UnitView,
     mines: ReturnType<Intel['sources']>,
     woods: ReturnType<Intel['sources']>,
     home: { x: Fixed; y: Fixed },
   ): ReturnType<Intel['nearestSource']> {
     const pool = kind === 'gold' ? mines : woods;
     if (!pool.length) return null;
-    // Gold: prefer whichever mine our hall sits next to. Wood: nearest tree.
-    if (kind === 'gold') {
-      let best = pool[0];
-      let bd = Infinity;
-      for (const m of pool) {
-        const d = (m.tx - fn(home.x)) ** 2 + (m.ty - fn(home.y)) ** 2;
-        if (d < bd) {
-          bd = d;
-          best = m;
-        }
-      }
-      return best;
-    }
-    return this.intel.nearestSource('wood', ff(wk.x), ff(wk.y));
+    // Always pick the source nearest the *worker*. Sending a worker to the
+    // hall-side mine regardless of where it stands makes it cross the whole
+    // map and starve the line it was already working.
+    void home;
+    return this.intel.nearestSource(kind, ff(wk.x), ff(wk.y));
   }
 
   /* ---------------------------- building ----------------------------- */
 
-  private buildStuff(tick: number, built: { eid: number; id: string }[], workers: { eid: number; x: number; y: number }[], res: { gold: number; lumber: number; supplyUsed: number; supplyCap: number }): void {
+  private buildStuff(tick: number, built: { eid: number; id: string }[], workers: UnitView[], res: { gold: number; lumber: number; supplyUsed: number; supplyCap: number }): void {
     const owned = new Map<string, number>();
     for (const b of built) owned.set(b.id, (owned.get(b.id) ?? 0) + 1);
     const home = this.homeOf(built);
 
-    // 1. Supply first — a supply block stalls everything else.
-    const supplyNeed = res.supplyUsed + 6 > res.supplyCap;
-    if (supplyNeed || this.supplyShortfall(built, res)) {
+    // Retire finished / abandoned construction projects.
+    for (const [id, site] of [...this.sites]) {
+      const exists = this.game.snapshot().buildings.some((b) => b.player === this.me && b.id === id);
+      if (exists || tick - site.startedTick > STALL_LIMIT * 2) this.sites.delete(id);
+    }
+
+    // 1. Supply first — a supply block stalls everything else. Trigger well
+    // before the cap so the farm finishes before we would otherwise stall.
+    const each = this.plan.supplies.length ? this.gd.buildings.get(this.plan.supplies[0])?.supplyProvided ?? 6 : 6;
+    const slack = res.supplyCap - res.supplyUsed;
+    if (slack < each * 2 || this.supplyShortfall(built, res)) {
       const farm = this.plan.supplies[0];
-      if (farm) this.tryBuild(tick, farm, workers, home, res);
-      return;
+      if (farm && !this.sites.has(farm)) {
+        if (this.tryBuild(tick, farm, workers, home, res)) return;
+        // Cannot afford a farm yet: hoard, do not spend on tech chains.
+        if (res.gold < (this.gd.buildings.get(farm)?.cost.gold ?? 80)) return;
+      }
     }
 
     // 2. Follow the tech chain, one open project at a time.
@@ -328,7 +420,7 @@ class SkirmishAi implements AiController {
           if (spot) {
             const w = this.freeWorker(workers, tick);
             if (w && this.issue({ k: 'build', player: this.me, worker: w.eid, buildingId: nextId, at: spot })) {
-              this.sites.set(nextId, { buildingId: nextId, worker: w.eid, x: spot.x, y: spot.y, startedTick: tick });
+              this.sites.set(nextId, { buildingId: nextId, worker: w.eid, x: spot.x, y: spot.y, startedTick: tick, siteEid: this.lastBuiltEntity });
               this.orderedAt.set(w.eid, tick);
             }
           }
@@ -344,7 +436,7 @@ class SkirmishAi implements AiController {
     return res.supplyCap - farms * each < res.supplyUsed + each;
   }
 
-  private wantCount(id: string, built: { id: string }[], res: { supplyUsed: number }): number {
+  private wantCount(id: string, _built: { id: string }[], res: { supplyUsed: number }): number {
     const def = this.gd.buildings.get(id);
     if (!def) return 0;
     if (this.plan.supplies.includes(id)) return 1; // handled by supplyShortfall
@@ -357,7 +449,7 @@ class SkirmishAi implements AiController {
     return 1;
   }
 
-  private tryBuild(tick: number, id: string, workers: { eid: number; x: number; y: number }[], home: { x: Fixed; y: Fixed }, res: { gold: number; lumber: number }): boolean {
+  private tryBuild(tick: number, id: string, workers: UnitView[], home: { x: Fixed; y: Fixed }, res: { gold: number; lumber: number }): boolean {
     if (this.sites.has(id)) return true;
     const def = this.gd.buildings.get(id);
     if (!def) return false;
@@ -370,7 +462,7 @@ class SkirmishAi implements AiController {
       return false;
     }
     if (this.issue({ k: 'build', player: this.me, worker: w.eid, buildingId: id, at: r.at })) {
-      this.sites.set(id, { buildingId: id, worker: w.eid, x: r.at.x, y: r.at.y, startedTick: tick });
+      this.sites.set(id, { buildingId: id, worker: w.eid, x: r.at.x, y: r.at.y, startedTick: tick, siteEid: this.lastBuiltEntity });
       this.orderedAt.set(w.eid, tick);
       return true;
     }
@@ -379,16 +471,17 @@ class SkirmishAi implements AiController {
   }
 
   /** A worker not currently building something. */
-  private freeWorker(workers: { eid: number; x: number; y: number }[], tick: number): { eid: number; x: number; y: number } | null {
-    const busy = new Set<number>();
-    for (const s of this.sites.values()) if (tick - s.startedTick < STALL_LIMIT) busy.add(s.worker);
+  private freeWorker(workers: UnitView[], tick: number): UnitView | null {
+    void tick;
+    // A worker standing at a construction site must stay there: the sim only
+    // advances progress while a builder is adjacent. Never pull one away.
     for (const w of workers) {
       if (busy.has(w.eid)) continue;
       const o = (this.game.world.stores.orders as unknown as { get(e: number): { current: { kind: string } } | undefined }).get(w.eid);
       if (o && o.current.kind === 'build') continue;
       return w;
     }
-    return workers[0] ?? null;
+    return null;
   }
 
   /**
@@ -459,7 +552,9 @@ class SkirmishAi implements AiController {
     if (wd && workers < this.prof.maxWorkers && res.supplyUsed + (wd.cost.popUpkeep ?? 1) <= res.supplyCap + 6) {
       const hall = built.find((b) => this.plan.townHall === b.id || this.plan.hallUpgrades.includes(b.id));
       if (hall && this.canAfford(res, wd.cost.gold, wd.cost.lumber)) {
-        this.issue({ k: 'train', player: this.me, building: hall.eid, unitId: this.plan.worker });
+        // One command per plan cycle, and workers get priority — otherwise we
+        // blow the entire gold reserve in a single frame.
+        if (this.issue({ k: 'train', player: this.me, building: hall.eid, unitId: this.plan.worker })) return;
       }
     }
 
@@ -536,7 +631,7 @@ class SkirmishAi implements AiController {
 
   /* ----------------------------- heroes ------------------------------ */
 
-  private heroStuff(tick: number, heroes: { eid: number; x: number; y: number }[], army: { eid: number; x: number; y: number }[], home: { x: Fixed; y: Fixed }): void {
+  private heroStuff(tick: number, heroes: UnitView[], army: UnitView[], home: { x: Fixed; y: Fixed }): void {
     const built = this.game.snapshot().buildings.filter((b) => b.player === this.me && b.built);
     if (heroes.length === 0 && tick - this.lastHeroOrder > 20 * SEC) {
       const altar = built.find((b) => (this.gd.buildings.get(b.id)?.trains ?? []).some((u) => this.isHero(u)));
@@ -567,8 +662,17 @@ class SkirmishAi implements AiController {
 
   /* ----------------------------- scouting ---------------------------- */
 
-  private scoutStuff(tick: number, workers: { eid: number; x: number; y: number }[], home: { x: Fixed; y: Fixed }): void {
+  private scoutStuff(tick: number, workers: UnitView[], home: { x: Fixed; y: Fixed }): void {
     if (tick - this.lastScoutTick < 45 * SEC || !workers.length) return;
+    // Never pull a worker out of an active gather cycle just to wander.
+    const st = this.game.world.stores as unknown as {
+      cargo: { get(e: number): { carrying: string } | undefined };
+      orders: { get(e: number): { current: { kind: string } } | undefined };
+    };
+    workers = workers.filter(
+      (w) => st.cargo.get(w.eid)?.carrying === 'none' && st.orders.get(w.eid)?.current.kind !== 'harvest' && st.orders.get(w.eid)?.current.kind !== 'build',
+    );
+    if (!workers.length) return;
     const angle = (this.rng.int(8) * Math.PI) / 4;
     const dist = 18 + this.rng.int(14);
     const tx = Math.min(this.game.terrain.width - 3, Math.max(2, Math.floor(fn(home.x) + Math.cos(angle) * dist)));
@@ -584,9 +688,9 @@ class SkirmishAi implements AiController {
 
   private fightStuff(
     tick: number,
-    army: { eid: number; x: number; y: number; hp: number }[],
-    heroes: { eid: number; x: number; y: number }[],
-    workers: { eid: number; x: number; y: number }[],
+    army: UnitView[],
+    heroes: UnitView[],
+    workers: UnitView[],
     built: { eid: number; id: string }[],
     res: { gold: number; lumber: number },
     home: { x: Fixed; y: Fixed },
@@ -628,7 +732,7 @@ class SkirmishAi implements AiController {
   }
 
   /** Under attack: fight visible intruders, militia the nearby peasants. */
-  private orderDefenders(tick: number, fighters: { eid: number; x: number; y: number }[], workers: { eid: number; x: number; y: number }[], home: { x: Fixed; y: Fixed }): void {
+  private orderDefenders(tick: number, fighters: UnitView[], workers: UnitView[], home: { x: Fixed; y: Fixed }): void {
     const threats = this.intel.hostiles(4 * SEC, tick);
     const focus = threats[0];
     const units = fighters.map((u) => u.eid);
@@ -654,7 +758,7 @@ class SkirmishAi implements AiController {
     }
   }
 
-  private armyStrength(units: { hp: number }[]): number {
+  private armyStrength(units: UnitView[]): number {
     let s = 0;
     for (const u of units) {
       const d = this.gd.units.get(this.idOf(u.eid));
@@ -675,7 +779,7 @@ class SkirmishAi implements AiController {
   }
 
   /** Batch-move without spamming: only re-issue when the batch is stale. */
-  private moveAll(tick: number, units: { eid: number; x: number; y: number }[], to: { x: Fixed; y: Fixed }, mode: MoveMode): void {
+  private moveAll(tick: number, units: { eid: number }[], to: { x: Fixed; y: Fixed }, mode: MoveMode): void {
     const eids = units.map((u) => u.eid).sort((a, b) => a - b);
     if (!eids.length) return;
     const oldest = Math.min(...eids.map((e) => this.orderedAt.get(e) ?? -9999));
@@ -691,9 +795,21 @@ class SkirmishAi implements AiController {
     return res.gold >= gold && res.lumber >= lumber;
   }
 
+  /** Entity id created by the most recent `build` command, if any. */
+  private lastBuiltEntity: number | undefined = undefined;
+
   /** The single mutation point of this entire module. */
   private issue(cmd: Command): boolean {
+    const before = cmd.k === 'build' ? new Set(this.game.world.live as readonly number[]) : null;
     this.game.command(cmd);
+    if (before) {
+      for (const e of this.game.world.live as readonly number[]) {
+        if (!before.has(e)) {
+          this.lastBuiltEntity = e;
+          break;
+        }
+      }
+    }
     return true;
   }
 }

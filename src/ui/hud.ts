@@ -297,6 +297,7 @@ function cap(s: string): string {
 
 function infoFrom(r: SelRecord, count: number): SelInfo {
   return {
+    eid: r.eid,
     id: r.id,
     name: r.name,
     count,

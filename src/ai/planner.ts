@@ -55,9 +55,22 @@ export function planFor(gd: GameData, race: string): BuildPlan {
   // ---- build chain: topological by requiresBuilding, then cost -------------
   const order: string[] = [];
   const placed = new Set<string>([townHall]);
+  // Only keep buildings that actually do something for us: train, research,
+  // supply, upgrade a hall, or attack. Shipyards on a land-only map and empty
+  // shells would otherwise eat the whole budget.
+  const useful = mine.filter(
+    (b) =>
+      (b.trains ?? []).some((id) => gd.units.get(id)?.race === race) ||
+      (b.researches ?? []).length > 0 ||
+      b.supplyProvided > 0 ||
+      !!b.upgradeTo ||
+      !!b.attack,
+  );
+  const chain = new Set(useful.map((b) => b.id));
+
   let guard = 0;
-  while (order.length < mine.length && guard++ < 200) {
-    const ready = mine
+  while (order.length < useful.length && guard++ < 200) {
+    const ready = useful
       .filter((b) => !placed.has(b.id) && !supplies.includes(b.id))
       .filter((b) => !b.requiresBuilding || placed.has(b.requiresBuilding) || b.requiresBuilding === townHall)
       .sort(
@@ -69,7 +82,7 @@ export function planFor(gd: GameData, race: string): BuildPlan {
     if (!ready.length) {
       // Deadlock in the table (a prereq we never place): take the cheapest
       // remaining so the AI still progresses instead of stalling forever.
-      const rest = mine
+      const rest = useful
         .filter((b) => !placed.has(b.id) && !supplies.includes(b.id))
         .sort((a, b) => totalCost(a) - totalCost(b) || (a.id < b.id ? -1 : 1));
       if (!rest.length) break;
@@ -101,12 +114,13 @@ export function planFor(gd: GameData, race: string): BuildPlan {
       const ua = gd.units.get(a)!;
       const ub = gd.units.get(b)!;
       return (
-        producerCost(gd, byId, trainerOf(trainers, a)) - producerCost(gd, byId, trainerOf(trainers, b)) ||
+producerCost(byId, trainerOf(trainers, a)) - producerCost(byId, trainerOf(trainers, b)) ||
         totalUnitCost(ua) - totalUnitCost(ub) ||
         (a < b ? -1 : 1)
       );
     });
 
+  void chain;
   return { race, worker, townHall, supplies, armyUnits: ordered, heroes, buildChain: order, hallUpgrades, trainers };
 }
 
@@ -115,10 +129,10 @@ function trainerOf(trainers: Map<string, string[]>, unit: string): string | unde
   return undefined;
 }
 
-function producerCost(gd: GameData, byId: Map<string, BuildingDef>, b: string | undefined): number {
+function producerCost(byId: Map<string, BuildingDef>, b: string | undefined): number {
   if (!b) return 0;
   // A unit trained at the town hall is available from tick 0.
-  if (byId.get(b)?.supplyProvided >= HALL_SUPPLY) return 0;
+  if ((byId.get(b)?.supplyProvided ?? 0) >= HALL_SUPPLY) return 0;
   return byId.has(b) ? totalCost(byId.get(b)!) : 0;
 }
 
@@ -144,6 +158,6 @@ function depthOf(byId: Map<string, BuildingDef>, b: BuildingDef, seen = new Set<
 }
 
 /** Do we own a built instance of `id` (or its town-hall equivalent)? */
-export function ownsBuilding(owned: Map<string, number>, id: string): boolean {
+export function _unusedOwns(owned: Map<string, number>, id: string): boolean {
   return (owned.get(id) ?? 0) > 0;
 }

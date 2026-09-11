@@ -1,4 +1,5 @@
 import { createGame, spawnUnit, unitSpec } from '../src/sim/index.js';
+import { Store } from '../src/ecs/store.js';
 const g = createGame({ seed: 7, size: 48, players: [
   { id: 1, race: 'human', name: 'P1' }, { id: 2, race: 'orc', name: 'P2' } ] });
 const w:any = g.world;
@@ -11,11 +12,12 @@ let hall=-1; for(const e of w.live){ const b=w.stores.building.get(e); if(b?.bui
 g.command({k:'train', player:1, building:hall, unitId:'footman'});
 for (let t=0;t<605;t++) g.update(1);
 console.log('605 done live=', w.live.length);
-// Wrap each system with a call counter; if a system never returns we see which one.
-const tag:{i:number;tick:number} = {i:-1,tick:0};
-const orig = w.systems.slice();
-w.systems = orig.map((s:any,i:number)=>(ww:any,tick:number)=>{ tag.i=i; tag.tick=tick; s(ww,tick); });
-setInterval(()=>{ console.log('WATCHDOG stuck in sys#'+tag.i+' at tick '+tag.tick+' live='+w.live.length); }, 5000);
-for (let t=0;t<600;t++) g.update(1);
-console.log('DONE');
+let calls=0; let where='';
+const proto = Store.prototype as any;
+for (const m of ['get','add','has','remove']) {
+  const orig = proto[m];
+  proto[m] = function(...a:any[]){ if(++calls > 5_000_000 && !where){ where = m+' budget blown at tick '+w.tick; throw new Error(where);} return orig.apply(this,a); };
+}
+try { for (let t=0;t<600;t++) g.update(1); console.log('DONE calls='+calls); }
+catch(e:any){ console.log('STOP:', e.message, 'calls='+calls); }
 process.exit(0);

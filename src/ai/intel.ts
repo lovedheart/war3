@@ -159,7 +159,10 @@ export class Intel {
       const tx = Math.floor(fn(t.x));
       const ty = Math.floor(fn(t.y));
       if (!this.explored(tx, ty)) continue; // never seen: does not exist for us
-      out.push({ eid, x: t.x, y: t.y, tx, ty, kind, capacity: fn(store.capacity) });
+      // NB: mine.capacity is Fixed (gold), tree.capacity is a raw int count of
+      // lumber — normalise both to whole resource units here.
+      const cap = kind === 'gold' ? fn(store.capacity) : store.capacity;
+      out.push({ eid, x: t.x, y: t.y, tx, ty, kind, capacity: cap });
     }
     return out.sort((a, b) => b.capacity - a.capacity || a.eid - b.eid);
   }
