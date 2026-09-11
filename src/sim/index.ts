@@ -202,7 +202,7 @@ function parseMap(json: unknown): MapLike {
     height,
     tiles,
     spawns: (j.spawns ?? []).map(([x, y]) => ({ x: ff(x) + ff(0.5), y: ff(y) + ff(0.5) })),
-    mines: (j.mines ?? []).map(([x, y, c]) => ({ x: ff(x) + ff(0.5), y: ff(y) + ff(0.5), capacity: fi(c ?? 12500) })),
+    mines: (j.mines ?? []).map(([x, y, c]) => ({ x: ff(x) + ff(0.5), y: ff(y) + ff(0.5), capacity: c ?? 12500 })),
     trees: (j.trees ?? []).map(([x, y]) => ({ x: ff(x) + ff(0.5), y: ff(y) + ff(0.5) })),
     creeps: (j.creeps ?? []).map(([u, x, y]) => ({ unitId: u, x: ff(x) + ff(0.5), y: ff(y) + ff(0.5) })),
   };
@@ -223,7 +223,7 @@ function attachMap(w: World, map: MapLike, gd: GameData): void {
     },
   };
   for (const m of map.mines) {
-    const e = spawnGoldMine(w, m.x, m.y, fi(m.capacity));
+    const e = spawnGoldMine(w, m.x, m.y, ff(m.capacity));
     (w as unknown as { goldMines: Eid[] }).goldMines.push(e);
   }
   for (const t of map.trees) {
@@ -290,14 +290,11 @@ function placeStart(w: World, gd: GameData, player: number, race: string, at: { 
     const cargo = (w.stores.cargo as unknown as { add(e: Eid): { capacity: Fixed } }).add(e);
     cargo.capacity = ff(gd.units.get(workerId)?.carryCapacity ?? 10);
   }
-  // auto-start harvesting so an idle player still gathers (AI overrides later)
-  if (mine) {
-    for (const wk of workers.slice(0, 3)) {
-      (w.stores.orders as unknown as {
-        get(e: Eid): { current: { kind: string; targetEid: number; tx: Fixed; ty: Fixed; mode: number; param: string } } | undefined;
-      }).get(wk)!.current = { kind: 'harvest', targetEid: mine, tx: 0, ty: 0, mode: 0, param: 'gold' };
-      (w.stores.cargo as unknown as { get(e: Eid): { sourceEid: number } }).get(wk)!.sourceEid = mine;
-    }
+  // Record intent only; the real order is issued by startHarvestBootstrap at
+  // tick 1, when every entity id exists.
+  if (mine !== 0xffffffff) {
+    const want = ((w as unknown as { pendingHarvest?: Map<number, Eid[]> }).pendingHarvest ??= new Map());
+    want.set(player, workers.slice(0, 3));
   }
 }
 
@@ -461,6 +458,10 @@ export type { GeneratedMap };
  * One-shot: send the idle starting workers to the nearest gold mine.
  * Runs every tick but self-disarms; the AI may retarget them later.
  */
+/**
+ * Tick-1 bootstrap: send the starting workers to the nearest gold mine and
+ * keep them in a gather loop. Runs once per World.
+ */
 const bootstrapped = new WeakSet<object>();
 function startHarvestBootstrap(w: World, _tick: number): void {
   if (w.tick < 1) return;
@@ -469,6 +470,7 @@ function startHarvestBootstrap(w: World, _tick: number): void {
   const st = w.stores;
   const tr = st.transform as unknown as { get(e: Eid): { x: Fixed; y: Fixed } | undefined };
   const sd = st.stats as unknown as { get(e: Eid): { id: string } | undefined };
+  const ow = st.owner as unknown as { get(e: Eid): { player: number } | undefined };
   const ord = st.orders as unknown as {
     get(e: Eid): { current: { kind: string; targetEid: number; tx: Fixed; ty: Fixed; mode: number; param: string } } | undefined;
   };
@@ -496,4 +498,6 @@ function startHarvestBootstrap(w: World, _tick: number): void {
     o.current = { kind: 'harvest', targetEid: best, tx: 0, ty: 0, mode: 0, param: 'gold' };
     (st.cargo as unknown as { get(e: Eid): { sourceEid: number } | undefined }).get(eid)!.sourceEid = best;
   }
+  void ow;
 }
+

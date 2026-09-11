@@ -8,8 +8,8 @@
  * Everything here is READ-ONLY with respect to the simulation: no store value
  * is ever assigned, and missing components are skipped rather than fatal.
  */
-import { Fixed, ff, fn } from '../core/fixed.js';
-import { TILE_SIZE_PX, FOG_UNEXPLORED, FOG_VISIBLE } from '../core/constants.js';
+import { Fixed, ff, fn, fsub, fmul, fdivi } from '../core/fixed.js';
+import { TILE_SIZE_PX, FOG_UNEXPLORED, FOG_EXPIRED } from '../core/constants.js';
 import { stepsToDeg } from '../core/geom.js';
 import type { Eid } from '../core/pool.js';
 import type { Game } from '../sim/index.js';
@@ -19,13 +19,13 @@ import type { FogOfWar } from '../map/fog.js';
 import { Camera } from './camera.js';
 import { SpriteAtlas, bakeKey, drawSprite, guessRace } from './atlas.js';
 import {
-  TERRAIN, UI, racePalette, terrainSwatch, terrainVariant, desaturateHex,
+  TERRAIN, UI, hexToRgb, racePalette, terrainSwatch, terrainVariant, desaturateHex,
   playerColor, healthBarColor, shadeHex, tintHex, withAlpha, rand01, hash2,
 } from './palette.js';
 import { FOG_EXPIRED_WASH } from './palette.js';
 import { fillFogImageData, fogTileRange, fogStateAt, type FogSource } from './fogmask.js';
 import { footprintPx, spriteKey, isHeroId } from './draw/spec.js';
-import type { Ctx2D } from './draw/spec.js';
+import type { ArtCategory, Ctx2D } from './draw/spec.js';
 import { shadowBlob } from './draw/common.js';
 import type { ParticleSystem, FloaterLayer } from './particles.js';
 
@@ -93,13 +93,16 @@ export interface FrameCtx {
 export function entityScreenPos(st: Stores, eid: Eid, cam: Camera, alpha: number): { sx: number; sy: number } | null {
   const t = st.transform?.get(eid);
   if (!t) return null;
-  const m = st.movement?.get(eid);
+  const m = alpha < 1 ? st.movement?.get(eid) : undefined;
   let x = t.x;
   let y = t.y;
   if (m && (m.vx !== 0 || m.vy !== 0)) {
-    // back up one step by (1-alpha) of this tick's motion
-    x -= ((m.vx / 30) * (1 - alpha)) | 0;
-    y -= ((m.vy / 30) * (1 - alpha)) | 0;
+    // `t` is the position at the END of the tick, so pull back by the fraction
+    // of one tick's motion that has not been rendered yet. fmul keeps this in
+    // exact fixed point (plain multiplication would overflow 2^53).
+    const k = fdivi(fsub(ff(1), ff(alpha)), 30);
+    x -= fmul(m.vx, k);
+    y -= fmul(m.vy, k);
   }
   return { sx: cam.worldToScreenX(x), sy: cam.worldToScreenY(y) };
 }
@@ -140,58 +143,67 @@ export function drawGround(
   if (!terrain) { ctx.restore(); return; }
   const r = tilesInRange(cam, terrain.width, terrain.height);
   const ppu = cam.pxPerUnit();
-  // one batched path per palette entry keeps fillStyle switches to ~9/frame
-  for (let ti = 0; ti < TERRAIN.length; ti++) {
-    const sw = TERRAIN[ti];
+  // Base colour: one cell per tile in an offscreen ImageData, upscaled with
+  // smoothing off. The whole ground costs one putImageData + one drawImage
+  // instead of thousands of fillRects.
+  {
+    const cols = r.x1 - r.x0 + 1;
+    const rows = r.y1 - r.y0 + 1;
+    const img = ensureCells(cols, rows);
+    if (img) {
+      const d = img.data;
+      d.fill(0);
+      for (let row = 0; row < rows; row++) {
+        const ty = r.y0 + row;
+        for (let col = 0; col < cols; col++) {
+          const tx = r.x0 + col;
+          const id = terrain.tile(tx, ty);
+          if (fog && fogStateAt(fog, tx, ty) === FOG_UNEXPLORED) continue;
+          const sw = terrainSwatch(id);
+          const v = terrainVariant(tx, ty, id);
+          const [rr, gg, bb] = hexToRgb(v === 2 ? sw.dark : v === 3 ? sw.light : sw.base);
+          const i = (row * cols + col) * 4;
+          d[i] = rr; d[i + 1] = gg; d[i + 2] = bb; d[i + 3] = 255;
+        }
+      }
+      blitCells(ctx, img, cam, r.x0, r.y0, false);
+    }
+  }
+  // Speckle detail: a single deterministic stipple path for the whole view
+  // (one fill), instead of one rect per tile.
+  if (ppu >= 18) {
+    const step = Math.max(1, Math.ceil(2 / Math.max(1, ppu)));
     let opened = false;
-    ctx.fillStyle = sw.base;
-    for (let ty = r.y0; ty <= r.y1; ty++) {
-      for (let tx = r.x0; tx <= r.x1; tx++) {
-        if (terrain.tile(tx, ty) !== ti) continue;
+    ctx.fillStyle = withAlpha(TERRAIN[1].speck, 0.45);
+    for (let ty = r.y0; ty <= r.y1; ty += step) {
+      for (let tx = r.x0; tx <= r.x1; tx += step) {
         if (fog && fogStateAt(fog, tx, ty) === FOG_UNEXPLORED) continue;
-        const sx = Math.floor(cam.worldToScreenX(ff(tx)));
-        const sy = Math.floor(cam.worldToScreenY(ff(ty)));
+        const id = terrain.tile(tx, ty);
+        if (id === 4) continue; // water gets shimmer instead
+        const h = hash2(tx, ty);
+        if ((h & 3) !== 1) continue; // ~25% of cells carry grain
         if (!opened) { ctx.beginPath(); opened = true; }
-        ctx.rect(sx, sy, Math.ceil(ppu) + 1, Math.ceil(ppu) + 1);
+        const bx = cam.worldToScreenX(ff(tx));
+        const by = cam.worldToScreenY(ff(ty));
+        ctx.rect(bx + ((h >> 3) % 9) * ppu * 0.1, by + ((h >> 7) % 9) * ppu * 0.1, Math.max(1, ppu * 0.1), Math.max(1, ppu * 0.1));
       }
     }
     if (opened) ctx.fill();
   }
-  // deterministic speckle texture, batched per tile id
-  if (ppu >= 18) {
-    for (let ti = 0; ti < TERRAIN.length; ti++) {
-      const sw = TERRAIN[ti];
-      let opened = false;
-      ctx.fillStyle = withAlpha(sw.speck, 0.5);
-      for (let ty = r.y0; ty <= r.y1; ty++) {
-        for (let tx = r.x0; tx <= r.x1; tx++) {
-          if (terrain.tile(tx, ty) !== ti) continue;
-          if (fog && fogStateAt(fog, tx, ty) === FOG_UNEXPLORED) continue;
-          const v = terrainVariant(tx, ty, ti);
-          const bx = cam.worldToScreenX(ff(tx));
-          const by = cam.worldToScreenY(ff(ty));
-          if (!opened) { ctx.beginPath(); opened = true; }
-          for (let k = 0; k < 3; k++) {
-            const ox = (v * 7 + k * 23 + (hash2(tx, ty) & 7)) % 13;
-            const oy = (v * 11 + k * 17 + (hash2(ty, tx) & 7)) % 13;
-            ctx.rect(bx + (ox / 13) * ppu, by + (oy / 13) * ppu, Math.max(1, ppu * 0.06), Math.max(1, ppu * 0.06));
-          }
-        }
-      }
-      if (opened) ctx.fill();
-    }
-  }
   // cliff faces: darken the tile below a cliff run so elevation reads at a glance
-  ctx.fillStyle = 'rgba(0,0,0,0.30)';
-  ctx.beginPath();
-  for (let ty = r.y0; ty <= r.y1; ty++) {
-    for (let tx = r.x0; tx <= r.x1; tx++) {
-      if (terrain.tile(tx, ty) !== 3 && terrain.tile(tx, ty) !== 5) continue;
-      if (!tileBelowIsCliff(terrain, tx, ty)) continue;
-      ctx.rect(Math.floor(cam.worldToScreenX(ff(tx))), Math.floor(cam.worldToScreenY(ff(ty))), Math.ceil(ppu) + 1, Math.ceil(ppu * 0.34));
+  if (ppu >= 10) {
+    ctx.fillStyle = 'rgba(0,0,0,0.30)';
+    ctx.beginPath();
+    for (let ty = r.y0; ty <= r.y1; ty++) {
+      for (let tx = r.x0; tx <= r.x1; tx++) {
+        const id = terrain.tile(tx, ty);
+        if (id !== 3 && id !== 5) continue;
+        if (!tileBelowIsCliff(terrain, tx, ty)) continue;
+        ctx.rect(Math.floor(cam.worldToScreenX(ff(tx))), Math.floor(cam.worldToScreenY(ff(ty))), Math.ceil(ppu) + 1, Math.ceil(ppu * 0.34));
+      }
     }
+    ctx.fill();
   }
-  ctx.fill();
   // water shimmer
   ctx.strokeStyle = withAlpha(TERRAIN[4].speck, 0.35);
   ctx.lineWidth = 1;
@@ -276,22 +288,23 @@ export function drawEntities(ctx: Ctx2D, game: Game, cam: Camera, alpha: number,
   const sel = selectionSet(game);
   const items = collectEntities(game, viewer);
 
-  /* pass A: contact shadows, batched into one path */
+  /* pass A: contact shadows for ground units only (batched into one path);
+     the sprite pass below collects everything else it needs in the same walk. */
   ctx.save();
   ctx.fillStyle = '#000000';
   ctx.globalAlpha = 0.34;
   ctx.beginPath();
+  let shadowed = false;
   for (const it of items) {
+    const t = st.transform?.get(it.eid);
+    if (!t || st.building?.get(it.eid) || st.movement?.get(it.eid)?.fly) continue;
     const p = entityScreenPos(st, it.eid, cam, alpha);
     if (!p) continue;
-    const t = st.transform?.get(it.eid);
-    if (!t) continue;
-    if (st.building?.get(it.eid)) continue;
-    if (st.movement?.get(it.eid)?.fly) continue;
     const rx = Math.max(3, cam.pxPerUnit() * (fn(t.radius) || 0.35) * 1.1);
     ellipsePath(ctx, p.sx, p.sy + 1, rx, rx * 0.42);
+    shadowed = true;
   }
-  ctx.fill();
+  if (shadowed) ctx.fill();
   ctx.restore();
 
   /* pass B: sprites */
@@ -327,13 +340,10 @@ function drawOneEntity(
     const b = st.building?.get(eid);
     const id = b?.buildingId ?? '';
     const ghost = !!b && !b.built;
-    const key = atl.resolve('building', id, { race: raceOf(st, eid, id), ghost })?.key
-      ?? bakeKey('building', id, { race: raceOf(st, eid, id), ghost });
+    const key = bakeKey('building', id, { race: raceOf(st, eid, id), ghost });
+    atl.resolve('building', id, { race: raceOf(st, eid, id), ghost });
     const px = footprintPx(t.w || 1, t.h || 1, TILE_SIZE_PX) * zoom;
-    ctx.save();
-    if (ghost) ctx.globalAlpha = 0.55;
-    drawSprite(atl, ctx, key, sx, sy, false, px / slotOf(atl, key));
-    ctx.restore();
+    blit(atl, ctx, key, sx, sy, false, ghost ? 0.55 : 1, px / slotOf(atl, key));
     if (ghost && b) drawBuildProgress(ctx, sx, sy - px * 0.55, px, b.progress, b.totalTicks);
     return;
   }
@@ -341,7 +351,7 @@ function drawOneEntity(
   if (kind === KIND_ITEM) {
     const id = st.item?.get(eid)?.itemId ?? '';
     const key = atl.resolve('item', id)?.key ?? spriteKey('item', id);
-    drawSprite(atl, ctx, key, sx, sy - 6 * zoom, false, (TILE_SIZE_PX * 0.55 * zoom) / slotOf(atl, key));
+    blit(atl, ctx, key, sx, sy - 6 * zoom, false, 1, (TILE_SIZE_PX * 0.55 * zoom) / slotOf(atl, key));
     return;
   }
 
@@ -359,7 +369,7 @@ function drawOneEntity(
 
   if (kind === KIND_DECORATION) {
     const key = atl.resolve('decoration', decoIdFor(t))?.key ?? spriteKey('decoration', 'tree');
-    drawSprite(atl, ctx, key, sx, sy, false, (TILE_SIZE_PX * 1.5 * zoom) / slotOf(atl, key));
+    blit(atl, ctx, key, sx, sy, false, 1, (TILE_SIZE_PX * 1.5 * zoom) / slotOf(atl, key));
     return;
   }
 
@@ -368,29 +378,20 @@ function drawOneEntity(
   const id = s?.id ?? '';
   const hero = !!s?.isHero || isHeroId(id);
   const fly = !!st.movement?.get(eid)?.fly;
-  const key = atl.resolve('unit', id, { race: raceOf(st, eid, id), hero, fly })?.key
-    ?? bakeKey('unit', id, { race: raceOf(st, eid, id), hero });
+  const key = bakeKey('unit', id, { race: raceOf(st, eid, id), hero }) + (fly ? '#fly' : '');
+  atl.resolve('unit', id, { race: raceOf(st, eid, id), hero, fly });
   const scale = (hero ? 1.28 : 1) * (fly ? 1.05 : 1) * zoom;
   const bob = fly ? Math.sin((game.world.tick + (eid & 7)) * 0.18) * 2.5 * zoom : 0;
 
-  ctx.save();
-  if (fly) ctx.translate(0, -8 * zoom);
-  if (bob) ctx.translate(0, bob);
+  const lift = (fly ? -8 * zoom : 0) + bob;
   // face left/right from the deterministic facing angle
   const flip = facingFlips(st, eid);
-  drawSprite(atl, ctx, key, sx, sy, flip, scale);
+  blit(atl, ctx, key, sx, sy + lift, flip, 1, scale);
 
-  // hit flash: white silhouette for a few ticks after damage
+  // hit flash: additive white re-blit for a couple of ticks after damage
   const atk = st.attack?.get(eid);
   const flash = hitFlash(st, eid, game.world.tick, alpha);
-  if (flash > 0) {
-    ctx.globalAlpha = flash * 0.75;
-    ctx.globalCompositeOperation = 'lighter';
-    drawSprite(atl, ctx, key, sx, sy, flip, scale);
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.globalAlpha = 1;
-  }
-  ctx.restore();
+  if (flash > 0) blit(atl, ctx, key, sx, sy + lift, flip, flash * 0.75, scale, 'lighter');
 
   // dying units fade toward bone-white
   const h = st.health?.get(eid);
@@ -420,6 +421,57 @@ export function hitFlash(st: Stores, eid: Eid, tick: number, alpha: number): num
   if (!c) return 0;
   const age = tick - c.tick + (1 - alpha);
   return age <= 2 ? 1 - age / 3 : 0;
+}
+
+/**
+ * Blit a baked sprite without the save/restore pair drawSprite needs, so a
+ * 400-entity frame costs 400 drawImage calls instead of 1600 canvas ops.
+ */
+function blit(
+  atl: SpriteAtlas, ctx: Ctx2D, key: string, x: number, y: number,
+  flip: boolean, alpha: number, scale: number, op?: GlobalCompositeOperation,
+): void {
+  let e = atl.entry(key);
+  if (!e) {
+    // Register-and-bake once so a first-seen unit costs one blit, not two.
+    const cat = key.slice(0, key.indexOf(':')) as ArtCategory;
+    const rest = key.slice(key.indexOf(':') + 1);
+    const at = rest.indexOf('@');
+    const id = at < 0 ? rest : rest.slice(0, at);
+    const hash = key.indexOf('#');
+    const flags = hash < 0 ? '' : key.slice(hash + 1);
+    atl.resolve(cat, id, { race: key.slice(at + 1, hash < 0 ? undefined : hash), hero: flags.includes('hero'), ghost: flags.includes('scaffold') });
+    e = atl.entry(key);
+  }
+  if (!e) {
+    // Unbaked key (atlas exhausted or a subsystem not wired yet): draw the
+    // magenta placeholder without recursing into drawSprite's own fallback.
+    ctx.save();
+    ctx.fillStyle = 'rgba(255,0,255,0.35)';
+    ctx.strokeStyle = '#ff00ff';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.rect(x - 8, y - 16, 16, 16);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+    return;
+  }
+  const page = atl.pages[e.page] as unknown as CanvasImageSource;
+  const dw = e.sw * scale;
+  const dh = e.sh * scale;
+  const needsState = alpha !== 1 || op !== undefined || flip;
+  if (needsState) ctx.save();
+  if (alpha !== 1) ctx.globalAlpha = alpha;
+  if (op) ctx.globalCompositeOperation = op;
+  if (flip) {
+    ctx.translate(x, y);
+    ctx.scale(-1, 1);
+    ctx.drawImage(page, e.sx, e.sy, e.sw, e.sh, -e.anchorX * scale, -e.anchorY * scale, dw, dh);
+  } else {
+    ctx.drawImage(page, e.sx, e.sy, e.sw, e.sh, x - e.anchorX * scale, y - e.anchorY * scale, dw, dh);
+  }
+  if (needsState) ctx.restore();
 }
 
 function slotOf(atl: SpriteAtlas, key: string): number {
@@ -484,45 +536,37 @@ export function drawFog(
   const scratch = fogScratch(r.cols * r.rows * 4);
   const data = scratch.data;
   fillFogImageData(data, src, r.x0, r.y0, r.cols, r.rows);
-  const surf = scratch.surface;
-  const sctx = scratch.sctx;
-  const origin = cam.worldToScreen(ff(r.x0), ff(r.y0));
-  let img = scratch.img;
-  if (!img || scratch.imgCols !== r.cols || scratch.imgRows !== r.rows) {
-    img = makeImageData(r.cols, r.rows);
-    scratch.img = img;
-    scratch.imgCols = r.cols;
-    scratch.imgRows = r.rows;
-    scratch.cols = -1;
-  }
   const cell = cam.pxPerUnit();
-  const dw = r.cols * cell;
-  const dh = r.rows * cell;
-  if (surf && sctx && img) {
+  const img = ensureCells(r.cols, r.rows);
+  if (img && img.data.length >= r.cols * r.rows * 4) {
     img.data.set(data.subarray(0, r.cols * r.rows * 4));
-    sctx.clearRect(0, 0, r.cols, r.rows);
-    sctx.putImageData(img, 0, 0);
-    ctx.save();
-    ctx.imageSmoothingEnabled = true;
-    ctx.drawImage(surf as never, origin.sx, origin.sy, dw, dh);
-    ctx.restore();
+    blitCells(ctx, img, cam, r.x0, r.y0, true);
   } else {
     // fallback: one rect per non-visible tile (still no per-pixel loop)
+    // node / no-canvas fallback: two batched paths (opaque black + dim wash)
+    const origin = cam.worldToScreen(ff(r.x0), ff(r.y0));
     ctx.save();
-    for (let row = 0; row < r.rows; row++) {
-      for (let col = 0; col < r.cols; col++) {
-        const st = fogStateAt(src, r.x0 + col, r.y0 + row);
-        if (st === FOG_VISIBLE) continue;
-        ctx.globalAlpha = st === FOG_UNEXPLORED ? 1 : 0.55;
-        ctx.fillStyle = st === FOG_UNEXPLORED ? '#000000' : '#12141a';
-        ctx.fillRect(origin.sx + col * cell, origin.sy + row * cell, cell + 1, cell + 1);
+    for (const pass of [FOG_UNEXPLORED, FOG_EXPIRED]) {
+      ctx.globalAlpha = pass === FOG_UNEXPLORED ? 1 : 0.55;
+      ctx.fillStyle = pass === FOG_UNEXPLORED ? '#000000' : '#12141a';
+      ctx.beginPath();
+      for (let row = 0; row < r.rows; row++) {
+        for (let col = 0; col < r.cols; col++) {
+          if (fogStateAt(src, r.x0 + col, r.y0 + row) !== pass) continue;
+          ctx.rect(origin.sx + col * cell, origin.sy + row * cell, cell + 1, cell + 1);
+        }
       }
+      ctx.fill();
     }
     ctx.restore();
   }
-  // return the expired-mask so drawGround can desaturate those tiles next frame
+  // Expired-tile mask, reused by drawGround's desaturating wash next frame.
   const mask = new Uint8Array(r.cols * r.rows);
-  for (let i = 0; i < mask.length; i++) mask[i] = data[i * 4 + 3] > 40 && data[i * 4 + 3] < 200 ? 1 : 0;
+  for (let row = 0; row < r.rows; row++) {
+    for (let col = 0; col < r.cols; col++) {
+      mask[row * r.cols + col] = fogStateAt(src, r.x0 + col, r.y0 + row) === FOG_EXPIRED ? 1 : 0;
+    }
+  }
   scratch.cols = r.cols;
   scratch.rows = r.rows;
   void w; void h;
@@ -540,6 +584,56 @@ interface FogScratch {
   rows: number;
 }
 let fogCache: FogScratch | null = null;
+
+interface CellScratch {
+  surface: HTMLCanvasElement | OffscreenCanvas | null;
+  sctx: Ctx2D | null;
+  img: ImageData | null;
+  cols: number;
+  rows: number;
+}
+let cellCache: CellScratch | null = null;
+
+/** Offscreen 1-pixel-per-tile surface reused across frames (null under node). */
+export function ensureCells(cols: number, rows: number): ImageData | null {
+  if (!cellCache) cellCache = { surface: null, sctx: null, img: null, cols: -1, rows: -1 };
+  const g = globalThis as unknown as { document?: { createElement(t: 'canvas'): HTMLCanvasElement }; OffscreenCanvas?: new (w: number, h: number) => OffscreenCanvas };
+  if (cellCache.surface === null) {
+    if (g.document?.createElement) {
+      const c = g.document.createElement('canvas');
+      cellCache.surface = c;
+      cellCache.sctx = (c as unknown as { getContext(t: '2d'): Ctx2D | null }).getContext('2d');
+    } else if (g.OffscreenCanvas) {
+      const c = new g.OffscreenCanvas(1, 1);
+      cellCache.surface = c;
+      cellCache.sctx = (c as unknown as { getContext(t: '2d'): Ctx2D | null }).getContext('2d');
+    }
+  }
+  if (!cellCache.surface || !cellCache.sctx) return null;
+  if (cellCache.cols !== cols || cellCache.rows !== rows) {
+    const surf = cellCache.surface as unknown as { width: number; height: number };
+    surf.width = cols;
+    surf.height = rows;
+    cellCache.cols = cols;
+    cellCache.rows = rows;
+    cellCache.img = null;
+  }
+  if (!cellCache.img) cellCache.img = makeImageData(cols, rows);
+  return cellCache.img;
+}
+
+/** Upscale a cell grid onto the viewport. `smooth` feathers fog edges. */
+export function blitCells(ctx: Ctx2D, img: ImageData, cam: Camera, x0: number, y0: number, smooth: boolean): void {
+  if (!cellCache?.surface || !cellCache.sctx) return;
+  cellCache.sctx.clearRect(0, 0, img.width, img.height);
+  cellCache.sctx.putImageData(img, 0, 0);
+  const o = cam.worldToScreen(ff(x0), ff(y0));
+  const cell = cam.pxPerUnit();
+  ctx.save();
+  ctx.imageSmoothingEnabled = smooth;
+  ctx.drawImage(cellCache.surface as never, o.sx, o.sy, img.width * cell, img.height * cell);
+  ctx.restore();
+}
 
 /** Allocate ImageData via the DOM when present, else a plain-array shim. */
 export function makeImageData(cols: number, rows: number): ImageData {
@@ -583,13 +677,32 @@ function fogScratch(minBytes: number): FogScratch {
 
 /** Clip to the union of expired tiles using an even-odd path (one fill). */
 function clipExpired(ctx: Ctx2D, mask: Uint8Array, cols: number, x0: number, y0: number, cam: Camera): void {
+  const rows = Math.max(1, (mask.length / cols) | 0);
+  const img = ensureCells(cols, rows);
+  if (!img || !cellCache?.surface) { ctx.beginPath(); return; }
+  const d = img.data;
+  d.fill(0);
+  for (let i = 0; i < mask.length; i++) {
+    if (!mask[i]) continue;
+    const p = i * 4;
+    d[p] = d[p + 1] = d[p + 2] = 255;
+    d[p + 3] = 255;
+  }
+  // Canvas cannot clip against an image, so the mask is traced as one path of
+  // horizontal runs: one rect per contiguous expired span instead of one per tile.
+  void img;
+  const o = cam.worldToScreen(ff(x0), ff(y0));
   const cell = cam.pxPerUnit();
   ctx.beginPath();
-  for (let row = 0; row * cols < mask.length; row++) {
-    for (let col = 0; col < cols; col++) {
-      if (!mask[row * cols + col]) continue;
-      const o = cam.worldToScreen(ff(x0 + col), ff(y0 + row));
-      ctx.rect(o.sx, o.sy, cell + 1, cell + 1);
+  for (let row = 0; row < rows; row++) {
+    let run = -1;
+    for (let col = 0; col <= cols; col++) {
+      const on = col < cols && mask[row * cols + col] === 1;
+      if (on && run < 0) run = col;
+      else if (!on && run >= 0) {
+        ctx.rect(o.sx + run * cell, o.sy + row * cell, (col - run) * cell + 1, cell + 1);
+        run = -1;
+      }
     }
   }
   ctx.clip();
@@ -799,21 +912,34 @@ export function drawDebug(ctx: Ctx2D, game: Game, cam: Camera): void {
   }
   ctx.stroke();
 
-  // pathfinding grid
+  // pathfinding grid: cell outlines + blocked cells tinted
   const grid = game.grid as { passable?(tx: number, ty: number): boolean } | undefined;
   if (grid?.passable) {
     const r = tilesInRange(cam, game.terrain.width, game.terrain.height);
-    ctx.strokeStyle = 'rgba(90,200,255,0.20)';
+    const cell = cam.pxPerUnit();
+    ctx.strokeStyle = 'rgba(90,200,255,0.18)';
     ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let ty = r.y0; ty <= r.y1; ty++) {
+      const oy = Math.floor(cam.worldToScreenY(ff(ty)));
+      for (let tx = r.x0; tx <= r.x1; tx++) {
+        const ox = Math.floor(cam.worldToScreenX(ff(tx)));
+        ctx.moveTo(ox, oy);
+        ctx.lineTo(ox + cell, oy);
+        ctx.moveTo(ox, oy);
+        ctx.lineTo(ox, oy + cell);
+      }
+    }
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255,70,70,0.20)';
     ctx.beginPath();
     for (let ty = r.y0; ty <= r.y1; ty++) {
       for (let tx = r.x0; tx <= r.x1; tx++) {
         if (grid.passable(tx, ty)) continue;
-        const o = cam.worldToScreen(ff(tx), ff(ty));
-        ctx.rect(o.sx, o.sy, cam.pxPerUnit(), cam.pxPerUnit());
+        ctx.rect(Math.floor(cam.worldToScreenX(ff(tx))), Math.floor(cam.worldToScreenY(ff(ty))), Math.ceil(cell), Math.ceil(cell));
       }
     }
-    ctx.stroke();
+    ctx.fill();
   }
 
   // quadtree nodes

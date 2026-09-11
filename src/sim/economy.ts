@@ -14,6 +14,8 @@ import { UPKEEP_LOW_GOLD_DRAIN, UPKEEP_HIGH_GOLD_DRAIN } from '../core/constants
 import { dist } from './movement.js';
 
 const TICKS = 30;
+/** WC3: filling one load at a gold source takes ~1.05 s of gathering. */
+const HARVEST_TICKS = 31;
 
 interface S {
   transform: { get(e: Eid): { x: Fixed; y: Fixed; w: number; h: number } | undefined };
@@ -168,63 +170,83 @@ function harvestTick(
   t: NonNullable<ReturnType<S['transform']['get']>>,
   _tick: number,
 ): void {
-  const src = o.current.targetEid;
-  const st = s.transform.get(src);
-  if (!st) {
-    o.current.kind = 'none';
+  // ---- carrying: deliver to the drop-off, then resume harvesting ----------
+  if (c.carrying !== 'none') {
+    const dest = findDropoff(w, s, players(w), c.carrying, t);
+    if (dest === 0xffffffff) return; // no drop-off yet: hold the load
+    const dt = s.transform.get(dest);
+    if (!dt) return;
+    c.destEid = dest;
+    if (dist(t.x, t.y, dt.x, dt.y) > ff(2.2)) {
+      steer(o, dt.x, dt.y);
+      return;
+    }
+    const p = players(w)[s.owner.get(eid)?.player ?? 0];
+    if (p) p.earn(c.carrying === 'wood' ? 'lumber' : 'gold', c.amount);
+    c.amount = 0;
+    c.carrying = 'none';
+    c.phase = 0;
+    o.current.kind = 'harvest';
+    clearWaypoint(o);
     return;
+  }
+
+  // ---- empty: work at the source ----------------------------------------
+  let src = o.current.targetEid;
+  let st = src !== 0xffffffff ? s.transform.get(src) : undefined;
+  if (!st || (!s.mine.get(src) && !s.tree.get(src))) {
+    // Dead target (felled tree / removed mine): re-acquire a live source once.
+    retargetHarvest(w, s, eid, c, o, o.current.param === 'wood' ? 'wood' : 'gold');
+    src = o.current.targetEid;
+    st = src !== 0xffffffff ? s.transform.get(src) : undefined;
+    if (!st) return;
   }
   const mine = s.mine.get(src);
   const tree = s.tree.get(src);
-  if (!mine && !tree) {
-    o.current.kind = 'none';
+  if (!mine && !tree) return;
+
+  if (dist(t.x, t.y, st.x, st.y) > ff(1.8)) {
+    c.phase = 0; // walking: the gather timer only runs at the source
+    steer(o, st.x, st.y);
     return;
   }
-  const kind: 'gold' | 'wood' = mine ? 'gold' : 'wood';
-  const near = dist(t.x, t.y, st.x, st.y) <= ff(1.6);
-  if (!near) {
-    o.current.tx = st.x;
-    o.current.ty = st.y;
+  if (c.phase > 0) {
+    c.phase--; // still filling this load
+    clearWaypoint(o);
     return;
   }
-  if (c.carrying === 'none') {
-    const avail = mine ? mine.capacity : tree ? tree.capacity : 0;
-    const take = Math.min(c.capacity, avail);
-    if (take <= 0) {
-      // source exhausted → find another or idle
-      retargetHarvest(w, s, eid, c, o, kind);
-      return;
+  const take = Math.min(c.capacity, (mine ? mine.capacity : tree ? tree.capacity : 0));
+  if (take <= 0) {
+    retargetHarvest(w, s, eid, c, o, mine ? 'gold' : 'wood');
+    return;
+  }
+  if (mine) {
+    mine.capacity -= take;
+    c.phase = HARVEST_TICKS;
+  }
+  if (tree) {
+    tree.capacity -= take;
+    if (tree.capacity <= 0) {
+      tree.felled = true;
+      w.destroyEntity(src);
     }
-    if (mine) mine.capacity -= take;
-    if (tree) {
-      tree.capacity -= take;
-      if (tree.capacity <= 0) {
-        tree.felled = true;
-        w.destroyEntity(src);
-      }
-    }
-    c.carrying = kind;
-    c.amount = take;
-    c.sourceEid = src;
-    return;
   }
-  // carrying: go deposit
-  const dest = findDropoff(w, s, s.owner.get(eid)?.player ?? 0, c.carrying, t);
-  if (dest === 0xffffffff) return; // no drop-off: hold load
-  const dt = s.transform.get(dest);
-  if (!dt) return;
-  if (dist(t.x, t.y, dt.x, dt.y) > ff(1.8)) {
-    o.current.tx = dt.x;
-    o.current.ty = dt.y;
-    o.current.targetEid = src; // keep source for the next leg
-    c.destEid = dest;
-    return;
-  }
-  const p = players(w)[s.owner.get(eid)?.player ?? 0];
-  if (p) p.earn(c.carrying === 'wood' ? 'lumber' : 'gold', c.amount);
-  c.amount = 0;
-  c.carrying = 'none';
+  c.carrying = mine ? 'gold' : 'wood';
+  c.amount = take;
+  c.sourceEid = src;
 }
+
+/** Point a worker's waypoint at a target unless it is already there. */
+function steer(o: NonNullable<ReturnType<S['orders']['get']>>, x: Fixed, y: Fixed): void {
+  o.current.tx = x;
+  o.current.ty = y;
+}
+
+function clearWaypoint(o: NonNullable<ReturnType<S['orders']['get']>>): void {
+  o.current.tx = 0;
+  o.current.ty = 0;
+}
+
 
 function returnTick(
   w: World,
@@ -276,6 +298,8 @@ function buildTick(
   }
 }
 
+let retargetCursor = 0;
+
 function retargetHarvest(
   w: World,
   s: S,
@@ -284,12 +308,16 @@ function retargetHarvest(
   o: NonNullable<ReturnType<S['orders']['get']>>,
   kind: 'gold' | 'wood',
 ): void {
-  const list = kind === 'gold' ? (w as unknown as { goldMines: Eid[] }).goldMines : (w as unknown as { trees: Eid[] }).trees;
+  const all = kind === 'gold' ? (w as unknown as { goldMines: Eid[] }).goldMines : (w as unknown as { trees: Eid[] }).trees;
   const t = s.transform.get(_eid);
-  if (!t || !list) return;
+  if (!t || !all) return;
+  // Candidate cap keeps this O(k) instead of O(all trees on the map).
+  const CAP = 48;
+  const start = retargetCursor % Math.max(1, all.length);
   let best = 0xffffffff;
   let bestD = 0x7fffffff;
-  for (const cand of list) {
+  for (let n = 0; n < CAP; n++) {
+    const cand = all[(start + n) % all.length];
     if (!w.alive(cand)) continue;
     if (kind === 'gold' && (s.mine.get(cand)?.capacity ?? 0) <= 0) continue;
     if (kind === 'wood' && (s.tree.get(cand)?.felled ?? true)) continue;
@@ -301,11 +329,19 @@ function retargetHarvest(
       best = cand;
     }
   }
-  if (best !== 0xffffffff) o.current.targetEid = best;
-  else o.current.kind = 'none';
+  retargetCursor = (retargetCursor + 1) % Math.max(1, all.length);
+  if (best !== 0xffffffff) {
+    o.current.targetEid = best;
+    o.current.kind = 'harvest';
+    o.current.tx = 0;
+    o.current.ty = 0;
+  } else {
+    // Nothing left to harvest: idle rather than spin, but do not lose cargo.
+    o.current.kind = 'none';
+  }
 }
 
-function findDropoff(w: World, s: S, _player: number, kind: 'gold' | 'wood', t: { x: Fixed; y: Fixed }): Eid {
+function findDropoff(w: World, s: S, _players: unknown, kind: 'gold' | 'wood', t: { x: Fixed; y: Fixed }): Eid {
   const bmap = (w as unknown as { dropoffs: Record<'gold' | 'wood', Eid[]> }).dropoffs;
   const list = bmap?.[kind] ?? [];
   let best = 0xffffffff;
@@ -340,7 +376,8 @@ function recomputeSupply(w: World, s: S): void {
       if (b.built) p.supplyCap += b.supplyProvided;
       continue;
     }
-    if (!s.cargo.get(eid) && s.kind.get(eid)?.kind === 0) {
+    if (s.kind.get(eid)?.kind === 0 && !s.building.get(eid)) {
+      // Every unit counts its food cost — workers included.
       const pop = (w as unknown as { popOf: (id: string) => number }).popOf?.(s.stats.get(eid)?.id ?? '') ?? 1;
       p.supplyUsed += pop;
     }

@@ -104,7 +104,8 @@ function buildGame(seed: number, args: Args): Game {
 /** Lazily wire the AI if it exists, so this file runs before src/ai lands. */
 async function attachAi(game: Game, player: number): Promise<{ update(): void } | null> {
   try {
-    const mod = (await import('../src/ai/index.js')) as {
+    // Resolved by URL so the runner still typechecks before src/ai exists.
+    const mod = (await import(new URL('../src/ai/index.js', import.meta.url).href)) as {
       createAiController?: (g: Game, p: number, diff: string) => { update(): void };
     };
     if (typeof mod.createAiController !== 'function') return null;
@@ -147,11 +148,18 @@ async function playMatch(seed: number, args: Args): Promise<MatchReport> {
     }
   }
   const snap = game.snapshot();
-  const hashA = game.stateHash();
 
-  // Determinism oracle: identical inputs must produce an identical hash.
+  // Determinism oracle: replay the same inputs in a second world and compare
+  // hashes at a fixed checkpoint tick, so both sides are at the same depth.
+  const probeTicks = Math.min(args.ticks, 900);
+  let hashA: number;
+  {
+    const probe = buildGame(seed, args);
+    for (let t = 0; t < probeTicks; t++) probe.update(1);
+    hashA = probe.stateHash();
+  }
   const twin = buildGame(seed, args);
-  for (let t = 0; t < Math.min(args.ticks, 900); t++) twin.update(1);
+  for (let t = 0; t < probeTicks; t++) twin.update(1);
   const hashB = twin.stateHash();
 
   return {
@@ -175,7 +183,7 @@ async function playMatch(seed: number, args: Args): Promise<MatchReport> {
     timeline,
     hashA,
     hashB,
-    deterministic: game.world.tick < 900 ? true : hashA === hashB,
+    deterministic: hashA === hashB,
   };
 }
 

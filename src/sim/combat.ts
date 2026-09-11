@@ -169,7 +169,8 @@ export function applyHit(
   const st = s.transform.get(src);
   const dt = s.transform.get(dst);
   if (!d || !st || !dt) return 0;
-  const dmg = d.min + (((d.max - d.min) * w.rng.int(65537)) >> 16);
+  // 53-bit-safe shift: `>>` is int32 and would zero a large product.
+  const dmg = d.min + Math.floor(((d.max - d.min) * w.rng.int(65537)) / 65536);
   const amount = strike(w, src, dst, dmg, tick);
   if (amount > 0) {
     // splash to nearby enemies of the target

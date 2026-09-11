@@ -18,7 +18,7 @@ const CACHE_BITS = 9;
 const CACHE_SIZE = 1 << CACHE_BITS;
 const CACHE_LO = -(CACHE_SIZE >> 1);
 const intCache: Fixed[] = [];
-for (let i = 0; i < CACHE_SIZE; i++) intCache[i] = i << FP_SHIFT;
+for (let i = 0; i < CACHE_SIZE; i++) intCache[i] = (i + CACHE_LO) << FP_SHIFT;
 
 /** Convert an integer to fixed. */
 export function fi(n: number): Fixed {
@@ -48,7 +48,11 @@ export function fsub(a: Fixed, b: Fixed): Fixed {
 /** Multiply two fixed values with correct rounding. */
 export function fmul(a: Fixed, b: Fixed): Fixed {
   const p = a * b; // |a*b| < 2^62 in practice -> exact double mantissa
-  return (p >= 0 ? (p + FP_HALF) : (p - FP_HALF)) >> FP_SHIFT;
+  // NOTE: `>>` is forbidden here — it coerces to int32 and silently discards
+  // everything above bit 31, so any product >= 2^48 (i.e. |operand| >= 1024)
+  // would come back as 0. Truncating division is the correct 53-bit-safe shift.
+  const r = p >= 0 ? Math.floor((p + FP_HALF) / FP_SCALE) : Math.ceil((p - FP_HALF) / FP_SCALE);
+  return r | 0;
 }
 
 /** Divide two fixed values. Returns 0 on divide-by-zero (callers must guard). */

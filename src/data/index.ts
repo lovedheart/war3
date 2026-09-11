@@ -9,6 +9,8 @@
  */
 
 import type { ArmorType, AttackType } from '../sim/components.js';
+import { loadGameData } from './load.js';
+import { fallbackData } from './fallback.js';
 
 export interface Cost {
   gold: number;
@@ -154,21 +156,19 @@ let cached: GameData | null = null;
 
 export function getGameData(): GameData {
   if (cached) return cached;
+  // Static ESM imports only — `require` does not exist under "type": "module".
+  // The tables themselves are also statically imported (see load.ts), so a
+  // malformed JSON is a parse error at module evaluation, and a schema failure
+  // is a throw we can still catch here and degrade from.
   try {
-    // Imported lazily so a data failure cannot break module evaluation of the
-    // types above, and so bundlers keep a single code path for node + browser.
-    const { loadGameData } = require('./load.js') as { loadGameData: (strict?: boolean) => GameData };
-    const g = loadGameData(true);
-    cached = g;
+    cached = loadGameData(true);
     loaded = true;
-    return g;
   } catch (e) {
-    console.warn('[war3:data] data/*.json failed to load, using built-in fallback tables:', (e as Error).message);
-    const { fallbackData } = require('./fallback.js') as { fallbackData: () => GameData };
+    console.warn('[war3:data] data/*.json unusable, using built-in fallback tables:', (e as Error).message);
     cached = fallbackData();
     loaded = false;
-    return cached;
   }
+  return cached;
 }
 
 /** Replace the cached tables (used by the real loader and by tests). */

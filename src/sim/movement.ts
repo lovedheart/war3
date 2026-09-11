@@ -82,14 +82,24 @@ export function moveSystem(w: World, _tick: number): void {
       case 'harvest':
       case 'build':
       case 'return': {
-        const tt = s.transform.get(o.current.targetEid);
-        if (tt) {
-          const rng = ff(1.2);
-          const ddx = tt.x - t.x;
-          const ddy = tt.y - t.y;
+        // A harvester alternates between its source and its drop-off; the
+        // economy system steers by writing tx/ty, so walk toward tx/ty when it
+        // is set and only fall back to the order target when it is not.
+        const hasWaypoint = o.current.tx !== 0 || o.current.ty !== 0;
+        const tt = hasWaypoint ? null : s.transform.get(o.current.targetEid);
+        const wx = hasWaypoint ? o.current.tx : tt?.x ?? 0;
+        const wy = hasWaypoint ? o.current.ty : tt?.y ?? 0;
+        if (wx !== 0 || wy !== 0) {
+          const rng = hasWaypoint ? ff(1.4) : ff(1.2);
+          const ddx = wx - t.x;
+          const ddy = wy - t.y;
           if (fmul(ddx, ddx) + fmul(ddy, ddy) > fmul(rng, rng)) {
             dx = ddx;
             dy = ddy;
+          } else if (hasWaypoint) {
+            // arrived at the waypoint; clear it so the economy system can advance
+            o.current.tx = 0;
+            o.current.ty = 0;
           }
         }
         break;
@@ -132,11 +142,37 @@ export function moveSystem(w: World, _tick: number): void {
         const tx2 = Math.floor(fn(t.x));
         const ty2 = Math.floor(fn(t.y));
         if (!terr.isWalkable(tx2, ty2)) {
-          if (terr.isWalkable(tx2 + 1, ty2)) t.x = ff(tx2 + 1) + ff(0.5);
-          else if (terr.isWalkable(tx2 - 1, ty2)) t.x = ff(tx2 - 1) + ff(0.5);
-          else if (terr.isWalkable(tx2, ty2 + 1)) t.y = ff(ty2 + 1) + ff(0.5);
-          else if (terr.isWalkable(tx2, ty2 - 1)) t.y = ff(ty2 - 1) + ff(0.5);
-          else {
+          // Prefer sliding along the axis we are mostly moving on; only fall
+          // back to the perpendicular nudge when that axis is fully blocked.
+          const ax = Math.abs(m.vx), ay = Math.abs(m.vy);
+          const tryX = (): boolean => {
+            const right = terr.isWalkable(tx2 + 1, ty2);
+            const left = terr.isWalkable(tx2 - 1, ty2);
+            if (right && (!left || m.vx >= 0)) {
+              t.x = ff(tx2 + 1) + ff(0.5);
+              return true;
+            }
+            if (left) {
+              t.x = ff(tx2 - 1) + ff(0.5);
+              return true;
+            }
+            return false;
+          };
+          const tryY = (): boolean => {
+            const down = terr.isWalkable(tx2, ty2 + 1);
+            const up = terr.isWalkable(tx2, ty2 - 1);
+            if (down && (!up || m.vy >= 0)) {
+              t.y = ff(ty2 + 1) + ff(0.5);
+              return true;
+            }
+            if (up) {
+              t.y = ff(ty2 - 1) + ff(0.5);
+              return true;
+            }
+            return false;
+          };
+          const nudged = ax >= ay ? (tryX() || tryY()) : (tryY() || tryX());
+          if (!nudged) {
             t.x = o_anchor_x(w, e as Eid, t);
             t.y = o_anchor_y(w, e as Eid, t);
             m.vx = 0;

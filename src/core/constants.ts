@@ -37,7 +37,7 @@ export const DEFAULT_TURN_RATE = ff(360);
 
 /** Economy. */
 export const STARTING_WORKERS = 4;
-export const GOLD_MINE_CAPACITY = 1250;
+export const GOLD_MINE_CAPACITY = 12500; // WC3 gold mine total, in gold
 export const WORKER_CARRY_DEFAULT = 10;
 export const UPKEEP_LOW_THRESHOLD = 50;
 export const UPKEEP_HIGH_THRESHOLD = 80;

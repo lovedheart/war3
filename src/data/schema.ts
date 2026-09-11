@@ -523,9 +523,13 @@ export function validateAll(raw: Partial<RawTables>): ValidationResult {
         continue;
       }
       if (a in abilities) continue;
-      // Raw SLK codes are `a` + uppercase tail (AHbz, AInv); abilities.json is
-      // keyed by data id and only carries the curated subset.
-      if (/^a[A-Z]/.test(a)) warn(`${at}.abilities "${a}" is a raw SLK code with no curated entry`);
+      // units.json lists RAW SLK ability codes (ahar = harvest, aihn = smart,
+      // adef = defend); abilities.json is keyed by readable data ids and only
+      // carries the curated hero/spell subset. An unmatched 4-char code is an
+      // id-space mismatch, not a broken reference -> warning only.
+      // Any other 4-char lowercase token is also raw-SLK space (creep/neutral
+      // codes like sbsk, srtt) — warn, do not block the game on it.
+      if (/^[a-z][a-z0-9]{3}$/.test(a)) warn(`${at}.abilities "${a}" is a raw SLK code with no curated entry`);
       else err(`${at}.abilities "${a}" not found in abilities.json`);
     }
   }

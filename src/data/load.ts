@@ -11,15 +11,20 @@
  * All raw->sim field-name mapping lives here so the sim never has to know that
  * SLK calls vision "day/night x100" or that tech costs are per-level deltas.
  */
-import unitsJson from '../../../data/units.json';
-import buildingsJson from '../../../data/buildings.json';
-import abilitiesJson from '../../../data/abilities.json';
-import itemsJson from '../../../data/items.json';
-import techJson from '../../../data/tech.json';
-import raceJson from '../../../data/race.json';
-import heroesJson from '../../../data/heroes.json';
-import lootJson from '../../../data/loot.json';
-import damageJson from '../../../data/damage.json';
+// Static ESM imports of real .json files (resolveJsonModule). Chosen over `fs`
+// because the same module must run in the browser bundle (Vite inlines the
+// JSON) and under node/tsx for tests — one code path, no dual build, no async
+// bootstrap. Consequence: tables are baked into the bundle; hot-reloading data
+// would need a fetch-based variant (not required today).
+import unitsJson from '../../data/units.json';
+import buildingsJson from '../../data/buildings.json';
+import abilitiesJson from '../../data/abilities.json';
+import itemsJson from '../../data/items.json';
+import techJson from '../../data/tech.json';
+import raceJson from '../../data/race.json';
+import heroesJson from '../../data/heroes.json';
+import lootJson from '../../data/loot.json';
+import damageJson from '../../data/damage.json';
 
 import type { ArmorType, AttackType } from '../sim/components.js';
 import type {
@@ -78,14 +83,18 @@ import { validateAll, type RawAbilityLevel, type RawTables, type RawUnit, type V
 /*  .colors['0xRRGGBB']                          ->  colors[int]          */
 /* ------------------------------------------------------------------ */
 
-const raw = {
-  units: (unitsJson as { units: Record<string, RawUnit> }).units as RawTables['units'],
-  buildings: (buildingsJson as { buildings: RawTables['buildings'] }).buildings,
-  abilities: (abilitiesJson as { items: RawTables['abilities'] }).items,
-  items: (itemsJson as { items: RawTables['items'] }).items,
-  recipes: (itemsJson as { recipes: RawTables['recipes'] }).recipes,
-  tech: (techJson as { items: RawTables['tech'] }).items,
-  races: (raceJson as { races: RawTables['races'] }).races,
+// Every table goes through `unknown` before reaching its Raw* shape: the JSON
+// files carry heterogeneous, SLK-shaped literals (e.g. an item's statBonuses is
+// sometimes a nested object), and a direct cast would be rejected as
+// non-comparable. The Raw* types remain the authoritative documentation.
+const raw: RawTables = {
+  units: (unitsJson as { units: unknown }).units as RawTables['units'],
+  buildings: (buildingsJson as { buildings: unknown }).buildings as RawTables['buildings'],
+  abilities: (abilitiesJson as { items: unknown }).items as RawTables['abilities'],
+  items: (itemsJson as { items: unknown }).items as RawTables['items'],
+  recipes: (itemsJson as { recipes: unknown }).recipes as RawTables['recipes'],
+  tech: (techJson as { items: unknown }).items as RawTables['tech'],
+  races: (raceJson as { races: unknown }).races as RawTables['races'],
   damage: damageJson as unknown as RawTables['damage'],
   loot: lootJson as unknown as RawTables['loot'],
   heroes: heroesJson as unknown as RawTables['heroes'],
@@ -313,11 +322,19 @@ function toRace(id: string, r: RawTables['races'][string]): RaceDef {
  * resources" buildings in TFT). Farms/burrows are pure supply, so they are
  * `other` and never a drop-off target. Gold mines are entities, not buildings.
  */
-function deriveBuildingRoles(buildings: Map<string, BuildingDef>, races: Record<string, RaceDef>): Record<string, 'gold' | 'wood' | 'town'> {
+function deriveBuildingRoles(
+  buildings: Map<string, BuildingDef>,
+  races: Record<string, RaceDef>,
+  rawBuildings: RawTables['buildings'],
+): Record<string, 'gold' | 'wood' | 'town'> {
   const roles: Record<string, 'gold' | 'wood' | 'town'> = {};
-  for (const [id, b] of buildings) roles[id] = b.role === 'town' ? 'town' : b.role === 'wood' ? 'wood' : 'town';
-  // Every hall-chain member must accept both resource types => town.
-  for (const r of Object.values(races)) for (const h of [r.townHall]) if (h && h in roles) roles[h] = 'town';
+  for (const [id, b] of buildings) roles[id] = b.role === 'wood' ? 'wood' : 'town';
+  // A night elf moon well is a lumber drop-off, never a town drop-off.
+  for (const id of Object.keys(rawBuildings)) if (/moon_well|lumber/.test(id)) roles[id] = 'wood';
+  // Every race hall chain head accepts both resource types => town. Undead and
+  // night elf halls are absent from buildings.json (only human+orc are
+  // authored), so register them here to keep the map total over race.townHall.
+  for (const r of Object.values(races)) if (r.townHall) roles[r.townHall] = 'town';
   return roles;
 }
 
@@ -457,7 +474,7 @@ export function loadGameData(strict = true): GameData {
     creepCamps: deriveCreepCamps(units),
     lootTable: makeLootTable(raw),
     abilityDefs: abilities as unknown as GameData['abilityDefs'],
-    buildingRoles: deriveBuildingRoles(buildings, races),
+    buildingRoles: deriveBuildingRoles(buildings, races, raw.buildings),
     heroXp: raw.heroes.experienceCurve.slice(),
   };
   return data;

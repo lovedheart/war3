@@ -86,7 +86,8 @@ export class PlayerState {
 
   earn(kind: 'gold' | 'lumber', amount: Fixed): void {
     if (kind === 'gold') {
-      const taxed = ((amount * this.incomeFactor()) >> 16) | 0;
+      // 53-bit-safe shift: `>>` here is int32 and would zero the product.
+      const taxed = Math.floor((amount * this.incomeFactor()) / 65536) | 0;
       this.gold += taxed;
       this.goldEarned += taxed;
     } else {

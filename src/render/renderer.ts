@@ -74,7 +74,16 @@ export class Renderer {
     this.ctx = ctx;
     this.showMinimap = opts.showMinimap ?? false;
     this.cam = new Camera({ viewW: this.cssW, viewH: this.cssH, bounds: { width: 128, height: 128 } });
-    this.atlas = new SpriteAtlas();
+    // Reuse the host canvas as the atlas page surface when no offscreen backend
+    // exists (node/vitest). The atlas then shares this ctx — safe because bake
+    // calls always sit inside an explicit save/restore in SpriteAtlas.
+    const g = globalThis as unknown as { document?: unknown; OffscreenCanvas?: unknown };
+    const hasBackend = !!g.document || !!g.OffscreenCanvas;
+    const hostCtx = ctx;
+    this.atlas = hasBackend ? new SpriteAtlas() : new SpriteAtlas(() => {
+      (this.canvas as unknown as { __atlasCtx?: Ctx2D }).__atlasCtx = hostCtx;
+      return this.canvas;
+    });
     if (opts.warmAtlas !== false) this.warm();
     this.minimap = new MinimapRenderer({ size: 150 });
     this.debug = opts.debug ?? false;
@@ -103,6 +112,8 @@ export class Renderer {
     const cv = this.canvas as unknown as { width: number; height: number };
     const w = Math.max(1, Math.round(this.cssW * this.dpr));
     const h = Math.max(1, Math.round(this.cssH * this.dpr));
+    // Only touch the backing store on an actual change: assigning width/height
+    // resets all context state (fonts, smoothing, transforms) and reallocates.
     if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
     this.cam.setView(this.cssW, this.cssH);
   }
@@ -111,6 +122,15 @@ export class Renderer {
 
   /** Point the camera at a world position (fixed). */
   centerOn(x: Fixed, y: Fixed): void { this.cam.centerOn(x, y); }
+
+  /** Pan by screen pixels (edge scrolling / WASD). */
+  panByPixels(dx: number, dy: number): void { this.cam.panByPixels(dx, dy); }
+
+  /** Wheel zoom about the viewport centre. */
+  zoomBy(factor: number): void { this.cam.zoomBy(factor); }
+
+  /** Screen px -> world fixed, for hit-testing and order targets. */
+  screenToWorld(sx: number, sy: number): { x: Fixed; y: Fixed } { return this.cam.screenToWorld(sx, sy); }
 
   /* ------------------------------------------------------------------ */
   /* main entry                                                         */

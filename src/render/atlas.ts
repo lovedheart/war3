@@ -186,8 +186,8 @@ export class SpriteAtlas {
   private pageCtx(page: number): Ctx2D | null {
     let c = this.ctxs[page];
     if (c === null || c === undefined) {
-      const cv = this.pages[page] as unknown as { getContext(t: '2d'): Ctx2D | null };
-      c = cv.getContext('2d');
+      const cv = this.pages[page] as unknown as { getContext(t: '2d'): Ctx2D | null; __atlasCtx?: Ctx2D };
+      c = cv.__atlasCtx ?? cv.getContext('2d');
       this.ctxs[page] = c ?? null;
     }
     return c;
