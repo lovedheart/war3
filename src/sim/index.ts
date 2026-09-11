@@ -77,6 +77,7 @@ export function createWorld(seed: number): World {
 export function installSystems(w: World): void {
   w.systems = [
     (ww) => ww.drainCommands(),
+    startHarvestBootstrap,
     visionSystem,
     moveSystem,
     economySystem,
@@ -455,3 +456,44 @@ function snapshotWorld(w: World): Snapshot {
 
 export { generateMap };
 export type { GeneratedMap };
+
+/**
+ * One-shot: send the idle starting workers to the nearest gold mine.
+ * Runs every tick but self-disarms; the AI may retarget them later.
+ */
+const bootstrapped = new WeakSet<object>();
+function startHarvestBootstrap(w: World, _tick: number): void {
+  if (w.tick < 1) return;
+  if (bootstrapped.has(w)) return;
+  (bootstrapped as WeakSet<object>).add(w);
+  const st = w.stores;
+  const tr = st.transform as unknown as { get(e: Eid): { x: Fixed; y: Fixed } | undefined };
+  const sd = st.stats as unknown as { get(e: Eid): { id: string } | undefined };
+  const ord = st.orders as unknown as {
+    get(e: Eid): { current: { kind: string; targetEid: number; tx: Fixed; ty: Fixed; mode: number; param: string } } | undefined;
+  };
+  const mines = (w as unknown as { goldMines: Eid[] }).goldMines;
+  for (const e of w.live) {
+    const eid = e as Eid;
+    const id = sd.get(eid)?.id ?? '';
+    if (id !== 'peasant' && id !== 'peon') continue;
+    const o = ord.get(eid);
+    if (!o || o.current.kind !== 'none') continue;
+    const t = tr.get(eid);
+    if (!t) continue;
+    let best = 0xffffffff;
+    let bd = Infinity;
+    for (const m of mines) {
+      const mt = tr.get(m);
+      if (!mt) continue;
+      const d = (mt.x - t.x) ** 2 + (mt.y - t.y) ** 2;
+      if (d < bd) {
+        bd = d;
+        best = m;
+      }
+    }
+    if (best === 0xffffffff) continue;
+    o.current = { kind: 'harvest', targetEid: best, tx: 0, ty: 0, mode: 0, param: 'gold' };
+    (st.cargo as unknown as { get(e: Eid): { sourceEid: number } | undefined }).get(eid)!.sourceEid = best;
+  }
+}

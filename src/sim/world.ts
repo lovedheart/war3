@@ -92,7 +92,8 @@ export class World {
   /** Apply deferred creations. Called once per tick before systems. */
   private flushCreations(): void {
     for (const eid of this.pendingCreate) this.live.push(eid);
-    this.live.sort((a, b) => (a - b) ** 1 || 0); // numeric, stable by id
+    // ascending eid order; eids are unsigned so comparison is exact
+    this.live.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
     this.pendingCreate.length = 0;
   }
 
