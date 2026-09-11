@@ -46,6 +46,8 @@ export interface InputManager {
   frame(dtMs: number): void;
   readonly state: InputState;
   controlGroup(slot: number): number[];
+  /** true while A/M targeting is armed and waiting for the next click */
+  isTargeting(): boolean;
   /** direct dispatch entry points, used by the HUD's command cards */
   click(ev: PointerLike): void;
   move(ev: PointerLike): void;
@@ -371,6 +373,7 @@ export function createInput(deps: InputDeps): InputManager {
     },
     frame,
     state,
+    isTargeting: () => state.attackMovePending || state.movePending,
     controlGroup(slot: number) {
       return state.groups[slot] ?? [];
     },

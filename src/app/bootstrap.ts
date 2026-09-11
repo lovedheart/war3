@@ -4,7 +4,7 @@
  * Wires sim + render + input into a running game and owns the frame loop.
  * Nothing here mutates sim state except `world.view`, which is presentation-owned.
  */
-import { createGame, type Game } from '../sim/index.js';
+import { createGame, type Game, type GameOptions } from '../sim/index.js';
 import { generateMap } from '../map/mapgen.js';
 import type { Command } from '../sim/commandTypes.js';
 import { Renderer } from '../render/index.js';
@@ -30,13 +30,15 @@ export interface App {
   renderer: Renderer;
   input: InputManager;
   loop: FixedStepLoop;
+  /** HUD minimap hook: jump the camera to a spot given in game units. */
+  jumpTo(xUnits: number, yUnits: number): void;
   destroy(): void;
 }
 
 const DEFAULT_SIZE = 96;
 
 /** Map our options onto the shape `createGame` expects (the sim owns it). */
-function gameOptions(opts: AppOptions): { seed: number; map: unknown; players: { id: number; race: 'human' | 'orc'; name: string }[] } {
+function gameOptions(opts: AppOptions): GameOptions {
   const mine: 'human' | 'orc' = opts.race ?? 'human';
   const foe: 'human' | 'orc' = mine === 'human' ? 'orc' : 'human';
   const seed = opts.seed ?? 12345;
@@ -54,7 +56,7 @@ function gameOptions(opts: AppOptions): { seed: number; map: unknown; players: {
 export function createApp(opts: AppOptions): App {
   const canvas = opts.canvas;
   const viewer = opts.viewer ?? 1;
-  const game = createGame(gameOptions(opts) as never);
+  const game = createGame(gameOptions(opts));
 
   const renderer = new Renderer({ canvas, debug: opts.debug });
   const viewW = (canvas as unknown as { clientWidth?: number }).clientWidth || 1280;
@@ -124,6 +126,10 @@ export function createApp(opts: AppOptions): App {
     renderer,
     input,
     loop,
+    jumpTo(xUnits: number, yUnits: number) {
+      renderer.centerOn(ff(xUnits), ff(yUnits));
+      syncView(game, renderer);
+    },
     destroy() {
       loop.stop();
       input.detach();

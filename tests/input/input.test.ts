@@ -283,6 +283,31 @@ describe('hotkeys', () => {
   });
 });
 
+describe('targeting state (HUD cursor hook)', () => {
+  it('isTargeting() reflects armed A/M mode and clears after the click', () => {
+    const a = unit({ x: ff(5), y: ff(5) });
+    const f = fake({ ents: [a] });
+    const inp = createInput(f.deps);
+    expect(inp.isTargeting()).toBe(false);
+    leftClick(inp, 5, 5);
+    inp.key(key('a'));
+    expect(inp.isTargeting()).toBe(true);
+    inp.rightClick(rclick(20 * 64, 20 * 64));
+    expect(inp.isTargeting()).toBe(false);
+    inp.key(key('m'));
+    expect(inp.isTargeting()).toBe(true);
+    inp.rightClick(rclick(21 * 64, 21 * 64));
+    expect(inp.isTargeting()).toBe(false);
+  });
+
+  it('isTargeting() stays false when nothing is selected', () => {
+    const f = fake({ ents: [unit()] });
+    const inp = createInput(f.deps);
+    inp.key(key('a'));
+    expect(inp.isTargeting()).toBe(false);
+  });
+});
+
 describe('control groups', () => {
   it('Ctrl+1 assigns, 1 recalls, and dead members drop out', () => {
     const a = unit({ x: ff(5), y: ff(5) });
