@@ -243,8 +243,11 @@ export function checkOutcome(game: Game, level: CampaignLevel): 'win' | 'lose' |
 /* helpers for authoring scripts and tests                             */
 /* ------------------------------------------------------------------ */
 
+
+
+/** Centre of a tile as a world point (Fixed components). */
 export function atTile(x: number, y: number): Vec2F {
-  return { x: ff(x) + ff(0.5), y: ff(y) + ff(0.5) };
+  return { x: Math.round((x + 0.5) * 65536), y: Math.round((y + 0.5) * 65536) };
 }
 
 /** Every eid owned by `player` matching `id` (or all units when omitted). */

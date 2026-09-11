@@ -228,7 +228,9 @@ export function spawnBuilding(
   b.totalTicks = Math.round((spec.buildTime ?? 60) * 30);
   b.progress = built ? 0 : b.totalTicks;
   b.rallyX = t.x;
-  b.rallyY = ff(t.y + ff(3));
+  // `t.y` is already fixed-point — wrapping it in ff() again multiplied by
+  // 65536 and parked every trained unit 2^16 tiles south of its barracks.
+  b.rallyY = t.y + ff(3);
 
   if (spec.canAttack) {
     const d = st.damage.add(e);
