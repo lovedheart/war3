@@ -11,7 +11,16 @@ function boot(): void {
   const seed = Number(params.get('seed') ?? 12345) || 12345;
   const size = Number(params.get('size') ?? 96) || 96;
   const race = params.get('race') === 'orc' ? 'orc' : 'human';
-  const app = createApp({ canvas, seed, size, race, debug: params.get('debug') === '1' });
+  // ?campaign=human-01 plays a hand-authored level instead of a skirmish.
+  const campaign = params.get('campaign');
+  const app = createApp({
+    canvas,
+    seed,
+    size,
+    race,
+    debug: params.get('debug') === '1',
+    ...(campaign ? { campaign: { levelId: campaign } } : {}),
+  });
   // Handy for debugging from the console; also lets the UI layer reach the app.
   (window as unknown as { __war3?: unknown }).__war3 = app;
 }
