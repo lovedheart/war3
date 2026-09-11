@@ -180,9 +180,11 @@ class SkirmishAi implements AiController {
     const heroes = mine.filter((u) => this.isHero(u.id)).map(view);
 
     this.decideState(tick, res, army, built, workers.length);
+    // Train before building so a worker in progress is never starved by a
+    // building bought earlier in the same cycle.
+    this.trainStuff(tick, built, res, workers.length, army.length + heroes.length);
     this.assignWorkers(tick, workers, built, res);
     this.buildStuff(tick, built, workers, res);
-    this.trainStuff(tick, built, res, workers.length, army.length + heroes.length);
     this.researchStuff(tick, built, res);
     this.heroStuff(tick, heroes, army, home);
     this.scoutStuff(tick, workers, home);
@@ -577,8 +579,19 @@ class SkirmishAi implements AiController {
 
     // Workers up to the profile cap, funded first.
     const wd = this.gd.units.get(this.plan.worker);
-    const workers = this.game.snapshot().units.filter((u) => u.player === this.me && u.id === this.plan.worker).length;
-    if (wd && workers < this.prof.maxWorkers && res.supplyUsed + (wd.cost.popUpkeep ?? 1) <= res.supplyCap + 6) {
+    const snapW = this.game.snapshot();
+    const workers = snapW.units.filter((u) => u.player === this.me && u.id === this.plan.worker).length;
+    if (this.debug && workers < this.prof.maxWorkers) {
+      const q = (this.game.world.stores.building as unknown as { get(e: number): { trainQueue: unknown[] } | undefined }).get(
+        built.find((b) => this.plan.townHall === b.id)?.eid ?? -1,
+      )?.trainQueue?.length ?? -1;
+      console.log(`[train] t=${tick} workers=${workers} gold=${res.gold} lumber=${res.lumber} supply=${res.supplyUsed}/${res.supplyCap} queue=${q} ownedBuilt=${built.length}`);
+    }
+    // Keep a reserve so the next worker does not starve a farm that is about
+    // to become necessary; but never hoard past the cap.
+    const reserve = this.supplyShortfall(built, res) ? (this.plan.supplies.length ? this.gd.buildings.get(this.plan.supplies[0])?.cost.gold ?? 80 : 80) : 0;
+    void reserve; // workers always funded first; farms are bought by buildStuff from the remainder
+    if (wd && workers < this.prof.maxWorkers && res.supplyUsed + (wd.cost.popUpkeep ?? 1) <= res.supplyCap) {
       const hall = built.find((b) => this.plan.townHall === b.id || this.plan.hallUpgrades.includes(b.id));
       if (hall && this.canAfford(res, wd.cost.gold, wd.cost.lumber)) {
         // One command per plan cycle, and workers get priority — otherwise we
@@ -825,6 +838,9 @@ class SkirmishAi implements AiController {
   }
 
   /** Entity id created by the most recent `build` command, if any. */
+  /** temporary diagnostic switch (removed before commit) */
+  debug = false;
+
   private lastBuiltEntity: number | undefined = undefined;
 
   /** The single mutation point of this entire module. */

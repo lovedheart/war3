@@ -11,6 +11,13 @@ let hall=-1; for(const e of w.live){ const b=w.stores.building.get(e); if(b?.bui
 g.command({k:'train', player:1, building:hall, unitId:'footman'});
 for (let t=0;t<605;t++) g.update(1);
 console.log('605 done live=', w.live.length);
-for (let t=0;t<600;t++){ g.update(1); if (t%25===24) console.log('tick '+g.world.tick+' live='+w.live.length); }
-console.log('END');
+// Wrap world.tickOnce with a per-tick wall-clock budget to catch the runaway tick.
+const oTick = w.tickOnce.bind(w);
+try {
+  for (let t=0;t<600;t++){
+    const a=process.hrtime.bigint(); oTick(); const d=Number(process.hrtime.bigint()-a)/1e6;
+    if (d>1000) throw new Error('tick '+w.tick+' took '+d.toFixed(0)+'ms live='+w.live.length);
+  }
+  console.log('END @'+w.tick);
+} catch(e:any){ console.log('THROW: '+e.message); }
 process.exit(0);

@@ -170,6 +170,19 @@ export function createSkirmishWorld(opts: SkirmishOptions): SkirmishResult {
     (w as unknown as { altars: Eid[][] }).altars[idx] = [];
     placeStart(w, gd, idx, p.race, map.spawns[i]);
   });
+  // Training and summoning resolve unit ids through this hook (see economy.ts /
+  // abilities.ts). Without it a finished train queue would silently vanish.
+  (w as unknown as { spawnUnitById: (id: string, x: Fixed, y: Fixed, player: number) => Eid }).spawnUnitById = (
+    id: string,
+    x: Fixed,
+    y: Fixed,
+    player: number,
+  ) => {
+    const def = gd.units.get(id);
+    if (!def) return 0xffffffff;
+    return spawnUnit(w, unitSpec(def), x, y, player);
+  };
+
   const cmds: TimedCommand[] = [];
   return { world: w, commands: cmds };
 }
