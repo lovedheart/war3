@@ -173,6 +173,13 @@ export function spawnUnit(w: World, spec: UnitSpec, x: Fixed, y: Fixed, player: 
   m.mass = ff(1);
 
   st.orders.add(e);
+  // Workers need a cargo component from the moment they exist: trained
+  // peasants/peon spawn through here (not placeStart), and without cargo the
+  // `harvest` command rejects them ("not a worker") so they idle forever.
+  if ((spec as { carryCapacity?: number }).carryCapacity !== undefined || spec.id === 'peasant' || spec.id === 'peon') {
+    const c = (st as unknown as { cargo: { add(x: Eid): { capacity: Fixed; carrying: string } } }).cargo.add(e);
+    c.capacity = ff((spec as { carryCapacity?: number }).carryCapacity ?? 10);
+  }
   st.attack.add(e);
   st.buffs.add(e);
   const ab = st.abilities.add(e);

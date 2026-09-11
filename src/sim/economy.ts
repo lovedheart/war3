@@ -187,12 +187,22 @@ function harvestTick(
     c.carrying = 'none';
     c.phase = 0;
     o.current.kind = 'harvest';
-    clearWaypoint(o);
+    // Head straight back to the source we harvested from. Leaving the waypoint
+    // clear would idle the worker at the drop-off until its next think tick.
+    const back = c.sourceEid !== 0xffffffff ? s.transform.get(c.sourceEid) : undefined;
+    if (back && (s.mine.get(c.sourceEid) || s.tree.get(c.sourceEid))) {
+      o.current.targetEid = c.sourceEid;
+      const wp = s.tree.get(c.sourceEid) ? treeStandSpot(w, back.x, back.y) : { x: back.x, y: back.y };
+      steer(o, wp.x, wp.y);
+    } else {
+      clearWaypoint(o);
+    }
     return;
   }
 
   // ---- empty: work at the source ----------------------------------------
   let src = o.current.targetEid;
+  if ((src === 0xffffffff || !s.transform.get(src)) && c.sourceEid !== 0xffffffff) src = c.sourceEid;
   let st = src !== 0xffffffff ? s.transform.get(src) : undefined;
   if (!st || (!s.mine.get(src) && !s.tree.get(src))) {
     // Dead target (felled tree / removed mine): re-acquire a live source once.

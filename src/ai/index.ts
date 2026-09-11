@@ -260,11 +260,14 @@ class SkirmishAi implements AiController {
     const woods = this.intel.sources('wood').filter((m) => m.capacity > 0);
     if (!mines.length && !woods.length) return;
 
-    // Target split: 3-5 per live mine on gold, everyone else cutting trees.
-    const wantGold = Math.max(2, Math.min(workers.length - 1, mines.length * 4));
+    // Target split: 3-5 per live mine on gold, everyone else cutting trees —
+    // but the wood line must never starve. Lumber gates every building and
+    // tech, and a single harvester cannot keep pace with construction spend,
+    // so reserve at least MIN_WOOD_WORKERS (half the crew once it is large).
+    const MIN_WOOD_WORKERS = 2;
+    const wantGold = Math.max(1, Math.min(workers.length - MIN_WOOD_WORKERS, mines.length * 4));
     let gold = 0;
     let wood = 0;
-
     for (const wk of workers) {
       const st = this.game.world.stores as unknown as {
         cargo: { get(e: number): { carrying: string; sourceEid: number } | undefined };
@@ -278,10 +281,34 @@ class SkirmishAi implements AiController {
         continue;
       }
 
-      // Mid-carry: leave the trip alone, just tally which line it belongs to.
+      // Mid-trip: leave the trip alone, but tally by the ORDER's line, not by
+      // what is in the satchel. A gold-line worker returning empty to its mine
+      // would otherwise be counted as a wood worker (and vice versa), which
+      // inflates the gold tally so `gold >= wantGold` forever and no worker is
+      // ever sent to wood — lumber then pins at its starting value and every
+      // lumber-costing build/train becomes permanently unaffordable.
       if (cargo.carrying !== 'none') {
-        if (cargo.carrying === 'gold') gold++;
-        else wood++;
+        if (order.current.kind === 'harvest') {
+          if (order.current.param === 'wood') wood++;
+          else gold++;
+          continue;
+        }
+        // Carrying a load under no harvest order (a builder whose site just
+        // finished): the sim only re-steers carriers in its harvest branch, so
+        // such a worker strands at the drop-off forever. Keep it on the line
+        // its satchel says it belongs to — the gold/wood split can't see
+        // uncounted carriers, so comparing against wantGold here would drag
+        // every returning builder back onto the gold line and starve lumber.
+        const kindC: 'gold' | 'wood' = cargo.carrying === 'wood' ? 'wood' : 'gold';
+        const srcC = this.pickSource(kindC, wk, mines, woods, home);
+        if (srcC && this.issue({ k: 'harvest', player: this.me, worker: wk.eid, target: srcC.eid, kind: kindC })) {
+          this.orderedAt.set(wk.eid, tick);
+          this.workerSeen.delete(wk.eid);
+          if (kindC === 'gold') gold++;
+          else wood++;
+          continue;
+        }
+        // no source available: leave it alone until one exists
         continue;
       }
 
@@ -318,7 +345,7 @@ class SkirmishAi implements AiController {
         // A finished construction site leaves the builder on `none/farm` —
         // send it back to resources. A freshly trained unit is `none` with no
         // param at all; task it too.
-        const kind0: 'gold' | 'wood' = gold < wantGold ? 'gold' : 'wood';
+        const kind0: 'gold' | 'wood' = wood < MIN_WOOD_WORKERS || !(gold < wantGold && mines.length > 0) ? 'wood' : 'gold';
         const src0 = this.pickSource(kind0, wk, mines, woods, home);
         if (src0 && this.issue({ k: 'harvest', player: this.me, worker: wk.eid, target: src0.eid, kind: kind0 })) {
           this.orderedAt.set(wk.eid, tick);
@@ -370,7 +397,11 @@ class SkirmishAi implements AiController {
       }
 
       // Idle, stranded on a dead source, or frozen in place: give it a job now.
-      const kind: 'gold' | 'wood' = gold < wantGold ? 'gold' : 'wood';
+      // Balance first: if the wood line is under its reserve, pull this worker
+      // onto trees even when gold still trails wantGold — otherwise every
+      // retask walks back to the gold line and lumber starves at 1 worker.
+      const kind: 'gold' | 'wood' =
+        wood < MIN_WOOD_WORKERS || !(gold < wantGold && mines.length > 0) ? 'wood' : 'gold';
       const source = this.pickSource(kind, wk, mines, woods, home);
       if (!source) continue;
       if (this.issue({ k: 'harvest', player: this.me, worker: wk.eid, target: source.eid, kind })) {

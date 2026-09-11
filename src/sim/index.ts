@@ -278,6 +278,7 @@ export function unitSpec(d: GameData['units'] extends Map<string, infer U> ? U :
     cooldown: u.damage.cooldown,
     attackPoint: u.damage.attackPoint,
     moveSpeed: u.moveSpeed,
+    carryCapacity: u.carryCapacity,
     fly: u.fly,
     isHero: u.hero,
     level: u.level,
