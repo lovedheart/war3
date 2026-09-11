@@ -5,7 +5,7 @@ import { generateMap } from '../map/mapgen.js';
  * `createSkirmishWorld` builds a fully playable world from a map JSON, so the
  * headless runner, tests and the browser app all share one bootstrap path.
  */
-import { Fixed, ff, fi } from '../core/fixed.js';
+import { Fixed, ff, fi, fn } from '../core/fixed.js';
 import { Eid } from '../core/pool.js';
 import { World } from './world.js';
 import { makeStores } from './components.js';
@@ -228,6 +228,12 @@ function attachMap(w: World, map: MapLike, gd: GameData): void {
   }
   for (const t of map.trees) {
     const e = spawnTree(w, t.x, t.y);
+    // Give scenery a stable art key so the renderer does not have to invent one.
+    // Kept in its own unregistered store: presentation never enters stateHash().
+    (w.stores.decor as unknown as { add(eid: Eid): { decorationId: string } }).add(e).decorationId = treeVariant(
+      t.x,
+      t.y,
+    );
     (w as unknown as { trees: Eid[] }).trees.push(e);
   }
   for (const c of map.creeps ?? []) {
@@ -501,3 +507,12 @@ function startHarvestBootstrap(w: World, _tick: number): void {
   void ow;
 }
 
+
+/** Deterministic scenery variant from tile coords (no RNG — must not shift the stream). */
+function treeVariant(x: Fixed, y: Fixed): string {
+  const tx = Math.floor(fn(x));
+  const ty = Math.floor(fn(y));
+  let h = (tx * 73856093) ^ (ty * 19349663);
+  h = (h ^ (h >>> 13)) >>> 0;
+  return ['tree', 'pine', 'rock', 'shrub'][h & 3];
+}

@@ -211,6 +211,18 @@ export interface CAura {
   amount: Fixed;
 }
 
+/** Scenery art key (tree / pine / rock / shrub). Render-only. */
+export interface CDecor {
+  decorationId: string;
+}
+
+/** Tick at which an entity last took damage — render-only, drives the hit flash. */
+export interface CLastHit {
+  tick: number;
+  /** damage actually dealt, for floating combat text */
+  amount: Fixed;
+}
+
 export interface CBuilding {
   buildingId: string;
   built: boolean; // false while under construction
@@ -305,6 +317,10 @@ export function makeStores(reg: {
     hero: reg.register(new Store<CHero>('hero', () => ({ respawnTick: 0, altarEid: 0xffffffff, skillPoints: 0, itemSlots: [null, null, null, null, null, null], itemCharges: [0, 0, 0, 0, 0, 0], corpseEid: 0xffffffff }))),
     item: reg.register(new Store<CItem>('item', () => ({ itemId: '', x: 0, y: 0, charges: 0, ownerEid: 0xffffffff }))),
     missile: reg.register(new Store<CMissile>('missile', () => ({ srcEid: 0, targetEid: 0xffffffff, tx: 0, ty: 0, speed: ff(12), damage: 0, kind: 'instant', ttl: 0, pierceLeft: 0 }))),
+    // Render-only channels. Deliberately NOT registered with the registry so
+    // they stay out of stateHash(): presentation must never perturb determinism.
+    lastHit: new Store<CLastHit>('lastHit', () => ({ tick: -99999, amount: 0 })),
+    decor: new Store<CDecor>('decor', () => ({ decorationId: '' })),
   };
   return s as unknown as Record<string, Store<object>>;
 }

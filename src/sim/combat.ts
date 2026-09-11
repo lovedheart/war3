@@ -17,6 +17,7 @@ import { grantXp } from './hero.js';
 
 interface S {
   transform: { get(e: Eid): { x: Fixed; y: Fixed; radius: Fixed } | undefined };
+  lastHit: { get(e: Eid): { tick: number; amount: Fixed } | undefined; add(e: Eid): { tick: number; amount: Fixed } };
   owner: { get(e: Eid): { player: number } | undefined };
   kind: { get(e: Eid): { kind: number } | undefined };
   health: {
@@ -220,6 +221,11 @@ export function strike(w: World, src: Eid, dst: Eid, raw: Fixed, tick: number): 
     roll: 0,
   });
   dh.hp -= res.amount;
+  // Render-only bookkeeping: the flash must not feed back into gameplay, so it
+  // lives in its own store and is never read by any system.
+  const lh = s.lastHit.add(dst);
+  lh.tick = tick;
+  lh.amount = res.amount;
   w.bus.emit('damage', { src, dst, amount: res.amount, tick });
   if (dh.hp <= 0) {
     dh.hp = 0;
