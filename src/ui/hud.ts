@@ -144,6 +144,8 @@ export function createHud(opts: HudOptions): Hud {
       host.appendChild(minimap.build());
       right.appendChild(info.build());
       right.appendChild(card.build());
+      // Create the whole button/bubble pool now so later frames never append.
+      card.prewarm();
       host.appendChild(right);
       host.appendChild(alerts.build());
       doc.addEventListener?.('mousemove', onMouseMove);

@@ -32,6 +32,11 @@ export interface InputDeps {
   setHover?(eid: number): void;
   /** debug overlay toggle (Tab) */
   toggleDebug?(): void;
+  /**
+   * Give the app first refusal on a click. Return true to swallow it (used for
+   * build-placement ghosts, where a normal right-click must not order a move).
+   */
+  interceptClick?(world: Vec2F, button: number): boolean;
   /** UI hooks (the HUD subscribes here; may be absent in tests) */
   onSelectionChanged?(eids: number[]): void;
 }
@@ -130,6 +135,7 @@ export function createInput(deps: InputDeps): InputManager {
 
   const click = (ev: PointerLike): void => {
     trackMove(ev);
+    if (deps.interceptClick?.(atMouse(), ev.button ?? 0)) return;
     if (ev.button === 1) {
       middleDown = true;
       middleLast = { sx: ev.clientX, sy: ev.clientY };
@@ -214,6 +220,7 @@ export function createInput(deps: InputDeps): InputManager {
 
   const rightClick = (ev: PointerLike): void => {
     trackMove(ev);
+    if (deps.interceptClick?.(atMouse(), 2)) return;
     const units = sel();
     const targeting = state.attackMovePending || state.movePending;
     if (!units.length && !targeting) return;

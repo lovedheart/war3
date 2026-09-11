@@ -342,6 +342,8 @@ import type { GeneratedMap } from '../map/mapgen.js';
 
 export interface GameOptions {
   seed: number;
+  /** Omit to auto-generate a random map of this edge length (default 96). */
+  size?: number;
   map?: GeneratedMap;
   players: { id: number; race: Race; name: string; startGold?: number; startLumber?: number }[];
 }
@@ -368,7 +370,7 @@ export interface Snapshot {
 }
 
 export function createGame(opts: GameOptions): Game {
-  const gen = opts.map ?? generateMap({ seed: opts.seed, size: 96, players: opts.players.length });
+  const gen = opts.map ?? generateMap({ seed: opts.seed, size: opts.size ?? 96, players: opts.players.length });
   const json = {
     name: 'generated',
     size: [gen.terrain.width, gen.terrain.height] as [number, number],

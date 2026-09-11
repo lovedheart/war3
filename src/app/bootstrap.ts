@@ -11,6 +11,8 @@ import { Renderer } from '../render/index.js';
 import { ff, type Fixed } from '../core/fixed.js';
 import { FixedStepLoop } from './loop.js';
 import { createInput, type InputManager, type InputDeps } from '../input/index.js';
+import { createHud, type Hud } from '../ui/index.js';
+import type { PlacementRequest, PendingTarget } from '../ui/commandcard.js';
 import type { SelectableEntity } from '../input/select.js';
 import { isHeroId } from '../render/draw/spec.js';
 import { getGameData } from '../data/index.js';
@@ -32,8 +34,15 @@ export interface App {
   loop: FixedStepLoop;
   /** HUD minimap hook: jump the camera to a spot given in game units. */
   jumpTo(xUnits: number, yUnits: number): void;
+  readonly hud: Hud;
   destroy(): void;
 }
+
+/** A partially-specified order waiting for the player to click a world point. */
+type Pending =
+  | { kind: 'build'; buildingId: string; worker: number }
+  | { kind: 'target'; partial: PendingTarget }
+  | null;
 
 const DEFAULT_SIZE = 96;
 
@@ -90,9 +99,59 @@ export function createApp(opts: AppOptions): App {
       game.world.view.hoverEid = eid;
     },
     toggleDebug: () => renderer.setDebug(!renderer.debug),
+    // A pending build/target order owns the next click; input must not turn it
+    // into a move/attack. Right-click and Escape cancel it.
+    interceptClick: (world, button) => {
+      if (!pendingRef.value) return false;
+      resolvePending(world, button === 2);
+      return true;
+    },
   };
   const input = createInput(deps);
   input.attach();
+
+  // ---- HUD -------------------------------------------------------------
+  // The card never guesses coordinates: it asks us for a point, we arm a
+  // pending order, and the next left-click resolves it into a Command.
+  // Declared before `deps` reads it; only ever touched inside callbacks.
+  var pendingRef: { value: Pending } = { value: null };
+
+  const hud = createHud({
+    viewer,
+    dispatch: (cmd) => game.command(cmd),
+    selectionProvider: () => game.world.view.selection,
+    minimapDraw: (_ctx, g, v) => renderer.drawMinimap(g, v),
+    onMinimapClick: (wx, wy) => {
+      renderer.centerOn(ff(wx), ff(wy));
+      syncView(game, renderer);
+    },
+    onPlacement: (req: PlacementRequest) => {
+      pendingRef.value = { kind: 'build', buildingId: req.buildingId, worker: req.worker };
+    },
+    onTarget: (partial: PendingTarget) => {
+      pendingRef.value = { kind: 'target', partial };
+    },
+  });
+  const uiRoot = (globalThis as { document?: Document }).document?.getElementById('ui-root');
+  if (uiRoot && canvas) hud.mount({ root: uiRoot as HTMLElement, canvas });
+
+  /** Turn the armed order plus a clicked world point into a Command. */
+  function resolvePending(atWorld: { x: number; y: number }, cancel: boolean): void {
+    const pend = pendingRef.value;
+    if (!pend) return;
+    if (cancel) {
+      pendingRef.value = null;
+      return;
+    }
+    if (pend.kind === 'build') {
+      game.command({ k: 'build', player: viewer, worker: pend.worker, buildingId: pend.buildingId, at: atWorld });
+    } else {
+      const p = pend.partial;
+      if (p.k === 'move') game.command({ k: 'move', player: viewer, units: p.units ?? [], to: atWorld, mode: p.mode });
+      else game.command({ k: 'rally', player: viewer, entity: p.entity ?? 0xffffffff, at: atWorld });
+    }
+    pendingRef.value = null;
+  }
 
   const loop = new FixedStepLoop({
     update: (ticks) => {
@@ -105,6 +164,7 @@ export function createApp(opts: AppOptions): App {
       input.frame(1000 / 30);
       syncView(game, renderer);
       renderer.render(game, alpha);
+      hud.frame(game, viewer);
     },
   });
 
@@ -126,12 +186,14 @@ export function createApp(opts: AppOptions): App {
     renderer,
     input,
     loop,
+    hud,
     jumpTo(xUnits: number, yUnits: number) {
       renderer.centerOn(ff(xUnits), ff(yUnits));
       syncView(game, renderer);
     },
     destroy() {
       loop.stop();
+      hud.destroy();
       input.detach();
       renderer.destroy();
       if (typeof window !== 'undefined') {

@@ -278,7 +278,7 @@ export class InfoPanel {
     if (info.speed != null) statBits.push(`Speed <span>${info.speed}</span>`);
     if (info.rate != null) statBits.push(`Attack <span>${info.rate}s</span>`);
     const txt = statBits.join(' · ');
-    if (this.stats.innerHTML !== txt) this.stats.innerHTML = txt;
+    set(this.stats, txt);
 
     for (let i = 0; i < 6; i++) {
       const id = info.items[i] ?? '';

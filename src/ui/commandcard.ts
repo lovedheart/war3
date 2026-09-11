@@ -90,7 +90,11 @@ interface Btn {
   tip?: () => TipLine[];
 }
 
-const MAX_BUTTONS = 24;
+// Pool size must cover the largest command card in the game. Orc has ~19
+// buildings, Undead/Night Elf more once they land, and a worker card lists all
+// of them — so the old cap of 24 silently truncated non-human cards.
+const MAX_BUTTONS = 48;
+const MAX_BUBBLES = 6;
 const TICK_RATE = 30;
 
 export class CommandCard {
@@ -105,6 +109,15 @@ export class CommandCard {
   pending: PlacementRequest | null = null;
 
   constructor(private o: CardOptions) {}
+
+  /** Create the full node pool now so later frames never append. */
+  prewarm(): void {
+    for (let i = 0; i < MAX_BUTTONS; i++) this.obtain();
+    for (let i = 0; i < MAX_BUBBLES; i++) this.obtainBubble();
+    this.used = 0;
+    this.bubbleUsed = 0;
+    this.hideRest();
+  }
 
   build(): HTMLElement {
     const doc = this.o.doc;
@@ -205,6 +218,7 @@ export class CommandCard {
     (b as unknown as { why?: string }).why = cfg.why;
     b.shade.style.display = cfg.off ? 'block' : 'none';
     b.el.className = 'w3-btn' + (cfg.off ? ' off' : '') + (cfg.armed ? ' armed' : '');
+    b.el.style.display = '';
     this.setTip(b, cfg.tip);
   }
 
@@ -268,6 +282,7 @@ export class CommandCard {
   private workerCard(gd: ReturnType<typeof getGameData>, viewer: number, p: PlayerState | undefined, builtList: string[]): void {
     const race = p?.race ?? 'human';
     const builtIds = new Set(builtList);
+    void this.builtIds;
     const list = [...gd.buildings.entries()]
       .filter(([, d]) => d.race === race)
       .sort((a, b) => rank(a[1], builtIds) - rank(b[1], builtIds) || cmp(a[1].name, b[1].name))
@@ -280,11 +295,10 @@ export class CommandCard {
       }
       const gold = d.cost.gold;
       const lumber = d.cost.lumber;
-      const afford = (p?.gold ?? 0) >= gold && (p?.lumber ?? 0) >= lumber;
-      if (!afford) {
-        if ((p?.gold ?? 0) < gold) missing.push(`${gold - Math.floor(fn(p?.gold ?? 0))} more gold needed`);
-        if ((p?.lumber ?? 0) < lumber) missing.push(`${lumber - Math.floor(fn(p?.lumber ?? 0))} more lumber needed`);
-      }
+      const haveGold = Math.floor(fn(p?.gold ?? 0));
+      const haveLumber = Math.floor(fn(p?.lumber ?? 0));
+      if (haveGold < gold) missing.push(`${gold - haveGold} more gold needed`);
+      if (haveLumber < lumber) missing.push(`${lumber - haveLumber} more lumber needed`);
       const off = missing.length > 0;
       const b = this.obtain();
       const worker = this.lastWorker;
@@ -349,8 +363,8 @@ export class CommandCard {
       }
       const popFree = (p?.supplyCap ?? 0) - (p?.supplyUsed ?? 0);
       if (popFree < (d.cost.popUpkeep ?? 1)) missing.push('Not enough supply');
-      if ((p?.gold ?? 0) < d.cost.gold) missing.push(`${d.cost.gold - Math.floor(fn(p?.gold ?? 0))} more gold needed`);
-      if ((p?.lumber ?? 0) < d.cost.lumber) missing.push(`${d.cost.lumber - Math.floor(fn(p?.lumber ?? 0))} more lumber needed`);
+      if (Math.floor(fn(p?.gold ?? 0)) < d.cost.gold) missing.push(`${d.cost.gold - Math.floor(fn(p?.gold ?? 0))} more gold needed`);
+      if (Math.floor(fn(p?.lumber ?? 0)) < d.cost.lumber) missing.push(`${d.cost.lumber - Math.floor(fn(p?.lumber ?? 0))} more lumber needed`);
       const b = this.obtain();
       this.configure(b, {
         id: uid,
@@ -482,6 +496,7 @@ export class CommandCard {
         const act = (el as unknown as { act?: () => void }).act;
         act?.();
       });
+      el.style.display = 'none';
       this.bubbles.push(el);
       this.queue.appendChild(el);
     }
@@ -509,8 +524,13 @@ function cmp(a: string, b: string): number {
   return a < b ? -1 : a > b ? 1 : 0;
 }
 function shortName(n: string): string {
-  const s = n.replace(/\(.*?\)/g, '').trim();
-  return s.length > 12 ? s.slice(0, 11) + '…' : s;
+  const words = n
+    .replace(/\(.*?\)/g, ' ')
+    .replace(/[_-]+/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean);
+  const s = words.map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  return s.length > 15 ? s.slice(0, 14).trimEnd() + '…' : s;
 }
 function basicHint(kind: string): string {
   switch (kind) {
