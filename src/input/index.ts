@@ -311,12 +311,12 @@ export function createInput(deps: InputDeps): InputManager {
 
   const frame = (dtMs: number): void => {
     const { w, h } = deps.viewport();
-    let dx = 0;
-    let dy = 0;
-    if (lastScreen.sx <= EDGE_BAND_PX) dx -= 1;
-    else if (lastScreen.sx >= w - EDGE_BAND_PX) dx += 1;
-    if (lastScreen.sy <= EDGE_BAND_PX) dy -= 1;
-    else if (lastScreen.sy >= h - EDGE_BAND_PX) dy += 1;
+    let edgeX = 0;
+    let edgeY = 0;
+    if (lastScreen.sx <= EDGE_BAND_PX) edgeX -= 1;
+    else if (lastScreen.sx >= w - EDGE_BAND_PX) edgeX += 1;
+    if (lastScreen.sy <= EDGE_BAND_PX) edgeY -= 1;
+    else if (lastScreen.sy >= h - EDGE_BAND_PX) edgeY += 1;
     let arrowX = 0;
     let arrowY = 0;
     for (const [k, v] of Object.entries(PAN_KEYS)) {
@@ -325,8 +325,11 @@ export function createInput(deps: InputDeps): InputManager {
       arrowY += v[1];
     }
     const seconds = dtMs / 1000;
-    if (dx || dy) deps.panByPixels(dx * EDGE_SPEED_PX_PER_S * seconds, dy * EDGE_SPEED_PX_PER_S * seconds);
-    if (arrowX || arrowY) deps.panByPixels(arrowX * PAN_KEY_SPEED_PX_PER_S * seconds, arrowY * PAN_KEY_SPEED_PX_PER_S * seconds);
+    // Edge scroll and key pan are independent sources; sum them into one pan so
+    // a caller cannot observe two competing deltas in the same frame.
+    const dx = edgeX * EDGE_SPEED_PX_PER_S + arrowX * PAN_KEY_SPEED_PX_PER_S;
+    const dy = edgeY * EDGE_SPEED_PX_PER_S + arrowY * PAN_KEY_SPEED_PX_PER_S;
+    if (dx || dy) deps.panByPixels(dx * seconds, dy * seconds);
   };
 
   const handlers: [string, EventListener][] = [

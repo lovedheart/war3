@@ -340,9 +340,12 @@ describe('camera', () => {
   it('arrow keys pan continuously while held', () => {
     const f = fake();
     const inp = createInput(f.deps);
+    // park the cursor mid-screen so edge scrolling contributes nothing here
+    inp.move(click(640, 360));
     inp.key(key('ArrowLeft'));
     f.pans.length = 0;
     inp.frame(100);
+    expect(f.pans.length).toBe(1);
     expect(f.pans[0][0]).toBeLessThan(0);
     inp.unkey('ArrowLeft');
     f.pans.length = 0;
