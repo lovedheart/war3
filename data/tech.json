@@ -1,0 +1,1230 @@
+{
+  "_source": "UpgradeData.slk (war3.mpq, TFT 1.20.x). cost = base + perLevel*(level-1); time likewise.",
+  "items": {
+    "human_melee_attack": {
+      "id": "human_melee_attack",
+      "slkId": "Rhme",
+      "name": "Human melee attack",
+      "race": "human",
+      "maxLevel": 3,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 75,
+        "lumberBase": 50,
+        "lumberPerLevel": 125
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 15
+      },
+      "effects": [
+        {
+          "kind": "attackDamage",
+          "code": "ratd",
+          "base": 1,
+          "perLevel": 1
+        }
+      ],
+      "researchBuilding": "blacksmith",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": [
+        "footman",
+        "knight",
+        "grunt",
+        "tauren",
+        "peasant",
+        "peon"
+      ]
+    },
+    "human_ranged_attack": {
+      "id": "human_ranged_attack",
+      "slkId": "Rhra",
+      "name": "Human ranged attack",
+      "race": "human",
+      "maxLevel": 3,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 75,
+        "lumberBase": 50,
+        "lumberPerLevel": 125
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 15
+      },
+      "effects": [
+        {
+          "kind": "attackDamage",
+          "code": "ratd",
+          "base": 1,
+          "perLevel": 1
+        }
+      ],
+      "researchBuilding": "blacksmith",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": [
+        "rifleman",
+        "headhunter_troll",
+        "mortar_team"
+      ]
+    },
+    "human_armor": {
+      "id": "human_armor",
+      "slkId": "Rhar",
+      "name": "Human armor",
+      "race": "human",
+      "maxLevel": 3,
+      "cost": {
+        "goldBase": 125,
+        "goldPerLevel": 25,
+        "lumberBase": 75,
+        "lumberPerLevel": 100
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 15
+      },
+      "effects": [
+        {
+          "kind": "armor",
+          "code": "rarm",
+          "base": null,
+          "perLevel": null
+        }
+      ],
+      "researchBuilding": "blacksmith",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": [
+        "footman",
+        "knight",
+        "mortar_team",
+        "flying_machine",
+        "siege_engine"
+      ]
+    },
+    "human_architecture": {
+      "id": "human_architecture",
+      "slkId": "Rhac",
+      "name": "Human architecture",
+      "race": "human",
+      "maxLevel": 3,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 25,
+        "lumberBase": 25,
+        "lumberPerLevel": 25
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 15
+      },
+      "effects": [
+        {
+          "kind": "armor",
+          "code": "rarm",
+          "base": null,
+          "perLevel": null
+        },
+        {
+          "kind": "hitPointsPercent",
+          "code": "rhpo",
+          "base": 0.1,
+          "perLevel": 0.1
+        }
+      ],
+      "researchBuilding": "blacksmith",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": [
+        "town_hall",
+        "keep",
+        "castle",
+        "farm",
+        "barracks_human",
+        "blacksmith",
+        "workshop",
+        "arcane_sanctum",
+        "gryphon_pier",
+        "arcane_vault",
+        "altar_of_kings",
+        "lumber_mill",
+        "scout_tower",
+        "guard_tower",
+        "arcane_tower",
+        "cannon_tower"
+      ]
+    },
+    "human_leather_armor": {
+      "id": "human_leather_armor",
+      "slkId": "Rhla",
+      "name": "Human leather armor",
+      "race": "human",
+      "maxLevel": 3,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 50,
+        "lumberBase": 100,
+        "lumberPerLevel": 75
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 15
+      },
+      "effects": [
+        {
+          "kind": "armor",
+          "code": "rarm",
+          "base": null,
+          "perLevel": null
+        }
+      ],
+      "researchBuilding": "blacksmith",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": [
+        "peasant",
+        "militia",
+        "rifleman",
+        "priest",
+        "sorceress"
+      ]
+    },
+    "footman_shields": {
+      "id": "footman_shields",
+      "slkId": "Rhde",
+      "name": "Human footman defend",
+      "race": "human",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 150,
+        "goldPerLevel": 0,
+        "lumberBase": 100,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 45,
+        "perLevel": 0
+      },
+      "effects": [],
+      "researchBuilding": "blacksmith",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "priest_training": {
+      "id": "priest_training",
+      "slkId": "Rhpt",
+      "name": "Human priest training",
+      "race": "human",
+      "maxLevel": 2,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 0,
+        "lumberBase": 50,
+        "lumberPerLevel": 100
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 15
+      },
+      "effects": [
+        {
+          "kind": "manaPool",
+          "code": "rmnx",
+          "base": 100,
+          "perLevel": 100
+        },
+        {
+          "kind": "manaRegeneration",
+          "code": "rmnr",
+          "base": 0.325,
+          "perLevel": 0.325
+        }
+      ],
+      "researchBuilding": "arcane_sanctum",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "sorceress_training": {
+      "id": "sorceress_training",
+      "slkId": "Rhst",
+      "name": "Human sorceress training",
+      "race": "human",
+      "maxLevel": 2,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 0,
+        "lumberBase": 50,
+        "lumberPerLevel": 100
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 15
+      },
+      "effects": [
+        {
+          "kind": "manaPool",
+          "code": "rmnx",
+          "base": 100,
+          "perLevel": 100
+        },
+        {
+          "kind": "manaRegeneration",
+          "code": "rmnr",
+          "base": 0.325,
+          "perLevel": 0.325
+        }
+      ],
+      "researchBuilding": "arcane_sanctum",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "peasant_lumber_technology": {
+      "id": "peasant_lumber_technology",
+      "slkId": "Rhlh",
+      "name": "Human lumber harvesting",
+      "race": "human",
+      "maxLevel": 2,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 100,
+        "lumberBase": 0,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 15
+      },
+      "effects": [
+        {
+          "kind": "lumberCarryCapacity",
+          "code": "rlum",
+          "base": 10,
+          "perLevel": 10
+        }
+      ],
+      "researchBuilding": "lumber_mill",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "rifleman_long_range": {
+      "id": "rifleman_long_range",
+      "slkId": "Rhri",
+      "name": "Human rifleman plus range",
+      "race": "human",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 75,
+        "goldPerLevel": 0,
+        "lumberBase": 125,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 30,
+        "perLevel": 0
+      },
+      "effects": [
+        {
+          "kind": "attackRange",
+          "code": "ratr",
+          "base": 200,
+          "perLevel": 200
+        }
+      ],
+      "researchBuilding": "blacksmith",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "gyrocopter_bombs": {
+      "id": "gyrocopter_bombs",
+      "slkId": "Rhgb",
+      "name": "Human gyro bombs",
+      "race": "human",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 150,
+        "goldPerLevel": 50,
+        "lumberBase": 100,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 35,
+        "perLevel": 0
+      },
+      "effects": [
+        {
+          "kind": "newAbility",
+          "code": "renw",
+          "base": 3,
+          "perLevel": null
+        }
+      ],
+      "researchBuilding": "workshop",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "flak_cannons": {
+      "id": "flak_cannons",
+      "slkId": "Rhfc",
+      "name": "Human flak cannon",
+      "race": "human",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 0,
+        "lumberBase": 150,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 40,
+        "perLevel": 0
+      },
+      "effects": [],
+      "researchBuilding": "workshop",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "frag_shards": {
+      "id": "frag_shards",
+      "slkId": "Rhfs",
+      "name": "Human frag shards",
+      "race": "human",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 50,
+        "goldPerLevel": 0,
+        "lumberBase": 100,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 40,
+        "perLevel": 0
+      },
+      "effects": [],
+      "researchBuilding": "workshop",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "flare": {
+      "id": "flare",
+      "slkId": "Rhfl",
+      "name": "Human flare",
+      "race": "human",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 50,
+        "goldPerLevel": 0,
+        "lumberBase": 50,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 30,
+        "perLevel": 0
+      },
+      "effects": [],
+      "researchBuilding": "workshop",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "magical_sentinel": {
+      "id": "magical_sentinel",
+      "slkId": "Rhse",
+      "name": "Human magical sentinal",
+      "race": "human",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 50,
+        "goldPerLevel": 0,
+        "lumberBase": 50,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 30,
+        "perLevel": 0
+      },
+      "effects": [],
+      "researchBuilding": "arcane_sanctum",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "control_magic": {
+      "id": "control_magic",
+      "slkId": "Rhss",
+      "name": "Human control magic",
+      "race": "human",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 75,
+        "goldPerLevel": 0,
+        "lumberBase": 75,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 45,
+        "perLevel": 0
+      },
+      "effects": [],
+      "researchBuilding": "arcane_sanctum",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "rocket_tank": {
+      "id": "rocket_tank",
+      "slkId": "Rhrt",
+      "name": "Human rocket tank",
+      "race": "human",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 50,
+        "goldPerLevel": 0,
+        "lumberBase": 150,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 40,
+        "perLevel": 0
+      },
+      "effects": [
+        {
+          "kind": "toggleAbility",
+          "code": "rtma",
+          "base": 1,
+          "perLevel": null
+        },
+        {
+          "kind": "toggleAbility",
+          "code": "rtma",
+          "base": -1,
+          "perLevel": null
+        }
+      ],
+      "researchBuilding": "workshop",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "human_backpack": {
+      "id": "human_backpack",
+      "slkId": "Rhpm",
+      "name": "Human backpack",
+      "race": "human",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 50,
+        "goldPerLevel": 0,
+        "lumberBase": 25,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 20,
+        "perLevel": 0
+      },
+      "effects": [],
+      "researchBuilding": "barracks_human",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "animal_training": {
+      "id": "animal_training",
+      "slkId": "Rhan",
+      "name": "Human animal breeding",
+      "race": "human",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 125,
+        "goldPerLevel": 0,
+        "lumberBase": 175,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 40,
+        "perLevel": 0
+      },
+      "effects": [
+        {
+          "kind": "hitPoints",
+          "code": "rhpx",
+          "base": 150,
+          "perLevel": null
+        }
+      ],
+      "researchBuilding": "barracks_human",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "hammer_bounce": {
+      "id": "hammer_bounce",
+      "slkId": "Rhhb",
+      "name": "Human hammer bounce",
+      "race": "human",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 125,
+        "goldPerLevel": 0,
+        "lumberBase": 225,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 45,
+        "perLevel": 0
+      },
+      "effects": [
+        {
+          "kind": "splashArea",
+          "code": "rasd",
+          "base": 200,
+          "perLevel": null
+        }
+      ],
+      "researchBuilding": "blacksmith",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "cloud_research": {
+      "id": "cloud_research",
+      "slkId": "Rhcd",
+      "name": "Human cloud research",
+      "race": "human",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 50,
+        "goldPerLevel": 0,
+        "lumberBase": 100,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 35,
+        "perLevel": 0
+      },
+      "effects": [],
+      "researchBuilding": "arcane_sanctum",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "orc_melee_attack": {
+      "id": "orc_melee_attack",
+      "slkId": "Rome",
+      "name": "Orc melee attack",
+      "race": "orc",
+      "maxLevel": 3,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 50,
+        "lumberBase": 75,
+        "lumberPerLevel": 100
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 15
+      },
+      "effects": [
+        {
+          "kind": "attackDamage",
+          "code": "ratd",
+          "base": 1,
+          "perLevel": 1
+        }
+      ],
+      "researchBuilding": "orc_forge",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "orc_ranged_attack": {
+      "id": "orc_ranged_attack",
+      "slkId": "Rora",
+      "name": "Orc ranged attack",
+      "race": "orc",
+      "maxLevel": 3,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 50,
+        "lumberBase": 100,
+        "lumberPerLevel": 100
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 15
+      },
+      "effects": [
+        {
+          "kind": "attackDamage",
+          "code": "ratd",
+          "base": 1,
+          "perLevel": 1
+        }
+      ],
+      "researchBuilding": "orc_forge",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "orc_armor": {
+      "id": "orc_armor",
+      "slkId": "Roar",
+      "name": "Orc armor",
+      "race": "orc",
+      "maxLevel": 3,
+      "cost": {
+        "goldBase": 150,
+        "goldPerLevel": 75,
+        "lumberBase": 75,
+        "lumberPerLevel": 150
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 15
+      },
+      "effects": [
+        {
+          "kind": "armor",
+          "code": "rarm",
+          "base": null,
+          "perLevel": null
+        }
+      ],
+      "researchBuilding": "orc_forge",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": [
+        "grunt",
+        "headhunter_troll",
+        "raider",
+        "tauren",
+        "peon",
+        "kodo_beast",
+        "shaman",
+        "witch_doctor",
+        "spirit_walker"
+      ]
+    },
+    "war_drums": {
+      "id": "war_drums",
+      "slkId": "Rwdm",
+      "name": "Orc war drums damage",
+      "race": "orc",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 0,
+        "lumberBase": 150,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 40,
+        "perLevel": 0
+      },
+      "effects": [
+        {
+          "kind": "auraDamageBuff",
+          "code": "raud",
+          "base": 0.1,
+          "perLevel": 0.1
+        }
+      ],
+      "researchBuilding": "orc_forge",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "grunt_berserk": {
+      "id": "grunt_berserk",
+      "slkId": "Robs",
+      "name": "Orc grunt berserk",
+      "race": "orc",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 50,
+        "goldPerLevel": 0,
+        "lumberBase": 150,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 40,
+        "perLevel": 0
+      },
+      "effects": [
+        {
+          "kind": "hitPoints",
+          "code": "rhpx",
+          "base": 100,
+          "perLevel": null
+        },
+        {
+          "kind": "attackDamagePerTarget",
+          "code": "ratx",
+          "base": 3,
+          "perLevel": null
+        }
+      ],
+      "researchBuilding": "baracks_orc",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "berserkers_upgrade": {
+      "id": "berserkers_upgrade",
+      "slkId": "Robk",
+      "name": "Orc berserkers",
+      "race": "orc",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 75,
+        "goldPerLevel": 0,
+        "lumberBase": 175,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 40,
+        "perLevel": 0
+      },
+      "effects": [
+        {
+          "kind": "toggleAbility",
+          "code": "rtma",
+          "base": 1,
+          "perLevel": null
+        },
+        {
+          "kind": "toggleAbility",
+          "code": "rtma",
+          "base": -1,
+          "perLevel": null
+        }
+      ],
+      "researchBuilding": "baracks_orc",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "raider_ensnare": {
+      "id": "raider_ensnare",
+      "slkId": "Roen",
+      "name": "Orc raider ensare",
+      "race": "orc",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 50,
+        "goldPerLevel": 0,
+        "lumberBase": 75,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 40,
+        "perLevel": 0
+      },
+      "effects": [],
+      "researchBuilding": "beastiary",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "wyvern_venom_spear": {
+      "id": "wyvern_venom_spear",
+      "slkId": "Rovs",
+      "name": "Orc wyvern venom spear",
+      "race": "orc",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 0,
+        "lumberBase": 150,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 40,
+        "perLevel": 0
+      },
+      "effects": [],
+      "researchBuilding": "beastiary",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "witch_doctor_training": {
+      "id": "witch_doctor_training",
+      "slkId": "Rowd",
+      "name": "Orc witch doctor training",
+      "race": "orc",
+      "maxLevel": 2,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 0,
+        "lumberBase": 50,
+        "lumberPerLevel": 100
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 15
+      },
+      "effects": [
+        {
+          "kind": "manaPool",
+          "code": "rmnx",
+          "base": 100,
+          "perLevel": 100
+        },
+        {
+          "kind": "manaRegeneration",
+          "code": "rmnr",
+          "base": 0.325,
+          "perLevel": 0.325
+        }
+      ],
+      "researchBuilding": "voodoo_lounge",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "shaman_training": {
+      "id": "shaman_training",
+      "slkId": "Rost",
+      "name": "Orc shaman training",
+      "race": "orc",
+      "maxLevel": 2,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 0,
+        "lumberBase": 50,
+        "lumberPerLevel": 100
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 15
+      },
+      "effects": [
+        {
+          "kind": "manaPool",
+          "code": "rmnx",
+          "base": 100,
+          "perLevel": 100
+        },
+        {
+          "kind": "manaRegeneration",
+          "code": "rmnr",
+          "base": 0.325,
+          "perLevel": 0.325
+        }
+      ],
+      "researchBuilding": "voodoo_lounge",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "spirit_walker_training": {
+      "id": "spirit_walker_training",
+      "slkId": "Rowt",
+      "name": "Orc spiritwalker training",
+      "race": "orc",
+      "maxLevel": 2,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 0,
+        "lumberBase": 50,
+        "lumberPerLevel": 100
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 15
+      },
+      "effects": [
+        {
+          "kind": "manaPool",
+          "code": "rmnx",
+          "base": 150,
+          "perLevel": 150
+        },
+        {
+          "kind": "manaRegeneration",
+          "code": "rmnr",
+          "base": 0.42,
+          "perLevel": 0.42
+        }
+      ],
+      "researchBuilding": "spirit_lodge",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "troll_regeneration": {
+      "id": "troll_regeneration",
+      "slkId": "Rotr",
+      "name": "Orc troll regeneration",
+      "race": "orc",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 0,
+        "lumberBase": 100,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 35,
+        "perLevel": 0
+      },
+      "effects": [
+        {
+          "kind": "hpRegeneration",
+          "code": "rhpr",
+          "base": 0.8,
+          "perLevel": 1
+        }
+      ],
+      "researchBuilding": "voodoo_lounge",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "peon_pillage": {
+      "id": "peon_pillage",
+      "slkId": "Ropg",
+      "name": "Orc pillage",
+      "race": "orc",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 75,
+        "goldPerLevel": 0,
+        "lumberBase": 25,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 45,
+        "perLevel": 0
+      },
+      "effects": [],
+      "researchBuilding": "great_hall",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "spiked_barricade": {
+      "id": "spiked_barricade",
+      "slkId": "Rosp",
+      "name": "Orc spiked barricade",
+      "race": "orc",
+      "maxLevel": 3,
+      "cost": {
+        "goldBase": 25,
+        "goldPerLevel": 25,
+        "lumberBase": 75,
+        "lumberPerLevel": 100
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 15
+      },
+      "effects": [
+        {
+          "kind": "thornsDamage",
+          "code": "rspi",
+          "base": 4,
+          "perLevel": 6
+        }
+      ],
+      "researchBuilding": "burrow",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "reinforced_defender": {
+      "id": "reinforced_defender",
+      "slkId": "Rorb",
+      "name": "Orc reinforced defense",
+      "race": "orc",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 50,
+        "goldPerLevel": 0,
+        "lumberBase": 200,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 0
+      },
+      "effects": [
+        {
+          "kind": "armorType",
+          "code": "rart",
+          "base": 1,
+          "perLevel": null
+        }
+      ],
+      "researchBuilding": "burrow",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "orc_backpack": {
+      "id": "orc_backpack",
+      "slkId": "Ropm",
+      "name": "Orc backpack",
+      "race": "orc",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 50,
+        "goldPerLevel": 0,
+        "lumberBase": 25,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 20,
+        "perLevel": 0
+      },
+      "effects": [],
+      "researchBuilding": "baracks_orc",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "chaos_conversion": {
+      "id": "chaos_conversion",
+      "slkId": "Roch",
+      "name": "Orc chaos conversion",
+      "race": "demon",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 0,
+        "goldPerLevel": 0,
+        "lumberBase": 0,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 0,
+        "perLevel": 0
+      },
+      "effects": [],
+      "researchBuilding": "spirit_lodge",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "liquid_fire": {
+      "id": "liquid_fire",
+      "slkId": "Rolf",
+      "name": "Orc liquid fire",
+      "race": "orc",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 75,
+        "goldPerLevel": 0,
+        "lumberBase": 125,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 75,
+        "perLevel": 0
+      },
+      "effects": [],
+      "researchBuilding": "orc_forge",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "tauren_smash": {
+      "id": "tauren_smash",
+      "slkId": "Rows",
+      "name": "Orc tauren smash",
+      "race": "orc",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 0,
+        "lumberBase": 250,
+        "lumberPerLevel": 0
+      },
+      "time": {
+        "base": 40,
+        "perLevel": 0
+      },
+      "effects": [],
+      "researchBuilding": "tauren_totem",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    },
+    "glyph_of_fortification": {
+      "id": "glyph_of_fortification",
+      "slkId": "Rgfo",
+      "name": "Glyph of fortification",
+      "race": "neutral",
+      "maxLevel": 3,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 50,
+        "lumberBase": 100,
+        "lumberPerLevel": 50
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 15
+      },
+      "effects": [
+        {
+          "kind": "armor",
+          "code": "rarm",
+          "base": null,
+          "perLevel": null
+        },
+        {
+          "kind": "hitPointsPercent",
+          "code": "rhpo",
+          "base": 0.2,
+          "perLevel": 0.2
+        }
+      ],
+      "researchBuilding": "blacksmith",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": [
+        "__structures"
+      ]
+    },
+    "glyph_of_ultravision": {
+      "id": "glyph_of_ultravision",
+      "slkId": "Rguv",
+      "name": "Glyph of ultravision",
+      "race": "neutral",
+      "maxLevel": 1,
+      "cost": {
+        "goldBase": 100,
+        "goldPerLevel": 50,
+        "lumberBase": 100,
+        "lumberPerLevel": 50
+      },
+      "time": {
+        "base": 60,
+        "perLevel": 15
+      },
+      "effects": [
+        {
+          "kind": "ultravision",
+          "code": "rauv",
+          "base": null,
+          "perLevel": null
+        }
+      ],
+      "researchBuilding": "arcane_vault",
+      "prereqTech": [],
+      "prereqUnits": [],
+      "appliesTo": null
+    }
+  }
+}

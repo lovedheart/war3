@@ -1,0 +1,2501 @@
+{
+  "_source": "ItemData.slk (war3.mpq, TFT 1.20.x). Stat bonuses decoded from the item AIxx abilities in AbilityData.slk.",
+  "_craftingNote": "TFT stores crafting recipes in the map object-editor, not in ItemData.slk; the six chains below are the standard melee loot recipes and are marked _note:\"verify\".",
+  "items": {
+    "ckng": {
+      "id": "ckng",
+      "slkId": "ckng",
+      "name": "Crown of Kings +5",
+      "quality": "artifact",
+      "slkClass": "Artifact",
+      "level": 8,
+      "cost": {
+        "gold": 1000,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "agility": 5,
+        "intelligence": 5,
+        "strength": 5
+      },
+      "abilities": [
+        "aix5"
+      ],
+      "components": null
+    },
+    "modt": {
+      "id": "modt",
+      "slkId": "modt",
+      "name": "mask of death",
+      "quality": "artifact",
+      "slkClass": "Artifact",
+      "level": 8,
+      "cost": {
+        "gold": 1000,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aiva"
+      ],
+      "components": null
+    },
+    "tkno": {
+      "id": "tkno",
+      "slkId": "tkno",
+      "name": "Tome of Power",
+      "quality": "artifact",
+      "slkClass": "Artifact",
+      "level": 8,
+      "cost": {
+        "gold": 1250,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": false,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "ailm"
+      ],
+      "components": null
+    },
+    "ratf": {
+      "id": "ratf",
+      "slkId": "ratf",
+      "name": "Claws of Attack +15",
+      "quality": "epic",
+      "slkClass": "Artifact",
+      "level": 7,
+      "cost": {
+        "gold": 800,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "attack": 15
+      },
+      "abilities": [
+        "aitf"
+      ],
+      "components": null
+    },
+    "rde4": {
+      "id": "rde4",
+      "slkId": "rde4",
+      "name": "Ring of Protection +5",
+      "quality": "epic",
+      "slkClass": "Artifact",
+      "level": 7,
+      "cost": {
+        "gold": 800,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "armor": 5
+      },
+      "abilities": [
+        "aid5"
+      ],
+      "components": null
+    },
+    "ofro": {
+      "id": "ofro",
+      "slkId": "ofro",
+      "name": "Orb of Frost",
+      "quality": "epic",
+      "slkClass": "Artifact",
+      "level": 7,
+      "cost": {
+        "gold": 800,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "frostArrows": {
+          "slowPct": 6
+        }
+      },
+      "abilities": [
+        "aiob"
+      ],
+      "components": null
+    },
+    "desc": {
+      "id": "desc",
+      "slkId": "desc",
+      "name": "Dagger of Escape",
+      "quality": "epic",
+      "slkClass": "Artifact",
+      "level": 7,
+      "cost": {
+        "gold": 800,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aibk"
+      ],
+      "components": null
+    },
+    "odef": {
+      "id": "odef",
+      "slkId": "odef",
+      "name": "Orb of Darkness",
+      "quality": "epic",
+      "slkClass": "Permanent",
+      "level": 6,
+      "cost": {
+        "gold": 600,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aidf"
+      ],
+      "components": null
+    },
+    "rde3": {
+      "id": "rde3",
+      "slkId": "rde3",
+      "name": "Ring of Protection +4",
+      "quality": "epic",
+      "slkClass": "Permanent",
+      "level": 6,
+      "cost": {
+        "gold": 600,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "armor": 4
+      },
+      "abilities": [
+        "aid4"
+      ],
+      "components": null
+    },
+    "pmna": {
+      "id": "pmna",
+      "slkId": "pmna",
+      "name": "Pendant of Mana",
+      "quality": "epic",
+      "slkClass": "Permanent",
+      "level": 6,
+      "cost": {
+        "gold": 600,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "mpBonus": 250
+      },
+      "abilities": [
+        "aibm"
+      ],
+      "components": null
+    },
+    "ssil": {
+      "id": "ssil",
+      "slkId": "ssil",
+      "name": "Staff of Silence",
+      "quality": "epic",
+      "slkClass": "Permanent",
+      "level": 6,
+      "cost": {
+        "gold": 600,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aise"
+      ],
+      "components": null
+    },
+    "spsh": {
+      "id": "spsh",
+      "slkId": "spsh",
+      "name": "Amulet of Spell Shield",
+      "quality": "epic",
+      "slkClass": "Permanent",
+      "level": 6,
+      "cost": {
+        "gold": 600,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "anss"
+      ],
+      "components": null
+    },
+    "pdiv": {
+      "id": "pdiv",
+      "slkId": "pdiv",
+      "name": "Potion of Divinity",
+      "quality": "rare",
+      "slkClass": "Charged",
+      "level": 5,
+      "cost": {
+        "gold": 550,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aidv"
+      ],
+      "components": null
+    },
+    "pres": {
+      "id": "pres",
+      "slkId": "pres",
+      "name": "Potion of Restoration",
+      "quality": "rare",
+      "slkClass": "Charged",
+      "level": 5,
+      "cost": {
+        "gold": 550,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aire"
+      ],
+      "components": null
+    },
+    "mcou": {
+      "id": "mcou",
+      "slkId": "mcou",
+      "name": "Medallion of Courage",
+      "quality": "rare",
+      "slkClass": "Permanent",
+      "level": 5,
+      "cost": {
+        "gold": 500,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "strength": 4,
+        "intelligence": 4
+      },
+      "abilities": [
+        "ais4",
+        "aii4"
+      ],
+      "components": null
+    },
+    "clfm": {
+      "id": "clfm",
+      "slkId": "clfm",
+      "name": "Cloak of Flames",
+      "quality": "rare",
+      "slkClass": "Permanent",
+      "level": 5,
+      "cost": {
+        "gold": 500,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "thorns": 10
+      },
+      "abilities": [
+        "aicf"
+      ],
+      "components": null
+    },
+    "ratc": {
+      "id": "ratc",
+      "slkId": "ratc",
+      "name": "Claws of Attack +12",
+      "quality": "rare",
+      "slkClass": "Permanent",
+      "level": 5,
+      "cost": {
+        "gold": 500,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "attack": 12
+      },
+      "abilities": [
+        "aitc"
+      ],
+      "components": null
+    },
+    "ward": {
+      "id": "ward",
+      "slkId": "ward",
+      "name": "Warsong Battle Drums",
+      "quality": "rare",
+      "slkClass": "Permanent",
+      "level": 5,
+      "cost": {
+        "gold": 500,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "auraCommand": {
+          "attackSpeed": 0.1,
+          "damage": 1,
+          "armor": 1
+        }
+      },
+      "abilities": [
+        "aicd"
+      ],
+      "components": null
+    },
+    "belv": {
+      "id": "belv",
+      "slkId": "belv",
+      "name": "Boots of Quel'Thalas +6",
+      "quality": "rare",
+      "slkClass": "Permanent",
+      "level": 4,
+      "cost": {
+        "gold": 400,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "agility": 6
+      },
+      "abilities": [
+        "aia6"
+      ],
+      "components": null
+    },
+    "bgst": {
+      "id": "bgst",
+      "slkId": "bgst",
+      "name": "Belt of Giant Strength +6",
+      "quality": "rare",
+      "slkClass": "Permanent",
+      "level": 4,
+      "cost": {
+        "gold": 400,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "strength": 6
+      },
+      "abilities": [
+        "ais6"
+      ],
+      "components": null
+    },
+    "ciri": {
+      "id": "ciri",
+      "slkId": "ciri",
+      "name": "Robe of the Magi +6",
+      "quality": "rare",
+      "slkClass": "Permanent",
+      "level": 4,
+      "cost": {
+        "gold": 400,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "intelligence": 6
+      },
+      "abilities": [
+        "aii6"
+      ],
+      "components": null
+    },
+    "lhst": {
+      "id": "lhst",
+      "slkId": "lhst",
+      "name": "Lion Horn of Stormwind",
+      "quality": "rare",
+      "slkClass": "Permanent",
+      "level": 4,
+      "cost": {
+        "gold": 400,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "auraArmor": 1
+      },
+      "abilities": [
+        "aiad"
+      ],
+      "components": null
+    },
+    "brac": {
+      "id": "brac",
+      "slkId": "brac",
+      "name": "Runed Bracers",
+      "quality": "rare",
+      "slkClass": "Permanent",
+      "level": 4,
+      "cost": {
+        "gold": 400,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aisr"
+      ],
+      "components": null
+    },
+    "hcun": {
+      "id": "hcun",
+      "slkId": "hcun",
+      "name": "Hood of Cunning",
+      "quality": "rare",
+      "slkClass": "Permanent",
+      "level": 5,
+      "cost": {
+        "gold": 500,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "agility": 4,
+        "intelligence": 4
+      },
+      "abilities": [
+        "aia4",
+        "aii4"
+      ],
+      "components": null
+    },
+    "hval": {
+      "id": "hval",
+      "slkId": "hval",
+      "name": "Helm of Valor",
+      "quality": "rare",
+      "slkClass": "Permanent",
+      "level": 5,
+      "cost": {
+        "gold": 500,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "strength": 4,
+        "agility": 4
+      },
+      "abilities": [
+        "ais4",
+        "aia4"
+      ],
+      "components": null
+    },
+    "ajen": {
+      "id": "ajen",
+      "slkId": "ajen",
+      "name": "Ancient Janggo of Endurance",
+      "quality": "rare",
+      "slkClass": "Permanent",
+      "level": 5,
+      "cost": {
+        "gold": 500,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aiae"
+      ],
+      "components": null
+    },
+    "kpin": {
+      "id": "kpin",
+      "slkId": "kpin",
+      "name": "Khadgar's Pipe of Insight",
+      "quality": "rare",
+      "slkClass": "Permanent",
+      "level": 5,
+      "cost": {
+        "gold": 500,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aiba"
+      ],
+      "components": null
+    },
+    "crys": {
+      "id": "crys",
+      "slkId": "crys",
+      "name": "Crystal Ball",
+      "quality": "rare",
+      "slkClass": "Permanent",
+      "level": 5,
+      "cost": {
+        "gold": 500,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "crystalBall": {
+          "revealRadius": 14.063,
+          "dur": 10
+        }
+      },
+      "abilities": [
+        "aita"
+      ],
+      "components": null
+    },
+    "lgdh": {
+      "id": "lgdh",
+      "slkId": "lgdh",
+      "name": "Legion Doom-Horn",
+      "quality": "rare",
+      "slkClass": "Permanent",
+      "level": 5,
+      "cost": {
+        "gold": 500,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aiau"
+      ],
+      "components": null
+    },
+    "ankh": {
+      "id": "ankh",
+      "slkId": "ankh",
+      "name": "Ankh of Reincarnation",
+      "quality": "rare",
+      "slkClass": "Charged",
+      "level": 4,
+      "cost": {
+        "gold": 450,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "airc"
+      ],
+      "components": null
+    },
+    "whwd": {
+      "id": "whwd",
+      "slkId": "whwd",
+      "name": "Healing Wards",
+      "quality": "rare",
+      "slkClass": "Charged",
+      "level": 4,
+      "cost": {
+        "gold": 450,
+        "lumber": 0
+      },
+      "charges": 3,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aihw"
+      ],
+      "components": null
+    },
+    "fgsk": {
+      "id": "fgsk",
+      "slkId": "fgsk",
+      "name": "Book of the Dead",
+      "quality": "rare",
+      "slkClass": "Charged",
+      "level": 4,
+      "cost": {
+        "gold": 450,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aifs"
+      ],
+      "components": null
+    },
+    "wcyc": {
+      "id": "wcyc",
+      "slkId": "wcyc",
+      "name": "Wand of the Wind",
+      "quality": "rare",
+      "slkClass": "Charged",
+      "level": 4,
+      "cost": {
+        "gold": 450,
+        "lumber": 0
+      },
+      "charges": 3,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aicy"
+      ],
+      "components": null
+    },
+    "hlst": {
+      "id": "hlst",
+      "slkId": "hlst",
+      "name": "Health Stone",
+      "quality": "rare",
+      "slkClass": "Charged",
+      "level": 4,
+      "cost": {
+        "gold": 450,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aih2",
+        "arll"
+      ],
+      "components": null
+    },
+    "mnst": {
+      "id": "mnst",
+      "slkId": "mnst",
+      "name": "Mana Stone",
+      "quality": "rare",
+      "slkClass": "Charged",
+      "level": 4,
+      "cost": {
+        "gold": 450,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "regenMp": 0.25
+      },
+      "abilities": [
+        "aim2",
+        "airn"
+      ],
+      "components": null
+    },
+    "penr": {
+      "id": "penr",
+      "slkId": "penr",
+      "name": "Pendant of Energy",
+      "quality": "uncommon",
+      "slkClass": "Permanent",
+      "level": 3,
+      "cost": {
+        "gold": 300,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "mpBonus": 150
+      },
+      "abilities": [
+        "aimb"
+      ],
+      "components": null
+    },
+    "prvt": {
+      "id": "prvt",
+      "slkId": "prvt",
+      "name": "Periapt of Vitality",
+      "quality": "uncommon",
+      "slkClass": "Permanent",
+      "level": 3,
+      "cost": {
+        "gold": 350,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "hpBonus": 150
+      },
+      "abilities": [
+        "ailf"
+      ],
+      "components": null
+    },
+    "rat9": {
+      "id": "rat9",
+      "slkId": "rat9",
+      "name": "Claws of Attack +9",
+      "quality": "uncommon",
+      "slkClass": "Permanent",
+      "level": 3,
+      "cost": {
+        "gold": 300,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "attack": 9
+      },
+      "abilities": [
+        "ait9"
+      ],
+      "components": null
+    },
+    "rde2": {
+      "id": "rde2",
+      "slkId": "rde2",
+      "name": "Ring of Protection +3",
+      "quality": "uncommon",
+      "slkClass": "Permanent",
+      "level": 3,
+      "cost": {
+        "gold": 300,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "armor": 3
+      },
+      "abilities": [
+        "aid3"
+      ],
+      "components": null
+    },
+    "bspd": {
+      "id": "bspd",
+      "slkId": "bspd",
+      "name": "Boots of Speed",
+      "quality": "uncommon",
+      "slkClass": "Permanent",
+      "level": 3,
+      "cost": {
+        "gold": 250,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "moveSpeedFlat": 0.9375
+      },
+      "abilities": [
+        "aims"
+      ],
+      "components": null
+    },
+    "wlsd": {
+      "id": "wlsd",
+      "slkId": "wlsd",
+      "name": "Wand of Lightning Shield",
+      "quality": "uncommon",
+      "slkClass": "Charged",
+      "level": 2,
+      "cost": {
+        "gold": 150,
+        "lumber": 0
+      },
+      "charges": 2,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "ails"
+      ],
+      "components": null
+    },
+    "cnob": {
+      "id": "cnob",
+      "slkId": "cnob",
+      "name": "Circlet of Nobility",
+      "quality": "uncommon",
+      "slkClass": "Permanent",
+      "level": 2,
+      "cost": {
+        "gold": 175,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "agility": 2,
+        "intelligence": 2,
+        "strength": 2
+      },
+      "abilities": [
+        "aix2"
+      ],
+      "components": null
+    },
+    "rat6": {
+      "id": "rat6",
+      "slkId": "rat6",
+      "name": "Claws of Attack +6",
+      "quality": "uncommon",
+      "slkClass": "Permanent",
+      "level": 2,
+      "cost": {
+        "gold": 125,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "attack": 6
+      },
+      "abilities": [
+        "ait6"
+      ],
+      "components": null
+    },
+    "rde1": {
+      "id": "rde1",
+      "slkId": "rde1",
+      "name": "Ring of Protection +2",
+      "quality": "uncommon",
+      "slkClass": "Permanent",
+      "level": 2,
+      "cost": {
+        "gold": 125,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "armor": 2
+      },
+      "abilities": [
+        "aid2"
+      ],
+      "components": null
+    },
+    "tdx2": {
+      "id": "tdx2",
+      "slkId": "tdx2",
+      "name": "Tome of Agility +2",
+      "quality": "uncommon",
+      "slkClass": "PowerUp",
+      "level": 2,
+      "cost": {
+        "gold": 300,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": true,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": false,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "agility": 2
+      },
+      "abilities": [
+        "aigm"
+      ],
+      "components": null,
+      "_note": "consumable single-use"
+    },
+    "texp": {
+      "id": "texp",
+      "slkId": "texp",
+      "name": "Tome of Experience",
+      "quality": "uncommon",
+      "slkClass": "PowerUp",
+      "level": 2,
+      "cost": {
+        "gold": 500,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": true,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": false,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aiem"
+      ],
+      "components": null,
+      "_note": "consumable single-use"
+    },
+    "tin2": {
+      "id": "tin2",
+      "slkId": "tin2",
+      "name": "Tome of Intelligence +2",
+      "quality": "uncommon",
+      "slkClass": "PowerUp",
+      "level": 2,
+      "cost": {
+        "gold": 300,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": true,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": false,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aitm"
+      ],
+      "components": null,
+      "_note": "consumable single-use"
+    },
+    "tpow": {
+      "id": "tpow",
+      "slkId": "tpow",
+      "name": "Tome of Knowledge",
+      "quality": "uncommon",
+      "slkClass": "PowerUp",
+      "level": 2,
+      "cost": {
+        "gold": 300,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": true,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": false,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aixm"
+      ],
+      "components": null,
+      "_note": "consumable single-use"
+    },
+    "tst2": {
+      "id": "tst2",
+      "slkId": "tst2",
+      "name": "Tome of Strength +2",
+      "quality": "uncommon",
+      "slkClass": "PowerUp",
+      "level": 2,
+      "cost": {
+        "gold": 300,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": true,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": false,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "ainm"
+      ],
+      "components": null,
+      "_note": "consumable single-use"
+    },
+    "pnvl": {
+      "id": "pnvl",
+      "slkId": "pnvl",
+      "name": "Potion of Lesser Invulnerability",
+      "quality": "uncommon",
+      "slkClass": "Purchasable",
+      "level": 2,
+      "cost": {
+        "gold": 150,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aivl"
+      ],
+      "components": null
+    },
+    "rag1": {
+      "id": "rag1",
+      "slkId": "rag1",
+      "name": "Slippers of Agility +3",
+      "quality": "common",
+      "slkClass": "Permanent",
+      "level": 1,
+      "cost": {
+        "gold": 100,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "agility": 3
+      },
+      "abilities": [
+        "aia3"
+      ],
+      "components": null
+    },
+    "rin1": {
+      "id": "rin1",
+      "slkId": "rin1",
+      "name": "Mantle of Intelligence +3",
+      "quality": "common",
+      "slkClass": "Permanent",
+      "level": 1,
+      "cost": {
+        "gold": 100,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "intelligence": 3
+      },
+      "abilities": [
+        "aii3"
+      ],
+      "components": null
+    },
+    "rst1": {
+      "id": "rst1",
+      "slkId": "rst1",
+      "name": "Gauntlets of Ogre Strength +3",
+      "quality": "common",
+      "slkClass": "Permanent",
+      "level": 1,
+      "cost": {
+        "gold": 100,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "strength": 3
+      },
+      "abilities": [
+        "ais3"
+      ],
+      "components": null
+    },
+    "manh": {
+      "id": "manh",
+      "slkId": "manh",
+      "name": "Manual of Health",
+      "quality": "common",
+      "slkClass": "PowerUp",
+      "level": 1,
+      "cost": {
+        "gold": 200,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": true,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": false,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aimh"
+      ],
+      "components": null,
+      "_note": "consumable single-use"
+    },
+    "tdex": {
+      "id": "tdex",
+      "slkId": "tdex",
+      "name": "Tome of Agility +1",
+      "quality": "common",
+      "slkClass": "PowerUp",
+      "level": 1,
+      "cost": {
+        "gold": 150,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": true,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": false,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "agility": 1
+      },
+      "abilities": [
+        "aiam"
+      ],
+      "components": null,
+      "_note": "consumable single-use"
+    },
+    "tint": {
+      "id": "tint",
+      "slkId": "tint",
+      "name": "Tome of Intelligence",
+      "quality": "common",
+      "slkClass": "PowerUp",
+      "level": 1,
+      "cost": {
+        "gold": 150,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": true,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": false,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aiim"
+      ],
+      "components": null,
+      "_note": "consumable single-use"
+    },
+    "tstr": {
+      "id": "tstr",
+      "slkId": "tstr",
+      "name": "Tome of Strength +1",
+      "quality": "common",
+      "slkClass": "PowerUp",
+      "level": 1,
+      "cost": {
+        "gold": 150,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": true,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": false,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aism"
+      ],
+      "components": null,
+      "_note": "consumable single-use"
+    },
+    "pomn": {
+      "id": "pomn",
+      "slkId": "pomn",
+      "name": "Potion of Omniscience",
+      "quality": "common",
+      "slkClass": "Charged",
+      "level": 0,
+      "cost": {
+        "gold": 400,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "airv"
+      ],
+      "components": null
+    },
+    "ofir": {
+      "id": "ofir",
+      "slkId": "ofir",
+      "name": "Orb of Fire",
+      "quality": "uncommon",
+      "slkClass": "Miscellaneous",
+      "level": 3,
+      "cost": {
+        "gold": 275,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aifb"
+      ],
+      "components": null
+    },
+    "ocor": {
+      "id": "ocor",
+      "slkId": "ocor",
+      "name": "Orb of Corruption",
+      "quality": "uncommon",
+      "slkClass": "Miscellaneous",
+      "level": 3,
+      "cost": {
+        "gold": 375,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "corruption": {
+          "armorReduction": 5,
+          "slowPct": 5
+        }
+      },
+      "abilities": [
+        "aicb"
+      ],
+      "components": null
+    },
+    "oli2": {
+      "id": "oli2",
+      "slkId": "oli2",
+      "name": "Orb of Lightning",
+      "quality": "uncommon",
+      "slkClass": "Miscellaneous",
+      "level": 3,
+      "cost": {
+        "gold": 375,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aill"
+      ],
+      "components": null
+    },
+    "oven": {
+      "id": "oven",
+      "slkId": "oven",
+      "name": "Orb of Venom",
+      "quality": "uncommon",
+      "slkClass": "Miscellaneous",
+      "level": 3,
+      "cost": {
+        "gold": 325,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "orbEffect": {
+          "poisonDamage": 9
+        }
+      },
+      "abilities": [
+        "aipb",
+        "apo2"
+      ],
+      "components": null
+    },
+    "tret": {
+      "id": "tret",
+      "slkId": "tret",
+      "name": "Tome of Retraining",
+      "quality": "uncommon",
+      "slkClass": "Purchasable",
+      "level": 3,
+      "cost": {
+        "gold": 300,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aret"
+      ],
+      "components": null
+    },
+    "stel": {
+      "id": "stel",
+      "slkId": "stel",
+      "name": "Staff of Teleportation",
+      "quality": "uncommon",
+      "slkClass": "Permanent",
+      "level": 2,
+      "cost": {
+        "gold": 150,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aimt"
+      ],
+      "components": null
+    },
+    "stwp": {
+      "id": "stwp",
+      "slkId": "stwp",
+      "name": "Scroll of Town Portal",
+      "quality": "uncommon",
+      "slkClass": "Purchasable",
+      "level": 2,
+      "cost": {
+        "gold": 350,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 2,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aitp"
+      ],
+      "components": null
+    },
+    "sneg": {
+      "id": "sneg",
+      "slkId": "sneg",
+      "name": "Staff of Negation",
+      "quality": "uncommon",
+      "slkClass": "Purchasable",
+      "level": 2,
+      "cost": {
+        "gold": 200,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 2,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aids"
+      ],
+      "components": null
+    },
+    "pspd": {
+      "id": "pspd",
+      "slkId": "pspd",
+      "name": "Potion of Speed",
+      "quality": "common",
+      "slkClass": "Miscellaneous",
+      "level": 1,
+      "cost": {
+        "gold": 75,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aisp"
+      ],
+      "components": null
+    },
+    "pinv": {
+      "id": "pinv",
+      "slkId": "pinv",
+      "name": "potion of invisibility",
+      "quality": "common",
+      "slkClass": "Purchasable",
+      "level": 1,
+      "cost": {
+        "gold": 100,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aiv1"
+      ],
+      "components": null
+    },
+    "phea": {
+      "id": "phea",
+      "slkId": "phea",
+      "name": "potion of healing",
+      "quality": "common",
+      "slkClass": "Purchasable",
+      "level": 1,
+      "cost": {
+        "gold": 150,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 3,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aih1"
+      ],
+      "components": null
+    },
+    "pman": {
+      "id": "pman",
+      "slkId": "pman",
+      "name": "Potion of Mana",
+      "quality": "common",
+      "slkClass": "Purchasable",
+      "level": 1,
+      "cost": {
+        "gold": 200,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 2,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aim1"
+      ],
+      "components": null
+    },
+    "spro": {
+      "id": "spro",
+      "slkId": "spro",
+      "name": "Scroll of Protection",
+      "quality": "common",
+      "slkClass": "Purchasable",
+      "level": 1,
+      "cost": {
+        "gold": 150,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 2,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aida"
+      ],
+      "components": null
+    },
+    "hslv": {
+      "id": "hslv",
+      "slkId": "hslv",
+      "name": "Healing Salve",
+      "quality": "common",
+      "slkClass": "Purchasable",
+      "level": 1,
+      "cost": {
+        "gold": 100,
+        "lumber": 0
+      },
+      "charges": 3,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 2,
+      "slotUsable": true,
+      "statBonuses": {
+        "regenHp": 400
+      },
+      "abilities": [
+        "airl"
+      ],
+      "components": null
+    },
+    "amrc": {
+      "id": "amrc",
+      "slkId": "amrc",
+      "name": "Amulet of Recall",
+      "quality": "common",
+      "slkClass": "Miscellaneous",
+      "level": 0,
+      "cost": {
+        "gold": 250,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 2,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "airt"
+      ],
+      "components": null
+    },
+    "gobm": {
+      "id": "gobm",
+      "slkId": "gobm",
+      "name": "Goblin Land Mine",
+      "quality": "common",
+      "slkClass": "Miscellaneous",
+      "level": 0,
+      "cost": {
+        "gold": 225,
+        "lumber": 0
+      },
+      "charges": 3,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 3,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aipm"
+      ],
+      "components": null
+    },
+    "pgin": {
+      "id": "pgin",
+      "slkId": "pgin",
+      "name": "potion of greater invisibility",
+      "quality": "common",
+      "slkClass": "Miscellaneous",
+      "level": 0,
+      "cost": {
+        "gold": 200,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aiv2"
+      ],
+      "components": null
+    },
+    "rat3": {
+      "id": "rat3",
+      "slkId": "rat3",
+      "name": "Claws of Attack +3",
+      "quality": "common",
+      "slkClass": "Miscellaneous",
+      "level": 0,
+      "cost": {
+        "gold": 50,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 3,
+      "slotUsable": true,
+      "statBonuses": {
+        "attack": 3
+      },
+      "abilities": [
+        "aiat"
+      ],
+      "components": null
+    },
+    "rde0": {
+      "id": "rde0",
+      "slkId": "rde0",
+      "name": "Ring of Protection +1",
+      "quality": "common",
+      "slkClass": "Miscellaneous",
+      "level": 0,
+      "cost": {
+        "gold": 50,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 3,
+      "slotUsable": true,
+      "statBonuses": {
+        "armor": 1
+      },
+      "abilities": [
+        "aid1"
+      ],
+      "components": null
+    },
+    "tgxp": {
+      "id": "tgxp",
+      "slkId": "tgxp",
+      "name": "Tome of Greater Experience",
+      "quality": "common",
+      "slkClass": "Miscellaneous",
+      "level": 0,
+      "cost": {
+        "gold": 1000,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": false,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aie2"
+      ],
+      "components": null
+    },
+    "brag": {
+      "id": "brag",
+      "slkId": "brag",
+      "name": "Bracer of Agility",
+      "quality": "common",
+      "slkClass": "Miscellaneous",
+      "level": 0,
+      "cost": {
+        "gold": 50,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "agility": 1
+      },
+      "abilities": [
+        "aia1"
+      ],
+      "components": null
+    },
+    "oslo": {
+      "id": "oslo",
+      "slkId": "oslo",
+      "name": "Orb of Slow",
+      "quality": "common",
+      "slkClass": "Miscellaneous",
+      "level": 0,
+      "cost": {
+        "gold": 550,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aisb"
+      ],
+      "components": null
+    },
+    "sksh": {
+      "id": "sksh",
+      "slkId": "sksh",
+      "name": "Skull Shield",
+      "quality": "common",
+      "slkClass": "Miscellaneous",
+      "level": 0,
+      "cost": {
+        "gold": 200,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "strength": 1
+      },
+      "abilities": [
+        "ais1"
+      ],
+      "components": null
+    },
+    "tmmt": {
+      "id": "tmmt",
+      "slkId": "tmmt",
+      "name": "Totem of Might",
+      "quality": "common",
+      "slkClass": "Miscellaneous",
+      "level": 0,
+      "cost": {
+        "gold": 50,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "strength": 1
+      },
+      "abilities": [
+        "ais1"
+      ],
+      "components": null
+    },
+    "vddl": {
+      "id": "vddl",
+      "slkId": "vddl",
+      "name": "Voodoo Doll",
+      "quality": "common",
+      "slkClass": "Miscellaneous",
+      "level": 0,
+      "cost": {
+        "gold": 50,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "intelligence": 1
+      },
+      "abilities": [
+        "aii1"
+      ],
+      "components": null
+    },
+    "spre": {
+      "id": "spre",
+      "slkId": "spre",
+      "name": "Staff of Preservation",
+      "quality": "common",
+      "slkClass": "Miscellaneous",
+      "level": 0,
+      "cost": {
+        "gold": 150,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "anpr"
+      ],
+      "components": null
+    },
+    "sfog": {
+      "id": "sfog",
+      "slkId": "sfog",
+      "name": "Horn of the Clouds",
+      "quality": "common",
+      "slkClass": "Miscellaneous",
+      "level": 0,
+      "cost": {
+        "gold": 200,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 2,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aifg"
+      ],
+      "components": null
+    },
+    "shtm": {
+      "id": "shtm",
+      "slkId": "shtm",
+      "name": "Shamanic Totem",
+      "quality": "common",
+      "slkClass": "Miscellaneous",
+      "level": 0,
+      "cost": {
+        "gold": 600,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aips"
+      ],
+      "components": null
+    },
+    "fwss": {
+      "id": "fwss",
+      "slkId": "fwss",
+      "name": "Frostwyrm Skull Shield",
+      "quality": "common",
+      "slkClass": "Miscellaneous",
+      "level": 0,
+      "cost": {
+        "gold": 750,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "armor": 2
+      },
+      "abilities": [
+        "aid2",
+        "aisr"
+      ],
+      "components": null
+    },
+    "rugt": {
+      "id": "rugt",
+      "slkId": "rugt",
+      "name": "Runed Gauntlets",
+      "quality": "common",
+      "slkClass": "Miscellaneous",
+      "level": 0,
+      "cost": {
+        "gold": 725,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {
+        "armor": 3,
+        "strength": 3
+      },
+      "abilities": [
+        "aid3",
+        "ais3"
+      ],
+      "components": null
+    },
+    "rlif": {
+      "id": "rlif",
+      "slkId": "rlif",
+      "name": "Ring of regeneration",
+      "quality": "uncommon",
+      "slkClass": "Permanent",
+      "level": 3,
+      "cost": {
+        "gold": 300,
+        "lumber": 0
+      },
+      "charges": null,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "arel"
+      ],
+      "components": null
+    },
+    "pghe": {
+      "id": "pghe",
+      "slkId": "pghe",
+      "name": "potion of greater healing",
+      "quality": "uncommon",
+      "slkClass": "Charged",
+      "level": 3,
+      "cost": {
+        "gold": 400,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aih2"
+      ],
+      "components": null
+    },
+    "pgma": {
+      "id": "pgma",
+      "slkId": "pgma",
+      "name": "Potion of Greater Mana",
+      "quality": "uncommon",
+      "slkClass": "Charged",
+      "level": 3,
+      "cost": {
+        "gold": 400,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aim2"
+      ],
+      "components": null
+    },
+    "pnvu": {
+      "id": "pnvu",
+      "slkId": "pnvu",
+      "name": "potion of invulnerability",
+      "quality": "uncommon",
+      "slkClass": "Charged",
+      "level": 3,
+      "cost": {
+        "gold": 400,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": false,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": true,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aivu"
+      ],
+      "components": null
+    },
+    "gold": {
+      "id": "gold",
+      "slkId": "gold",
+      "name": "Chest of Gold",
+      "quality": "common",
+      "slkClass": "PowerUp",
+      "level": 0,
+      "cost": {
+        "gold": 150,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": true,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": false,
+      "stockMax": 3,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aigo"
+      ],
+      "components": null,
+      "_note": "consumable single-use"
+    },
+    "lmbr": {
+      "id": "lmbr",
+      "slkId": "lmbr",
+      "name": "Bundle of Lumber",
+      "quality": "common",
+      "slkClass": "PowerUp",
+      "level": 0,
+      "cost": {
+        "gold": 150,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": true,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": false,
+      "stockMax": 3,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "ailu"
+      ],
+      "components": null,
+      "_note": "consumable single-use"
+    },
+    "gfor": {
+      "id": "gfor",
+      "slkId": "gfor",
+      "name": "Glyph of Fortification",
+      "quality": "common",
+      "slkClass": "PowerUp",
+      "level": 0,
+      "cost": {
+        "gold": 200,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": true,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": false,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aigf"
+      ],
+      "components": null,
+      "_note": "consumable single-use"
+    },
+    "guvi": {
+      "id": "guvi",
+      "slkId": "guvi",
+      "name": "Glyph of UltraVision",
+      "quality": "common",
+      "slkClass": "PowerUp",
+      "level": 0,
+      "cost": {
+        "gold": 125,
+        "lumber": 0
+      },
+      "charges": 1,
+      "stackable": true,
+      "droppable": true,
+      "pawnable": true,
+      "sellable": false,
+      "stockMax": 1,
+      "slotUsable": true,
+      "statBonuses": {},
+      "abilities": [
+        "aigu"
+      ],
+      "components": null,
+      "_note": "consumable single-use"
+    }
+  },
+  "recipes": {
+    "gladiators_shield": {
+      "name": "Gladiator's Shield",
+      "components": [
+        "claymore",
+        "gauntlets_of_strength",
+        "belt_of_strength"
+      ],
+      "gold": 0,
+      "lumber": 0,
+      "_note": "verify"
+    },
+    "fist_of_the_god": {
+      "name": "Fist of the God",
+      "components": [
+        "claymore",
+        "sword_of_slaughter",
+        "savage_orb"
+      ],
+      "gold": 0,
+      "lumber": 0,
+      "_note": "verify"
+    },
+    "wand_of_negation_plus": {
+      "name": "Wand of Negation",
+      "components": [
+        "wand_of_neutralization",
+        "staff_of_preservation"
+      ],
+      "gold": 0,
+      "lumber": 0,
+      "_note": "verify"
+    },
+    "dwarven_runed_blade": {
+      "name": "Dwarven Runed Blade",
+      "components": [
+        "ogre_club",
+        "executioner_scythe"
+      ],
+      "gold": 0,
+      "lumber": 0,
+      "_note": "verify"
+    },
+    "giant_slayer": {
+      "name": "Giant Slayer",
+      "components": [
+        "battle_shield",
+        "runed_bracers"
+      ],
+      "gold": 0,
+      "lumber": 0,
+      "_note": "verify"
+    },
+    "soul_burner": {
+      "name": "Soul Burner",
+      "components": [
+        "royal_scepter? ",
+        "crystal_mace"
+      ],
+      "gold": 0,
+      "lumber": 0,
+      "_note": "verify"
+    }
+  }
+}

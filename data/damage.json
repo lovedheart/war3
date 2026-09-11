@@ -1,0 +1,244 @@
+{
+  "_source": "Warcraft III: The Frozen Throne 1.20.x object tables (war3.mpq Units/UnitBalance.slk defType, Units/UnitWeapons.slk atkTypeN) plus the Blizzard Damage Type table.",
+  "_conventions": {
+    "length": "tile units; 1 terrain tile = 64 SLK game-units (divide SLK by 64)",
+    "speed": "tiles/s; SLK spd px/s divided by 64",
+    "time": "seconds",
+    "damage": "per-hit before armour"
+  },
+  "attackTypes": [
+    {
+      "id": "normal",
+      "name": "Normal",
+      "description": "Full damage against every unit armour type; halved against Fortified."
+    },
+    {
+      "id": "pierce",
+      "name": "Pierce",
+      "description": "+50% vs Light, -25% vs Heavy, poor vs Fortified/Ancient."
+    },
+    {
+      "id": "magic",
+      "name": "Magic",
+      "description": "+50% vs Unarmoured/Light/Normal, -50% vs Heavy, near-immune vs Hero."
+    },
+    {
+      "id": "chaos",
+      "name": "Chaos",
+      "description": "Full damage against all armour types including Fortified and Ancient."
+    },
+    {
+      "id": "hero",
+      "name": "Hero",
+      "description": "Full damage vs units, halved vs Fortified structures."
+    },
+    {
+      "id": "siege",
+      "name": "Siege",
+      "description": "Doubled vs Fortified, reduced vs Hero/Ancient and most unit armour via bonus table."
+    },
+    {
+      "id": "spell",
+      "name": "Spell",
+      "description": "Spell damage; mitigated by Magic Resistance and spell immunity."
+    }
+  ],
+  "armorTypes": [
+    {
+      "id": "unarmored",
+      "slk": "none",
+      "name": "Unarmored",
+      "description": "Takes +50% from Magic attacks."
+    },
+    {
+      "id": "light",
+      "slk": "small",
+      "name": "Light",
+      "description": "Takes +50% from Normal and Pierce."
+    },
+    {
+      "id": "medium",
+      "slk": "medium",
+      "name": "Normal",
+      "description": "Baseline armour; +50% from Magic."
+    },
+    {
+      "id": "heavy",
+      "slk": "large",
+      "name": "Heavy",
+      "description": "-25% from Pierce, -50% from Magic."
+    },
+    {
+      "id": "reinforced",
+      "slk": "enhanced",
+      "name": "Enhanced",
+      "description": "Extended armour type; reduces all incoming attacks to 75%."
+    },
+    {
+      "id": "hero",
+      "slk": "hero",
+      "name": "Hero",
+      "description": "Attenuated by the negative-armour curve; takes only 30% from Magic."
+    },
+    {
+      "id": "fortification",
+      "slk": "fort",
+      "name": "Fortified",
+      "description": "Structures: 50% from Normal/Hero, 35% from Pierce/Magic/Spell, 200% from Siege."
+    },
+    {
+      "id": "ancient",
+      "slk": "divine",
+      "name": "Ancient",
+      "description": "Only Chaos deals full damage; everything else is heavily reduced."
+    }
+  ],
+  "matrix": {
+    "normal": {
+      "unarmored": 1,
+      "light": 1,
+      "medium": 1,
+      "heavy": 1,
+      "reinforced": 0.75,
+      "hero": 1,
+      "fortification": 0.5,
+      "ancient": 0.3
+    },
+    "pierce": {
+      "unarmored": 1,
+      "light": 1.5,
+      "medium": 1,
+      "heavy": 0.75,
+      "reinforced": 0.75,
+      "hero": 0.5,
+      "fortification": 0.35,
+      "ancient": 0.3
+    },
+    "magic": {
+      "unarmored": 1.5,
+      "light": 1.5,
+      "medium": 1.5,
+      "heavy": 0.5,
+      "reinforced": 0.75,
+      "hero": 0.3,
+      "fortification": 0.35,
+      "ancient": 0.3
+    },
+    "chaos": {
+      "unarmored": 1,
+      "light": 1,
+      "medium": 1,
+      "heavy": 1,
+      "reinforced": 1,
+      "hero": 1,
+      "fortification": 1,
+      "ancient": 1
+    },
+    "hero": {
+      "unarmored": 1,
+      "light": 1,
+      "medium": 1,
+      "heavy": 1,
+      "reinforced": 0.75,
+      "hero": 1,
+      "fortification": 0.5,
+      "ancient": 0.5
+    },
+    "siege": {
+      "unarmored": 1,
+      "light": 1,
+      "medium": 1,
+      "heavy": 1,
+      "reinforced": 0.75,
+      "hero": 0.5,
+      "fortification": 2,
+      "ancient": 0.35
+    },
+    "spell": {
+      "unarmored": 1,
+      "light": 1,
+      "medium": 1,
+      "heavy": 1,
+      "reinforced": 0.75,
+      "hero": 0.5,
+      "fortification": 0.35,
+      "ancient": 0.3
+    }
+  },
+  "armorCurve": {
+    "formula": "reduction = (ARMOR_CONST * A) / (ARMOR_CONST * A - 1) * -1  i.e. damageTaken = raw * (1 - red)",
+    "expression": "damageMultiplier = 1 - (-0.06 * A) / (1 - 0.06 * A)",
+    "constant": -0.06,
+    "validRange": {
+      "min": -200,
+      "max": 200
+    },
+    "clamp": {
+      "minMultiplier": 0.02,
+      "maxMultiplier": 4
+    },
+    "note": "Negative armour increases damage taken on the same curve. This is the WC3 \"armor\" field (UnitBalance realdef), not an armour TYPE.",
+    "_note": "verify: closed form matches in-game results for |A| <= ~20; harness clamps outside that band."
+  },
+  "magicResistance": {
+    "base": 0,
+    "perPointOfIntelligence": 0.001,
+    "cap": 0.95,
+    "_note": "verify: base MR is 0 for all races except spells that specify otherwise; Intelligence grants 0.1% per point above the hero's primary-attribute contribution."
+  },
+  "fortificationBonus": {
+    "upgrade": "Rgfo",
+    "glyphOfFortification": true,
+    "armorPerLevel": 2,
+    "hitPointsPerLevelPct": 0.2,
+    "levels": 3
+  },
+  "splash": {
+    "model": "three concentric bands: full inside fullArea, half between fullArea..halfArea (halfFactor), quarter between halfArea..quarterArea (quarterFactor). Damage beyond the target is applied to splashTargs extra units and scaled by damageLoss.",
+    "defaultDamageLoss": 0.5,
+    "knownExamples": [
+      {
+        "unit": "hmtm",
+        "fullArea": 0.391,
+        "halfArea": 2.344,
+        "quarterArea": 3.906,
+        "halfFactor": 0.4,
+        "quarterFactor": 0.1,
+        "minRange": 3.906
+      },
+      {
+        "unit": "hctw",
+        "fullArea": 0.781,
+        "halfArea": 1.563,
+        "quarterArea": 1.953,
+        "halfFactor": 0.5,
+        "quarterFactor": 0.1
+      }
+    ]
+  },
+  "attackBounce": {
+    "ability": "Arob",
+    "chainTargets": 4,
+    "falloffPerJump": 0.5,
+    "_note": "verify: bounce chain stored in buff/aura data rather than UnitWeapons columns."
+  },
+  "piercing": {
+    "column": "minRange",
+    "note": "Units with minRange > 0 will not fire at targets closer than that radius (mortar team, flying machine siege mode)."
+  },
+  "attackSpeed": {
+    "formula": "cooldown_effective = cooldown_base / (1 + AGI * AGI_ATTACK_SPEED_BONUS)",
+    "agiAttackSpeedBonus": 0.01,
+    "_note": "verify: MiscData AgiAttackSpeedBonus = 0.01 per agility point."
+  },
+  "damageBonuses": {
+    "normal": 0,
+    "pierce": 0,
+    "magic": 0,
+    "chaos": 0,
+    "hero": 0,
+    "siege": 0,
+    "spell": 0,
+    "note": "Per-attack-type flat bonuses live in the unit weapon dmgplus/upg fields, not a global table."
+  }
+}

@@ -1,0 +1,13 @@
+import { ff } from '../src/core/fixed.js';
+import { Terrain, TILE_WATER, TILE_CLIFF, TILE_GRASS } from '../src/map/terrain.js';
+import { PathGrid } from '../src/map/pathgrid.js';
+import { Pathfinder } from '../src/map/pathfinding.js';
+const t = new Terrain(24,24);
+console.log('tile(5,5)', t.tile(5,5), 'walk', t.walkable(5,5));
+const g = new PathGrid(t);
+console.log('grid passable(5,5)', g.passable(5,5), 'cost(5,5)', g.cost(5,5), 'cost(0,0)', g.cost(0,0));
+const pf = new Pathfinder(g);
+const r = pf.find({fromX: ff(2.5), fromY: ff(2.5), toX: ff(6.5), toY: ff(2.5), radius: 0, maxNodes: 4096});
+console.log(JSON.stringify(r.nodes.map(v=>v>>16)), 'ok', r.ok, 'partial', r.partial, 'exp', pf.lastExpansions);
+t.setTile(11,11,TILE_WATER);
+console.log('after water walk(11,11)', t.walkable(11,11), 'grid', new PathGrid(t).passable(11,11));

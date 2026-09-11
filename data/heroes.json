@@ -1,0 +1,56 @@
+{
+  "_source": "TFT hero experience curve and revival constants (MiscGame/MiscData + Blizzard.j HERO_*).",
+  "experienceCurve": [
+    0,
+    350,
+    750,
+    1250,
+    1850,
+    2600,
+    3550,
+    4700,
+    6100,
+    7900
+  ],
+  "maxLevel": 10,
+  "formula": {
+    "note": "XP needed for level n>1 = xpn1*n^2 + xpn2*n + xpn3 with the TFT defaults below.",
+    "xpn1": 100,
+    "xpn2": 100,
+    "xpn3": 150,
+    "_note": "verify: reproduces the table above for n>=2 within rounding."
+  },
+  "skillPoints": {
+    "onePerLevel": true,
+    "ultimateUnlocksAtLevel": 6,
+    "maxAbilityLevel": 3,
+    "maxUltimateLevel": 1,
+    "mustMatchHeroLevel": true,
+    "refundItem": "tret"
+  },
+  "sharedExperience": {
+    "rangeTiles": 12,
+    "_note": "verify: JASS HERO_EXP_SHARE_RANGE equivalent ~ 12 tiles (768 game-units).",
+    "distribution": "split evenly among qualifying heroes",
+    "normalUnitXpFormula": "(level^2)*20*grantNormalXP",
+    "heroUnitXpFormula": "(level^2)*20*grantHeroXP"
+  },
+  "revival": {
+    "buildingGoldBase": 1000,
+    "buildingLumberBase": 0,
+    "timeBaseSeconds": 45,
+    "timePerLevelSeconds": 5,
+    "maxTimeSeconds": 120,
+    "altarCostMultiplier": 1,
+    "_note": "verify: gold/lumber revive cost scales with hero level; base figures are TFT defaults."
+  },
+  "attributes": {
+    "strengthHitPointBonus": 20,
+    "strengthAttackBonus": 1,
+    "intelligenceManaBonus": 15,
+    "agilityArmorPerPoint": 0.3333333333333333,
+    "agilityAttackSpeedBonus": 0.01,
+    "_note": "verify: MiscData AgiDefenseBonus/AgiAttackSpeedBonus."
+  },
+  "inventorySlots": 6
+}

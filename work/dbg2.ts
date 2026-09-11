@@ -1,0 +1,14 @@
+import { ff } from '../src/core/fixed.js';
+import { QuadTree } from '../src/map/quadtree.js';
+const W = ff(128);
+const q = new QuadTree(0,0,W,W,4);
+q.insert(3, ff(-40), ff(500), ff(0.5));
+console.log('size', q.size);
+console.log('all', q.all([]));
+console.log('query big', q.query(ff(64), ff(64), ff(200), []));
+console.log('query corner', q.query(ff(127), ff(127), ff(4), []));
+console.log('query corner r8', q.query(ff(127), ff(127), ff(8), []));
+const q2 = new QuadTree(0,0,W,W,4);
+q2.insert(4, ff(-40), ff(500), ff(0.5));
+q2.insert(5, ff(64), ff(64), ff(0.5));
+console.log('corner r10', q2.query(ff(127), ff(127), ff(10), []));

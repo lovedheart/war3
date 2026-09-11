@@ -1,0 +1,132 @@
+{
+  "_source": "game.constants.ts + Melee_V0 defaults; upkeep values are the TFT gameplay constants.",
+  "races": {
+    "human": {
+      "id": "human",
+      "name": "Human Alliance",
+      "worker": "peasant",
+      "startUnits": [
+        "peasant",
+        "peasant",
+        "peasant",
+        "peasant"
+      ],
+      "startHall": "town_hall",
+      "hallChain": [
+        "town_hall",
+        "keep",
+        "castle"
+      ],
+      "supplyBuildings": [
+        "farm"
+      ],
+      "supplyEach": 6,
+      "primaryResearcer": "blacksmith",
+      "colors": [
+        "0x3b7fd4",
+        "0x2a5f9e"
+      ],
+      "soundPrefix": "Human"
+    },
+    "orc": {
+      "id": "orc",
+      "name": "Horde",
+      "worker": "peon",
+      "startUnits": [
+        "peon",
+        "peon",
+        "peon",
+        "peon"
+      ],
+      "startHall": "great_hall",
+      "hallChain": [
+        "great_hall",
+        "stronghold",
+        "fortress"
+      ],
+      "supplyBuildings": [
+        "burrow"
+      ],
+      "supplyEach": 5,
+      "primaryResearcer": "orc_forge",
+      "colors": [
+        "0xb5443c",
+        "0x8c3129"
+      ],
+      "soundPrefix": "Orc"
+    },
+    "undead": {
+      "id": "undead",
+      "name": "Scourge",
+      "worker": "acolyte",
+      "startUnits": [
+        "acolyte"
+      ],
+      "startHall": "necropolis",
+      "hallChain": [
+        "necropolis",
+        "throne_frost",
+        "black_citadel"
+      ],
+      "supplyBuildings": [
+        "ziggurat"
+      ],
+      "supplyEach": 6,
+      "blight": true
+    },
+    "night_elf": {
+      "id": "night_elf",
+      "name": "Night Elf Sentinels",
+      "worker": "wisp",
+      "startUnits": [
+        "wisp"
+      ],
+      "startHall": "tree_of_life",
+      "hallChain": [
+        "tree_of_life",
+        "tree_of_ages",
+        "tree_of_eternity"
+      ],
+      "supplyBuildings": [
+        "moon_well"
+      ],
+      "supplyEach": 6,
+      "growsIntoBuildings": true
+    },
+    "neutral": {
+      "id": "neutral",
+      "name": "Neutral",
+      "worker": null,
+      "startUnits": [],
+      "startHall": null,
+      "hallChain": []
+    }
+  },
+  "upkeep": {
+    "none": {
+      "maxPopulation": 50,
+      "goldTax": 0,
+      "lumberTax": 0
+    },
+    "low": {
+      "minPopulation": 50,
+      "maxPopulation": 80,
+      "goldTax": 10,
+      "lumberTax": 0,
+      "incomeMultiplier": 0.5
+    },
+    "high": {
+      "minPopulation": 80,
+      "goldTax": 25,
+      "lumberTax": 0,
+      "incomeMultiplier": 0.3
+    },
+    "_note": "verify: gold tax per 10s tick and the 50%/30% harvest multipliers are the TFT constants; lumber tax is 0 in TFT melee."
+  },
+  "startingResources": {
+    "gold": 100,
+    "lumber": 100,
+    "foodCap": 5,
+    "foodCeiling": 90
+  }
+}

@@ -1,0 +1,1892 @@
+{
+  "_source": "UnitData/UnitBalance/UnitWeapons/UnitAbilities rows with isbldg=1 (war3.mpq, TFT 1.20.x).",
+  "buildings": {
+    "town_hall": {
+      "id": "town_hall",
+      "slkId": "htow",
+      "name": "townhall",
+      "race": "human",
+      "category": "building",
+      "footprint": [
+        4,
+        4
+      ],
+      "cost": {
+        "gold": 385,
+        "lumber": 205
+      },
+      "stats": {
+        "hp": 1500,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 180,
+      "supplies": 15,
+      "providesSupply": 15,
+      "abilities": [
+        "abdl",
+        "argl"
+      ],
+      "trains": [],
+      "upgradeTo": "keep",
+      "requiresTech": [],
+      "requiresBuildings": [],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.75,
+      "tilesets": "*",
+      "upkeepCategory": "hall",
+      "rallyPoint": false,
+      "notes": null
+    },
+    "keep": {
+      "id": "keep",
+      "slkId": "hkee",
+      "name": "keep",
+      "race": "human",
+      "category": "building",
+      "footprint": [
+        4,
+        4
+      ],
+      "cost": {
+        "gold": 705,
+        "lumber": 415
+      },
+      "stats": {
+        "hp": 2000,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 140,
+      "supplies": 15,
+      "providesSupply": 15,
+      "abilities": [
+        "abdl",
+        "amic",
+        "argl"
+      ],
+      "trains": [],
+      "upgradeTo": "castle",
+      "requiresTech": [],
+      "requiresBuildings": [
+        "town_hall"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.75,
+      "tilesets": "*",
+      "upkeepCategory": "hall",
+      "rallyPoint": false,
+      "notes": null
+    },
+    "castle": {
+      "id": "castle",
+      "slkId": "hcas",
+      "name": "castle",
+      "race": "human",
+      "category": "building",
+      "footprint": [
+        4,
+        4
+      ],
+      "cost": {
+        "gold": 1065,
+        "lumber": 625
+      },
+      "stats": {
+        "hp": 2500,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 140,
+      "supplies": 15,
+      "providesSupply": 15,
+      "abilities": [
+        "abdl",
+        "amic",
+        "argl"
+      ],
+      "trains": [],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "keep"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.688,
+      "tilesets": "*",
+      "upkeepCategory": "hall",
+      "rallyPoint": false,
+      "notes": null
+    },
+    "farm": {
+      "id": "farm",
+      "slkId": "hhou",
+      "name": "farm",
+      "race": "human",
+      "category": "building",
+      "footprint": [
+        2,
+        2
+      ],
+      "cost": {
+        "gold": 80,
+        "lumber": 20
+      },
+      "stats": {
+        "hp": 500,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 35,
+      "supplies": 6,
+      "providesSupply": 6,
+      "abilities": [
+        "abds"
+      ],
+      "trains": [],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 1.125,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": false,
+      "notes": null
+    },
+    "barracks_human": {
+      "id": "barracks_human",
+      "slkId": "hbar",
+      "name": "humanbarracks",
+      "race": "human",
+      "category": "building",
+      "footprint": [
+        3,
+        3
+      ],
+      "cost": {
+        "gold": 160,
+        "lumber": 60
+      },
+      "stats": {
+        "hp": 1500,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 60,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds"
+      ],
+      "trains": [
+        "peasant",
+        "footman",
+        "militia"
+      ],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "town_hall"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.25,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": true,
+      "notes": null
+    },
+    "blacksmith": {
+      "id": "blacksmith",
+      "slkId": "hbla",
+      "name": "blacksmith",
+      "race": "human",
+      "category": "building",
+      "footprint": [
+        3,
+        3
+      ],
+      "cost": {
+        "gold": 140,
+        "lumber": 60
+      },
+      "stats": {
+        "hp": 1200,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 70,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds"
+      ],
+      "trains": [],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "keep"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.25,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": false,
+      "notes": null
+    },
+    "arcane_sanctum": {
+      "id": "arcane_sanctum",
+      "slkId": "hars",
+      "name": "arcanesanctum",
+      "race": "human",
+      "category": "building",
+      "footprint": [
+        3,
+        3
+      ],
+      "cost": {
+        "gold": 150,
+        "lumber": 140
+      },
+      "stats": {
+        "hp": 1050,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 70,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds"
+      ],
+      "trains": [
+        "priest",
+        "sorceress"
+      ],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "keep"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.25,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": true,
+      "notes": null
+    },
+    "gryphon_pier": {
+      "id": "gryphon_pier",
+      "slkId": "hgra",
+      "name": "gryphonaviary",
+      "race": "human",
+      "category": "building",
+      "footprint": [
+        3,
+        3
+      ],
+      "cost": {
+        "gold": 140,
+        "lumber": 150
+      },
+      "stats": {
+        "hp": 1200,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 75,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds"
+      ],
+      "trains": [
+        "dragonhawk_rider"
+      ],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "keep"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 1.563,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": true,
+      "notes": null
+    },
+    "workshop": {
+      "id": "workshop",
+      "slkId": "harm",
+      "name": "workshop",
+      "race": "human",
+      "category": "building",
+      "footprint": [
+        3,
+        3
+      ],
+      "cost": {
+        "gold": 140,
+        "lumber": 140
+      },
+      "stats": {
+        "hp": 1200,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 60,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds"
+      ],
+      "trains": [
+        "flying_machine",
+        "siege_engine"
+      ],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "barracks_human"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.25,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": true,
+      "notes": null
+    },
+    "arcane_vault": {
+      "id": "arcane_vault",
+      "slkId": "hvlt",
+      "name": "arcanevault",
+      "race": "human",
+      "category": "building",
+      "footprint": [
+        2,
+        2
+      ],
+      "cost": {
+        "gold": 130,
+        "lumber": 30
+      },
+      "stats": {
+        "hp": 485,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 1000,
+        "night": 750
+      },
+      "buildTime": 60,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds",
+        "aall",
+        "apit"
+      ],
+      "trains": [],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "town_hall"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 0.781,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": false,
+      "notes": null
+    },
+    "altar_of_kings": {
+      "id": "altar_of_kings",
+      "slkId": "halt",
+      "name": "altarofkings",
+      "race": "human",
+      "category": "building",
+      "footprint": [
+        3,
+        3
+      ],
+      "cost": {
+        "gold": 180,
+        "lumber": 50
+      },
+      "stats": {
+        "hp": 900,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 60,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds"
+      ],
+      "trains": [
+        "archmage",
+        "mountain_king",
+        "paladin",
+        "blood_mage"
+      ],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "keep"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.25,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": true,
+      "notes": null
+    },
+    "lumber_mill": {
+      "id": "lumber_mill",
+      "slkId": "hlum",
+      "name": "humanlumbermill",
+      "race": "human",
+      "category": "building",
+      "footprint": [
+        3,
+        3
+      ],
+      "cost": {
+        "gold": 120,
+        "lumber": 0
+      },
+      "stats": {
+        "hp": 900,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 60,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds",
+        "arlm"
+      ],
+      "trains": [],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "town_hall"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.25,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": false,
+      "notes": null
+    },
+    "scout_tower": {
+      "id": "scout_tower",
+      "slkId": "hwtw",
+      "name": "scouttower",
+      "race": "human",
+      "category": "building",
+      "footprint": [
+        2,
+        2
+      ],
+      "cost": {
+        "gold": 30,
+        "lumber": 20
+      },
+      "stats": {
+        "hp": 300,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 0,
+        "type": "light"
+      },
+      "vision": {
+        "day": 1600,
+        "night": 1000
+      },
+      "buildTime": 25,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds",
+        "adts"
+      ],
+      "trains": [],
+      "upgradeTo": "guard_tower",
+      "requiresTech": [],
+      "requiresBuildings": [],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 1.125,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": false,
+      "notes": null
+    },
+    "guard_tower": {
+      "id": "guard_tower",
+      "slkId": "hgtw",
+      "name": "guardtower",
+      "race": "human",
+      "category": "building",
+      "footprint": [
+        2,
+        2
+      ],
+      "cost": {
+        "gold": 100,
+        "lumber": 70
+      },
+      "stats": {
+        "hp": 500,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "heavy"
+      },
+      "vision": {
+        "day": 1600,
+        "night": 800
+      },
+      "buildTime": 50,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds",
+        "adts"
+      ],
+      "trains": [],
+      "upgradeTo": "cannon_tower",
+      "requiresTech": [],
+      "requiresBuildings": [
+        "scout_tower"
+      ],
+      "attack": {
+        "min": 23,
+        "max": 27,
+        "average": 25,
+        "attackType": "pierce",
+        "range": 10.938,
+        "cooldown": 0.9,
+        "acquisitionRange": 10.938,
+        "splash": {
+          "fullArea": null,
+          "halfArea": null,
+          "halfFactor": null,
+          "quarterArea": null,
+          "quarterFactor": null,
+          "targetsHit": 1,
+          "damageLoss": 0
+        }
+      },
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 1.125,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": false,
+      "notes": null
+    },
+    "arcane_tower": {
+      "id": "arcane_tower",
+      "slkId": "hatw",
+      "name": "humanarcanetower",
+      "race": "human",
+      "category": "building",
+      "footprint": [
+        2,
+        2
+      ],
+      "cost": {
+        "gold": 100,
+        "lumber": 70
+      },
+      "stats": {
+        "hp": 500,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "heavy"
+      },
+      "vision": {
+        "day": 1600,
+        "night": 800
+      },
+      "buildTime": 50,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds",
+        "afbt",
+        "ahta",
+        "adts"
+      ],
+      "trains": [],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [],
+      "attack": {
+        "min": 8,
+        "max": 10,
+        "average": 9,
+        "attackType": "pierce",
+        "range": 12.5,
+        "cooldown": 1,
+        "acquisitionRange": 12.5,
+        "splash": {
+          "fullArea": null,
+          "halfArea": null,
+          "halfFactor": null,
+          "quarterArea": null,
+          "quarterFactor": null,
+          "targetsHit": 1,
+          "damageLoss": 0
+        }
+      },
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 1.125,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": false,
+      "notes": null
+    },
+    "cannon_tower": {
+      "id": "cannon_tower",
+      "slkId": "hctw",
+      "name": "cannontower",
+      "race": "human",
+      "category": "building",
+      "footprint": [
+        2,
+        2
+      ],
+      "cost": {
+        "gold": 200,
+        "lumber": 120
+      },
+      "stats": {
+        "hp": 600,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 1600,
+        "night": 800
+      },
+      "buildTime": 75,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds",
+        "adts"
+      ],
+      "trains": [],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "guard_tower"
+      ],
+      "attack": {
+        "min": 90,
+        "max": 111,
+        "average": 100.5,
+        "attackType": "siege",
+        "range": 12.5,
+        "cooldown": 2.5,
+        "acquisitionRange": 12.5,
+        "splash": {
+          "fullArea": 0.781,
+          "halfArea": 1.563,
+          "halfFactor": 0.5,
+          "quarterArea": 1.953,
+          "quarterFactor": 0.1,
+          "targetsHit": 1,
+          "damageLoss": 0
+        }
+      },
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 1.125,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": false,
+      "notes": null
+    },
+    "shipyard_human": {
+      "id": "shipyard_human",
+      "slkId": "hshy",
+      "name": "humanshipyard",
+      "race": "human",
+      "category": "building",
+      "footprint": [
+        4,
+        4
+      ],
+      "cost": {
+        "gold": 50,
+        "lumber": 0
+      },
+      "stats": {
+        "hp": 1200,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 900
+      },
+      "buildTime": 60,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "ane2",
+        "abds"
+      ],
+      "trains": [],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 0.781,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": false,
+      "notes": null
+    },
+    "great_hall": {
+      "id": "great_hall",
+      "slkId": "ogre",
+      "name": "greathall",
+      "race": "orc",
+      "category": "building",
+      "footprint": [
+        4,
+        4
+      ],
+      "cost": {
+        "gold": 385,
+        "lumber": 185
+      },
+      "stats": {
+        "hp": 1500,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 150,
+      "supplies": 15,
+      "providesSupply": 15,
+      "abilities": [
+        "abdl",
+        "aspi",
+        "argl"
+      ],
+      "trains": [
+        "peon"
+      ],
+      "upgradeTo": "stronghold",
+      "requiresTech": [],
+      "requiresBuildings": [],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.75,
+      "tilesets": "*",
+      "upkeepCategory": "hall",
+      "rallyPoint": true,
+      "notes": null
+    },
+    "stronghold": {
+      "id": "stronghold",
+      "slkId": "ostr",
+      "name": "stronghold",
+      "race": "orc",
+      "category": "building",
+      "footprint": [
+        4,
+        4
+      ],
+      "cost": {
+        "gold": 700,
+        "lumber": 375
+      },
+      "stats": {
+        "hp": 2000,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 140,
+      "supplies": 15,
+      "providesSupply": 15,
+      "abilities": [
+        "abdl",
+        "aspi",
+        "argl"
+      ],
+      "trains": [],
+      "upgradeTo": "fortress",
+      "requiresTech": [],
+      "requiresBuildings": [
+        "great_hall"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.75,
+      "tilesets": "*",
+      "upkeepCategory": "hall",
+      "rallyPoint": false,
+      "notes": null
+    },
+    "fortress": {
+      "id": "fortress",
+      "slkId": "ofrt",
+      "name": "fortress",
+      "race": "orc",
+      "category": "building",
+      "footprint": [
+        4,
+        4
+      ],
+      "cost": {
+        "gold": 1025,
+        "lumber": 565
+      },
+      "stats": {
+        "hp": 2500,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 140,
+      "supplies": 15,
+      "providesSupply": 15,
+      "abilities": [
+        "abdl",
+        "aspi",
+        "argl"
+      ],
+      "trains": [],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "stronghold"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.75,
+      "tilesets": "*",
+      "upkeepCategory": "hall",
+      "rallyPoint": false,
+      "notes": null
+    },
+    "burrow": {
+      "id": "burrow",
+      "slkId": "otrb",
+      "name": "trollburrow",
+      "race": "orc",
+      "category": "building",
+      "footprint": [
+        2,
+        2
+      ],
+      "cost": {
+        "gold": 160,
+        "lumber": 40
+      },
+      "stats": {
+        "hp": 600,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "heavy"
+      },
+      "vision": {
+        "day": 800,
+        "night": 800
+      },
+      "buildTime": 50,
+      "supplies": 5,
+      "providesSupply": 5,
+      "abilities": [
+        "abds",
+        "aspi",
+        "abun",
+        "abtl",
+        "astd",
+        "arbr"
+      ],
+      "trains": [],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [],
+      "attack": {
+        "min": 23,
+        "max": 27,
+        "average": 25,
+        "attackType": "pierce",
+        "range": 10.938,
+        "cooldown": 4,
+        "acquisitionRange": 10.938,
+        "splash": {
+          "fullArea": null,
+          "halfArea": null,
+          "halfFactor": null,
+          "quarterArea": null,
+          "quarterFactor": null,
+          "targetsHit": 1,
+          "damageLoss": 0
+        }
+      },
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 1.125,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": false,
+      "notes": null
+    },
+    "baracks_orc": {
+      "id": "baracks_orc",
+      "slkId": "obar",
+      "name": "orcbarracks",
+      "race": "orc",
+      "category": "building",
+      "footprint": [
+        3,
+        3
+      ],
+      "cost": {
+        "gold": 180,
+        "lumber": 50
+      },
+      "stats": {
+        "hp": 1200,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 60,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds",
+        "aspi"
+      ],
+      "trains": [
+        "grunt",
+        "berserker"
+      ],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "great_hall"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.25,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": true,
+      "notes": null
+    },
+    "orc_forge": {
+      "id": "orc_forge",
+      "slkId": "ofor",
+      "name": "warmill",
+      "race": "orc",
+      "category": "building",
+      "footprint": [
+        3,
+        3
+      ],
+      "cost": {
+        "gold": 205,
+        "lumber": 0
+      },
+      "stats": {
+        "hp": 1000,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 70,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds",
+        "aspi",
+        "arlm"
+      ],
+      "trains": [],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "stronghold"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.25,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": false,
+      "notes": null
+    },
+    "spirit_lodge": {
+      "id": "spirit_lodge",
+      "slkId": "osld",
+      "name": "spiritlodge",
+      "race": "orc",
+      "category": "building",
+      "footprint": [
+        3,
+        3
+      ],
+      "cost": {
+        "gold": 150,
+        "lumber": 150
+      },
+      "stats": {
+        "hp": 800,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 70,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds",
+        "aspi"
+      ],
+      "trains": [
+        "spirit_walker"
+      ],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "stronghold"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.25,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": true,
+      "notes": null
+    },
+    "voodoo_lounge": {
+      "id": "voodoo_lounge",
+      "slkId": "ovln",
+      "name": "voodoolounge",
+      "race": "orc",
+      "category": "building",
+      "footprint": [
+        2,
+        2
+      ],
+      "cost": {
+        "gold": 130,
+        "lumber": 30
+      },
+      "stats": {
+        "hp": 500,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 1000,
+        "night": 750
+      },
+      "buildTime": 60,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds",
+        "aall",
+        "aspi",
+        "apit"
+      ],
+      "trains": [
+        "shaman",
+        "witch_doctor"
+      ],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "baracks_orc"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 0.781,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": true,
+      "notes": null
+    },
+    "beastiary": {
+      "id": "beastiary",
+      "slkId": "obea",
+      "name": "beastiary",
+      "race": "orc",
+      "category": "building",
+      "footprint": [
+        3,
+        3
+      ],
+      "cost": {
+        "gold": 145,
+        "lumber": 140
+      },
+      "stats": {
+        "hp": 1100,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 60,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds",
+        "aspi"
+      ],
+      "trains": [
+        "raider",
+        "wind_rider",
+        "kodo_beast"
+      ],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "burrow"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.25,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": true,
+      "notes": null
+    },
+    "tauren_totem": {
+      "id": "tauren_totem",
+      "slkId": "otto",
+      "name": "taurentotem",
+      "race": "orc",
+      "category": "building",
+      "footprint": [
+        3,
+        3
+      ],
+      "cost": {
+        "gold": 135,
+        "lumber": 155
+      },
+      "stats": {
+        "hp": 1200,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 70,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds",
+        "aspi"
+      ],
+      "trains": [
+        "tauren"
+      ],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "stronghold"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.25,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": true,
+      "notes": null
+    },
+    "altar_of_storms": {
+      "id": "altar_of_storms",
+      "slkId": "oalt",
+      "name": "altarofstorms",
+      "race": "orc",
+      "category": "building",
+      "footprint": [
+        3,
+        3
+      ],
+      "cost": {
+        "gold": 180,
+        "lumber": 50
+      },
+      "stats": {
+        "hp": 900,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 600
+      },
+      "buildTime": 60,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds",
+        "aspi"
+      ],
+      "trains": [
+        "blademaster",
+        "far_seer",
+        "shadow_hunter",
+        "tauren_chieftain"
+      ],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "stronghold"
+      ],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 2.25,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": true,
+      "notes": null
+    },
+    "watch_tower": {
+      "id": "watch_tower",
+      "slkId": "owtw",
+      "name": "watchtower",
+      "race": "orc",
+      "category": "building",
+      "footprint": [
+        2,
+        2
+      ],
+      "cost": {
+        "gold": 110,
+        "lumber": 80
+      },
+      "stats": {
+        "hp": 500,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 3,
+        "type": "heavy"
+      },
+      "vision": {
+        "day": 1600,
+        "night": 800
+      },
+      "buildTime": 60,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "abds",
+        "arbr",
+        "aspi"
+      ],
+      "trains": [],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [
+        "burrow"
+      ],
+      "attack": {
+        "min": 16,
+        "max": 18,
+        "average": 17,
+        "attackType": "pierce",
+        "range": 12.5,
+        "cooldown": 0.6,
+        "acquisitionRange": 14.063,
+        "splash": {
+          "fullArea": null,
+          "halfArea": null,
+          "halfFactor": null,
+          "quarterArea": null,
+          "quarterFactor": null,
+          "targetsHit": 1,
+          "damageLoss": 0
+        }
+      },
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 1.125,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": false,
+      "notes": null
+    },
+    "shipyard_orc": {
+      "id": "shipyard_orc",
+      "slkId": "oshy",
+      "name": "orcshipyard",
+      "race": "orc",
+      "category": "building",
+      "footprint": [
+        4,
+        4
+      ],
+      "cost": {
+        "gold": 50,
+        "lumber": 0
+      },
+      "stats": {
+        "hp": 1200,
+        "hpRegen": null
+      },
+      "armor": {
+        "value": 5,
+        "type": "fortification"
+      },
+      "vision": {
+        "day": 900,
+        "night": 900
+      },
+      "buildTime": 60,
+      "supplies": 0,
+      "providesSupply": 0,
+      "abilities": [
+        "ane2",
+        "abds"
+      ],
+      "trains": [],
+      "upgradeTo": null,
+      "requiresTech": [],
+      "requiresBuildings": [],
+      "attack": null,
+      "canPlaceOn": [
+        "grass",
+        "dirt",
+        "blight",
+        "rock",
+        "sand"
+      ],
+      "cannotPlaceOn": [
+        "water",
+        "cliff",
+        "unbuildable",
+        "tree"
+      ],
+      "collisionRadius": 0.781,
+      "tilesets": "*",
+      "upkeepCategory": null,
+      "rallyPoint": false,
+      "notes": null
+    }
+  },
+  "_towerChainNote": "scout_tower -> guard_tower -> cannon_tower (human); orc watch_tower gains Rorb reinforced defender."
+}

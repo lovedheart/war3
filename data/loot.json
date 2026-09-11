@@ -1,0 +1,205 @@
+{
+  "_source": "TFT treasure-chest drop model: monster level selects a quality roll, then an item from that pool.",
+  "byMonsterLevel": {
+    "1": {
+      "green": 100,
+      "blue": 0,
+      "gold": 0,
+      "artifact": 0
+    },
+    "2": {
+      "green": 90,
+      "blue": 10,
+      "gold": 0,
+      "artifact": 0
+    },
+    "3": {
+      "green": 75,
+      "blue": 23,
+      "gold": 2,
+      "artifact": 0
+    },
+    "4": {
+      "green": 60,
+      "blue": 35,
+      "gold": 5,
+      "artifact": 0
+    },
+    "5": {
+      "green": 45,
+      "blue": 43,
+      "gold": 12,
+      "artifact": 0
+    },
+    "6": {
+      "green": 30,
+      "blue": 50,
+      "gold": 20,
+      "artifact": 0
+    },
+    "7": {
+      "green": 20,
+      "blue": 45,
+      "gold": 33,
+      "artifact": 2
+    },
+    "8": {
+      "green": 10,
+      "blue": 38,
+      "gold": 50,
+      "artifact": 2
+    },
+    "9": {
+      "green": 5,
+      "blue": 30,
+      "gold": 63,
+      "artifact": 2
+    },
+    "10": {
+      "green": 0,
+      "blue": 25,
+      "gold": 70,
+      "artifact": 5
+    }
+  },
+  "chests": {
+    "green": {
+      "pool": "green",
+      "items": 1,
+      "_note": "green chest = 1 common/uncommon item"
+    },
+    "blue": {
+      "pool": "blue",
+      "items": 1,
+      "_note": "blue chest = 1 rare item"
+    },
+    "gold": {
+      "pool": "gold",
+      "items": 1,
+      "_note": "gold chest = 1 epic item"
+    },
+    "red": {
+      "pool": "chest",
+      "items": 1,
+      "_note": "red chest = 1 artifact"
+    },
+    "brown": {
+      "gold": [
+        1,
+        2
+      ],
+      "_note": "brown chest = 500-1500 gold only"
+    }
+  },
+  "bounties": {
+    "formula": "gold = dice*d6 + plus per UnitBalance bountydice/bountysides/bountyplus",
+    "sample": {}
+  },
+  "pools": {
+    "green": [
+      "penr",
+      "prvt",
+      "rat9",
+      "rde2",
+      "bspd",
+      "wlsd",
+      "cnob",
+      "rat6",
+      "rde1",
+      "tdx2",
+      "texp",
+      "tin2",
+      "tpow",
+      "tst2",
+      "pnvl",
+      "rag1",
+      "rin1",
+      "rst1",
+      "manh",
+      "tdex",
+      "tint",
+      "tstr",
+      "pomn",
+      "ofir",
+      "ocor",
+      "oli2",
+      "oven",
+      "tret",
+      "stel",
+      "stwp",
+      "sneg",
+      "pspd",
+      "pinv",
+      "phea",
+      "pman",
+      "spro",
+      "hslv",
+      "amrc",
+      "gobm",
+      "pgin",
+      "rat3",
+      "rde0",
+      "tgxp",
+      "brag",
+      "oslo",
+      "sksh",
+      "tmmt",
+      "vddl",
+      "spre",
+      "sfog",
+      "shtm",
+      "fwss",
+      "rugt",
+      "rlif",
+      "pghe",
+      "pgma",
+      "pnvu",
+      "gold",
+      "lmbr",
+      "gfor",
+      "guvi"
+    ],
+    "blue": [
+      "pdiv",
+      "pres",
+      "mcou",
+      "clfm",
+      "ratc",
+      "ward",
+      "belv",
+      "bgst",
+      "ciri",
+      "lhst",
+      "brac",
+      "hcun",
+      "hval",
+      "ajen",
+      "kpin",
+      "crys",
+      "lgdh",
+      "ankh",
+      "whwd",
+      "fgsk",
+      "wcyc",
+      "hlst",
+      "mnst"
+    ],
+    "gold": [
+      "ratf",
+      "rde4",
+      "ofro",
+      "desc",
+      "odef",
+      "rde3",
+      "pmna",
+      "ssil",
+      "spsh"
+    ],
+    "chest": [
+      "ckng",
+      "modt",
+      "tkno"
+    ]
+  },
+  "_note": "verify: exact per-level percentages are not present in the shipped tables (they live in map scripts); these are the standard melee weights used by the reference maps."
+}

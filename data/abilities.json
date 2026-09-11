@@ -1,0 +1,6007 @@
+{
+  "_source": "AbilityData.slk (war3.mpq, TFT 1.20.x). Distance fields converted to tiles (SLK/64); durations in seconds.",
+  "_effectKinds": [
+    "damage",
+    "damageUndead",
+    "heal",
+    "stun",
+    "slow",
+    "missChance",
+    "summon",
+    "aoe",
+    "buff",
+    "debuff",
+    "aura",
+    "crit",
+    "chainlightning",
+    "invisibility",
+    "teleport",
+    "line",
+    "cone",
+    "flameStrike",
+    "clusterRockets",
+    "transmute",
+    "tornado",
+    "reincarnate",
+    "structuralDamage",
+    "manaShield",
+    "invulnerable",
+    "resurrect",
+    "polymorph",
+    "charm",
+    "silence",
+    "evasion",
+    "bash",
+    "cleave",
+    "drain",
+    "banish",
+    "morph",
+    "reveal",
+    "upgradeAbilities",
+    "raw"
+  ],
+  "items": {
+    "ahbz": {
+      "id": "ahbz",
+      "slkAlias": "AHbz",
+      "slkCode": "AHbz",
+      "name": "Blizzard",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "human",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 75,
+          "cooldown": 6,
+          "castRange": 12.5,
+          "aoeRadius": 3.125,
+          "duration": 0,
+          "castPoint": 1,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "hwe2",
+              "count": 1,
+              "life": 60,
+              "_note": "verify: blizzard is a channelled AOE spell; DataA=number of cold strikes, DataB=interval ms, DataC=damage per strike."
+            }
+          ],
+          "slkData": {
+            "DA": 6,
+            "DB": 30,
+            "DC": 6,
+            "DD": 0.5,
+            "DE": 0,
+            "DF": 150
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 6,
+          "castRange": 12.5,
+          "aoeRadius": 3.125,
+          "duration": 0,
+          "castPoint": 1,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "hwe2",
+              "count": 1,
+              "life": 60,
+              "_note": "verify: blizzard is a channelled AOE spell; DataA=number of cold strikes, DataB=interval ms, DataC=damage per strike."
+            }
+          ],
+          "slkData": {
+            "DA": 8,
+            "DB": 40,
+            "DC": 7,
+            "DD": 0.5,
+            "DE": 0,
+            "DF": 200
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 6,
+          "castRange": 12.5,
+          "aoeRadius": 3.125,
+          "duration": 0,
+          "castPoint": 1,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "hwe2",
+              "count": 1,
+              "life": 60,
+              "_note": "verify: blizzard is a channelled AOE spell; DataA=number of cold strikes, DataB=interval ms, DataC=damage per strike."
+            }
+          ],
+          "slkData": {
+            "DA": 10,
+            "DB": 50,
+            "DC": 10,
+            "DD": 0.5,
+            "DE": 0,
+            "DF": 250
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 6,
+          "castRange": 12.5,
+          "aoeRadius": 3.125,
+          "duration": 0,
+          "castPoint": 1,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "hwe2",
+              "count": 1,
+              "life": 60,
+              "_note": "verify: blizzard is a channelled AOE spell; DataA=number of cold strikes, DataB=interval ms, DataC=damage per strike."
+            }
+          ],
+          "slkData": {
+            "DA": 10,
+            "DB": 50,
+            "DC": 10,
+            "DD": 0.5,
+            "DE": 0,
+            "DF": 250
+          }
+        }
+      ]
+    },
+    "aocl": {
+      "id": "aocl",
+      "slkAlias": "AOcl",
+      "slkCode": "AOcl",
+      "name": "Chain Lightning",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "orc",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 120,
+          "cooldown": 9,
+          "castRange": 10.938,
+          "aoeRadius": 7.813,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "chainlightning"
+            }
+          ],
+          "slkData": {
+            "DA": 85,
+            "DB": 4,
+            "DC": 0.15
+          }
+        },
+        {
+          "manaCost": 120,
+          "cooldown": 9,
+          "castRange": 10.938,
+          "aoeRadius": 7.813,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "chainlightning"
+            }
+          ],
+          "slkData": {
+            "DA": 125,
+            "DB": 6,
+            "DC": 0.15
+          }
+        },
+        {
+          "manaCost": 120,
+          "cooldown": 9,
+          "castRange": 10.938,
+          "aoeRadius": 7.813,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "chainlightning"
+            }
+          ],
+          "slkData": {
+            "DA": 180,
+            "DB": 8,
+            "DC": 0.15
+          }
+        },
+        {
+          "manaCost": 120,
+          "cooldown": 9,
+          "castRange": 10.938,
+          "aoeRadius": 7.813,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "chainlightning"
+            }
+          ],
+          "slkData": {
+            "DA": 180,
+            "DB": 8,
+            "DC": 0.15
+          }
+        }
+      ]
+    },
+    "aomi": {
+      "id": "aomi",
+      "slkAlias": "AOmi",
+      "slkCode": "AOmi",
+      "name": "Mirror Image",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "orc",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 125,
+          "cooldown": 3,
+          "castRange": 2,
+          "aoeRadius": 15.625,
+          "duration": 60,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "hwe2",
+              "life": 60,
+              "asIllusion": true
+            }
+          ],
+          "slkData": {
+            "DA": 1,
+            "DB": 0,
+            "DC": 2,
+            "DD": 0.5
+          }
+        },
+        {
+          "manaCost": 125,
+          "cooldown": 3,
+          "castRange": 2,
+          "aoeRadius": 15.625,
+          "duration": 60,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "hwe2",
+              "life": 60,
+              "asIllusion": true
+            }
+          ],
+          "slkData": {
+            "DA": 2,
+            "DB": 0,
+            "DC": 2,
+            "DD": 0.5
+          }
+        },
+        {
+          "manaCost": 125,
+          "cooldown": 3,
+          "castRange": 2,
+          "aoeRadius": 15.625,
+          "duration": 60,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "hwe2",
+              "life": 60,
+              "asIllusion": true
+            }
+          ],
+          "slkData": {
+            "DA": 3,
+            "DB": 0,
+            "DC": 2,
+            "DD": 0.5
+          }
+        },
+        {
+          "manaCost": 150,
+          "cooldown": 3,
+          "castRange": 2,
+          "aoeRadius": 15.625,
+          "duration": 60,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "hwe2",
+              "life": 60,
+              "asIllusion": true
+            }
+          ],
+          "slkData": {
+            "DA": 3,
+            "DB": 0,
+            "DC": 2,
+            "DD": 0.5
+          }
+        }
+      ]
+    },
+    "aocr": {
+      "id": "aocr",
+      "slkAlias": "AOcr",
+      "slkCode": "AOcr",
+      "name": "Critical Strike",
+      "type": "passive",
+      "hero": true,
+      "ultimate": false,
+      "race": "orc",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 0,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "crit"
+            }
+          ],
+          "slkData": {
+            "DA": 15,
+            "DB": 2,
+            "DC": 0,
+            "DD": 0,
+            "DE": 0
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 0,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "crit"
+            }
+          ],
+          "slkData": {
+            "DA": 15,
+            "DB": 3,
+            "DC": 0,
+            "DD": 0,
+            "DE": 0
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 0,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "crit"
+            }
+          ],
+          "slkData": {
+            "DA": 15,
+            "DB": 4,
+            "DC": 0,
+            "DD": 0,
+            "DE": 0
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 0,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "crit"
+            }
+          ],
+          "slkData": {
+            "DA": 15,
+            "DB": 4,
+            "DC": 0,
+            "DD": 0,
+            "DE": 0
+          }
+        }
+      ]
+    },
+    "aohx": {
+      "id": "aohx",
+      "slkAlias": "AOhx",
+      "slkCode": "AOhx",
+      "name": "Hex",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "orc",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 70,
+          "cooldown": 7,
+          "castRange": 12.5,
+          "aoeRadius": null,
+          "duration": 4,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "organic",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "polymorph",
+              "dur": 4,
+              "forms": []
+            }
+          ],
+          "slkData": {
+            "DA": 99,
+            "DB": "npig,nsea,ncrb,nhmc,nrat,nfro,nech,necr,nrac",
+            "DC": "nalb,nvul,nsno",
+            "DD": "nsha,npng",
+            "DE": "nshw,npnw"
+          }
+        },
+        {
+          "manaCost": 70,
+          "cooldown": 7,
+          "castRange": 12.5,
+          "aoeRadius": null,
+          "duration": 5,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "organic",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "polymorph",
+              "dur": 5,
+              "forms": []
+            }
+          ],
+          "slkData": {
+            "DA": 99,
+            "DB": "npig,nsea,ncrb,nhmc,nrat,nfro,nech,necr,nrac",
+            "DC": "nalb,nvul,nsno",
+            "DD": "nsha,npng",
+            "DE": "nshw,npnw"
+          }
+        },
+        {
+          "manaCost": 70,
+          "cooldown": 7,
+          "castRange": 12.5,
+          "aoeRadius": null,
+          "duration": 6,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "organic",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "polymorph",
+              "dur": 6,
+              "forms": []
+            }
+          ],
+          "slkData": {
+            "DA": 99,
+            "DB": "npig,nsea,ncrb,nhmc,nrat,nfro,nech,necr,nrac",
+            "DC": "nalb,nvul,nsno",
+            "DD": "nsha,npng",
+            "DE": "nshw,npnw"
+          }
+        },
+        {
+          "manaCost": 70,
+          "cooldown": 7,
+          "castRange": 12.5,
+          "aoeRadius": null,
+          "duration": 6,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "organic",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "polymorph",
+              "dur": 6,
+              "forms": []
+            }
+          ],
+          "slkData": {
+            "DA": 99,
+            "DB": "npig,nsea,ncrb,nhmc,nrat,nfro,nech,necr,nrac",
+            "DC": "nalb,nvul,nsno",
+            "DD": "nsha,npng",
+            "DE": "nshw,npnw"
+          }
+        }
+      ]
+    },
+    "aosf": {
+      "id": "aosf",
+      "slkAlias": "AOsf",
+      "slkCode": "AOsf",
+      "name": "Spirit Wolf",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "orc",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 75,
+          "cooldown": 30,
+          "castRange": 12.5,
+          "aoeRadius": 3.125,
+          "duration": 60,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "osw2",
+              "life": 60
+            }
+          ],
+          "slkData": {
+            "DB": 2
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 30,
+          "castRange": 12.5,
+          "aoeRadius": 3.125,
+          "duration": 60,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "osw2",
+              "life": 60
+            }
+          ],
+          "slkData": {
+            "DB": 2
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 30,
+          "castRange": 12.5,
+          "aoeRadius": 3.125,
+          "duration": 60,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "osw2",
+              "life": 60
+            }
+          ],
+          "slkData": {
+            "DB": 2
+          }
+        },
+        {
+          "manaCost": 100,
+          "cooldown": 30,
+          "castRange": 12.5,
+          "aoeRadius": 3.125,
+          "duration": 60,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "osw2",
+              "life": 60
+            }
+          ],
+          "slkData": {
+            "DB": 2
+          }
+        }
+      ]
+    },
+    "aoww": {
+      "id": "aoww",
+      "slkAlias": "AOww",
+      "slkCode": "AOww",
+      "name": "Bladestorm",
+      "type": "ultimate",
+      "hero": true,
+      "ultimate": true,
+      "race": "orc",
+      "requiredHeroLevel": 6,
+      "slkLevels": 1,
+      "levels": [
+        {
+          "manaCost": 200,
+          "cooldown": 180,
+          "castRange": null,
+          "aoeRadius": 3.125,
+          "duration": 5,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "structure",
+            "debris",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "aoe",
+              "radius": 200
+            },
+            {
+              "kind": "damage",
+              "dtype": "normal",
+              "perSecond": true
+            }
+          ],
+          "slkData": {
+            "DA": 110,
+            "DB": 0
+          }
+        },
+        {
+          "manaCost": 250,
+          "cooldown": 240,
+          "castRange": null,
+          "aoeRadius": 3.125,
+          "duration": 5,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "structure",
+            "debris",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "aoe",
+              "radius": 200
+            },
+            {
+              "kind": "damage",
+              "dtype": "normal",
+              "perSecond": true
+            }
+          ],
+          "slkData": {
+            "DA": 150,
+            "DB": 0
+          }
+        },
+        {
+          "manaCost": 250,
+          "cooldown": 240,
+          "castRange": null,
+          "aoeRadius": 3.125,
+          "duration": 5,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "structure",
+            "debris",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "aoe",
+              "radius": 200
+            },
+            {
+              "kind": "damage",
+              "dtype": "normal",
+              "perSecond": true
+            }
+          ],
+          "slkData": {
+            "DA": 150,
+            "DB": 0
+          }
+        },
+        {
+          "manaCost": 250,
+          "cooldown": 240,
+          "castRange": null,
+          "aoeRadius": 3.125,
+          "duration": 5,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "structure",
+            "debris",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "aoe",
+              "radius": 200
+            },
+            {
+              "kind": "damage",
+              "dtype": "normal",
+              "perSecond": true
+            }
+          ],
+          "slkData": {
+            "DA": 150,
+            "DB": 0
+          }
+        }
+      ]
+    },
+    "aosh": {
+      "id": "aosh",
+      "slkAlias": "AOsh",
+      "slkCode": "AOsh",
+      "name": "Shock Wave",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "orc",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 100,
+          "cooldown": 8,
+          "castRange": 10.938,
+          "aoeRadius": 1.953,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "structure"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "line"
+            }
+          ],
+          "slkData": {
+            "DA": 75,
+            "DB": 900,
+            "DC": 800,
+            "DD": 125
+          }
+        },
+        {
+          "manaCost": 100,
+          "cooldown": 8,
+          "castRange": 10.938,
+          "aoeRadius": 1.953,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "structure"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "line"
+            }
+          ],
+          "slkData": {
+            "DA": 130,
+            "DB": 1560,
+            "DC": 800,
+            "DD": 125
+          }
+        },
+        {
+          "manaCost": 100,
+          "cooldown": 8,
+          "castRange": 10.938,
+          "aoeRadius": 1.953,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "structure"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "line"
+            }
+          ],
+          "slkData": {
+            "DA": 200,
+            "DB": 2400,
+            "DC": 800,
+            "DD": 125
+          }
+        },
+        {
+          "manaCost": 100,
+          "cooldown": 8,
+          "castRange": 10.938,
+          "aoeRadius": 1.953,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "structure"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "line"
+            }
+          ],
+          "slkData": {
+            "DA": 200,
+            "DB": 2400,
+            "DC": 800,
+            "DD": 125
+          }
+        }
+      ]
+    },
+    "aows": {
+      "id": "aows",
+      "slkAlias": "AOws",
+      "slkCode": "AOws",
+      "name": "War Stomp",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "orc",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 90,
+          "cooldown": 6,
+          "castRange": null,
+          "aoeRadius": 3.906,
+          "duration": 2,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "stun",
+              "dur": 2
+            }
+          ],
+          "slkData": {
+            "DA": 25
+          }
+        },
+        {
+          "manaCost": 90,
+          "cooldown": 6,
+          "castRange": null,
+          "aoeRadius": 4.688,
+          "duration": 3,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "stun",
+              "dur": 3
+            }
+          ],
+          "slkData": {
+            "DA": 50
+          }
+        },
+        {
+          "manaCost": 90,
+          "cooldown": 6,
+          "castRange": null,
+          "aoeRadius": 5.469,
+          "duration": 4,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "stun",
+              "dur": 4
+            }
+          ],
+          "slkData": {
+            "DA": 75
+          }
+        },
+        {
+          "manaCost": 90,
+          "cooldown": 6,
+          "castRange": null,
+          "aoeRadius": 5.469,
+          "duration": 4,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "stun",
+              "dur": 4
+            }
+          ],
+          "slkData": {
+            "DA": 75
+          }
+        }
+      ]
+    },
+    "aoeq": {
+      "id": "aoeq",
+      "slkAlias": "AOeq",
+      "slkCode": "AOeq",
+      "name": "Earthquake",
+      "type": "ultimate",
+      "hero": true,
+      "ultimate": true,
+      "race": "orc",
+      "requiredHeroLevel": 6,
+      "slkLevels": 1,
+      "levels": [
+        {
+          "manaCost": 150,
+          "cooldown": 90,
+          "castRange": 15.625,
+          "aoeRadius": 3.906,
+          "duration": 20,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "structure",
+            "debris",
+            "tree"
+          ],
+          "effects": [
+            {
+              "kind": "aoe",
+              "radius": 250
+            },
+            {
+              "kind": "structuralDamage",
+              "dur": 20
+            }
+          ],
+          "slkData": {
+            "DA": 0.5,
+            "DB": 50,
+            "DC": 0.75,
+            "DD": 250
+          }
+        },
+        {
+          "manaCost": 150,
+          "cooldown": 90,
+          "castRange": 15.625,
+          "aoeRadius": 6.25,
+          "duration": 20,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "structure",
+            "debris",
+            "tree"
+          ],
+          "effects": [
+            {
+              "kind": "aoe",
+              "radius": 400
+            },
+            {
+              "kind": "structuralDamage",
+              "dur": 20
+            }
+          ],
+          "slkData": {
+            "DA": 0.5,
+            "DB": 40,
+            "DC": 0.75,
+            "DD": 400
+          }
+        },
+        {
+          "manaCost": 150,
+          "cooldown": 90,
+          "castRange": 15.625,
+          "aoeRadius": 6.25,
+          "duration": 20,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "structure",
+            "debris",
+            "tree"
+          ],
+          "effects": [
+            {
+              "kind": "aoe",
+              "radius": 400
+            },
+            {
+              "kind": "structuralDamage",
+              "dur": 20
+            }
+          ],
+          "slkData": {
+            "DA": 0.5,
+            "DB": 40,
+            "DC": 0.75,
+            "DD": 400
+          }
+        },
+        {
+          "manaCost": 150,
+          "cooldown": 90,
+          "castRange": 15.625,
+          "aoeRadius": 6.25,
+          "duration": 20,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "structure",
+            "debris",
+            "tree"
+          ],
+          "effects": [
+            {
+              "kind": "aoe",
+              "radius": 400
+            },
+            {
+              "kind": "structuralDamage",
+              "dur": 20
+            }
+          ],
+          "slkData": {
+            "DA": 0.5,
+            "DB": 40,
+            "DC": 0.75,
+            "DD": 400
+          }
+        }
+      ]
+    },
+    "aoae": {
+      "id": "aoae",
+      "slkAlias": "AOae",
+      "slkCode": "AOae",
+      "name": "Endurance Aura",
+      "type": "aura",
+      "hero": true,
+      "ultimate": false,
+      "race": "orc",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 14.063,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "self",
+            "vuln",
+            "invu"
+          ],
+          "effects": [
+            {
+              "kind": "aura",
+              "effect": {
+                "kind": "buff",
+                "stat": "moveSpeed"
+              }
+            },
+            {
+              "kind": "aura",
+              "effect": {
+                "kind": "buff",
+                "stat": "attackSpeed"
+              }
+            }
+          ],
+          "slkData": {
+            "DA": 0.1,
+            "DB": 0.05
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 14.063,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "self",
+            "vuln",
+            "invu"
+          ],
+          "effects": [
+            {
+              "kind": "aura",
+              "effect": {
+                "kind": "buff",
+                "stat": "moveSpeed"
+              }
+            },
+            {
+              "kind": "aura",
+              "effect": {
+                "kind": "buff",
+                "stat": "attackSpeed"
+              }
+            }
+          ],
+          "slkData": {
+            "DA": 0.2,
+            "DB": 0.1
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 14.063,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "self",
+            "vuln",
+            "invu"
+          ],
+          "effects": [
+            {
+              "kind": "aura",
+              "effect": {
+                "kind": "buff",
+                "stat": "moveSpeed"
+              }
+            },
+            {
+              "kind": "aura",
+              "effect": {
+                "kind": "buff",
+                "stat": "attackSpeed"
+              }
+            }
+          ],
+          "slkData": {
+            "DA": 0.3,
+            "DB": 0.15
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 14.063,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "self",
+            "vuln",
+            "invu"
+          ],
+          "effects": [
+            {
+              "kind": "aura",
+              "effect": {
+                "kind": "buff",
+                "stat": "moveSpeed"
+              }
+            },
+            {
+              "kind": "aura",
+              "effect": {
+                "kind": "buff",
+                "stat": "attackSpeed"
+              }
+            }
+          ],
+          "slkData": {
+            "DA": 0.3,
+            "DB": 0.15
+          }
+        }
+      ]
+    },
+    "aore": {
+      "id": "aore",
+      "slkAlias": "AOre",
+      "slkCode": "AOre",
+      "name": "Reincarnation",
+      "type": "ultimate",
+      "hero": true,
+      "ultimate": true,
+      "race": "orc",
+      "requiredHeroLevel": 6,
+      "slkLevels": 1,
+      "levels": [
+        {
+          "manaCost": 0,
+          "cooldown": 240,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": 3,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "reincarnate",
+              "delay": 7
+            }
+          ],
+          "slkData": {
+            "DA": 7
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 240,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": null,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "reincarnate",
+              "delay": 7
+            }
+          ],
+          "slkData": {
+            "DA": 7
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 240,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": null,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "reincarnate",
+              "delay": 7
+            }
+          ],
+          "slkData": {
+            "DA": 7
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 240,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": null,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "reincarnate",
+              "delay": 7
+            }
+          ],
+          "slkData": {
+            "DA": 7
+          }
+        }
+      ]
+    },
+    "aovd": {
+      "id": "aovd",
+      "slkAlias": "AOvd",
+      "slkCode": "AOvd",
+      "name": "Voodooo",
+      "type": "ultimate",
+      "hero": true,
+      "ultimate": true,
+      "race": "orc",
+      "requiredHeroLevel": 6,
+      "slkLevels": 1,
+      "levels": [
+        {
+          "manaCost": 200,
+          "cooldown": 180,
+          "castRange": null,
+          "aoeRadius": 12.5,
+          "duration": 30,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "vuln",
+            "invu"
+          ],
+          "effects": [
+            {
+              "kind": "buff",
+              "stat": "attackSpeed",
+              "amount": 0.5,
+              "dur": 30
+            },
+            {
+              "kind": "buff",
+              "stat": "moveSpeed",
+              "amount": -0.5,
+              "dur": 30
+            }
+          ],
+          "slkData": {}
+        },
+        {
+          "manaCost": 200,
+          "cooldown": 180,
+          "castRange": null,
+          "aoeRadius": 12.5,
+          "duration": 30,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "vuln",
+            "invu"
+          ],
+          "effects": [
+            {
+              "kind": "buff",
+              "stat": "attackSpeed",
+              "amount": 0.5,
+              "dur": 30
+            },
+            {
+              "kind": "buff",
+              "stat": "moveSpeed",
+              "amount": -0.5,
+              "dur": 30
+            }
+          ],
+          "slkData": {}
+        },
+        {
+          "manaCost": 200,
+          "cooldown": 180,
+          "castRange": null,
+          "aoeRadius": 12.5,
+          "duration": 30,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "vuln",
+            "invu"
+          ],
+          "effects": [
+            {
+              "kind": "buff",
+              "stat": "attackSpeed",
+              "amount": 0.5,
+              "dur": 30
+            },
+            {
+              "kind": "buff",
+              "stat": "moveSpeed",
+              "amount": -0.5,
+              "dur": 30
+            }
+          ],
+          "slkData": {}
+        },
+        {
+          "manaCost": 200,
+          "cooldown": 180,
+          "castRange": null,
+          "aoeRadius": 12.5,
+          "duration": 30,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "vuln",
+            "invu"
+          ],
+          "effects": [
+            {
+              "kind": "buff",
+              "stat": "attackSpeed",
+              "amount": 0.5,
+              "dur": 30
+            },
+            {
+              "kind": "buff",
+              "stat": "moveSpeed",
+              "amount": -0.5,
+              "dur": 30
+            }
+          ],
+          "slkData": {}
+        }
+      ]
+    },
+    "anef": {
+      "id": "anef",
+      "slkAlias": "ANef",
+      "slkCode": "ANef",
+      "name": "Storm, Earth and Fire",
+      "type": "ultimate",
+      "hero": true,
+      "ultimate": true,
+      "race": "neutral",
+      "requiredHeroLevel": 6,
+      "slkLevels": 1,
+      "levels": [
+        {
+          "manaCost": 150,
+          "cooldown": 180,
+          "castRange": null,
+          "aoeRadius": 2,
+          "duration": 45,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitIds": [
+                "undefined"
+              ],
+              "count": 3,
+              "life": 45
+            }
+          ],
+          "slkData": {
+            "DA": "npn1,npn2,npn3"
+          }
+        },
+        {
+          "manaCost": 150,
+          "cooldown": 180,
+          "castRange": null,
+          "aoeRadius": 2,
+          "duration": 45,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitIds": [
+                "undefined"
+              ],
+              "count": 3,
+              "life": 45
+            }
+          ],
+          "slkData": {
+            "DA": "npn1,npn2,npn3"
+          }
+        },
+        {
+          "manaCost": 150,
+          "cooldown": 180,
+          "castRange": null,
+          "aoeRadius": 2,
+          "duration": 45,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitIds": [
+                "undefined"
+              ],
+              "count": 3,
+              "life": 45
+            }
+          ],
+          "slkData": {
+            "DA": "npn1,npn2,npn3"
+          }
+        },
+        {
+          "manaCost": 150,
+          "cooldown": 180,
+          "castRange": null,
+          "aoeRadius": 2,
+          "duration": 45,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitIds": [
+                "undefined"
+              ],
+              "count": 3,
+              "life": 45
+            }
+          ],
+          "slkData": {
+            "DA": "npn1,npn2,npn3"
+          }
+        }
+      ]
+    },
+    "anbf": {
+      "id": "anbf",
+      "slkAlias": "ANbf",
+      "slkCode": "ANbf",
+      "name": "Breath of Fire",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "neutral",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 70,
+          "cooldown": 10,
+          "castRange": 5.859,
+          "aoeRadius": 1.953,
+          "duration": 5,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "air",
+            "structure"
+          ],
+          "effects": [
+            {
+              "kind": "cone"
+            },
+            {
+              "kind": "damage",
+              "dtype": "spell",
+              "min": null,
+              "max": null
+            }
+          ],
+          "slkData": {
+            "DA": 65,
+            "DB": 520,
+            "DC": 375,
+            "DD": 300,
+            "DE": 7
+          }
+        },
+        {
+          "manaCost": 70,
+          "cooldown": 10,
+          "castRange": 5.859,
+          "aoeRadius": 1.875,
+          "duration": 5,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "air",
+            "structure"
+          ],
+          "effects": [
+            {
+              "kind": "cone"
+            },
+            {
+              "kind": "damage",
+              "dtype": "spell",
+              "min": null,
+              "max": null
+            }
+          ],
+          "slkData": {
+            "DA": 125,
+            "DB": 1000,
+            "DC": 375,
+            "DD": 300,
+            "DE": 14
+          }
+        },
+        {
+          "manaCost": 70,
+          "cooldown": 10,
+          "castRange": 5.859,
+          "aoeRadius": 1.953,
+          "duration": 5,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "air",
+            "structure"
+          ],
+          "effects": [
+            {
+              "kind": "cone"
+            },
+            {
+              "kind": "damage",
+              "dtype": "spell",
+              "min": null,
+              "max": null
+            }
+          ],
+          "slkData": {
+            "DA": 170,
+            "DB": 1360,
+            "DC": 375,
+            "DD": 300,
+            "DE": 21
+          }
+        },
+        {
+          "manaCost": 70,
+          "cooldown": 10,
+          "castRange": 5.859,
+          "aoeRadius": 1.953,
+          "duration": 5,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "air",
+            "structure"
+          ],
+          "effects": [
+            {
+              "kind": "cone"
+            },
+            {
+              "kind": "damage",
+              "dtype": "spell",
+              "min": null,
+              "max": null
+            }
+          ],
+          "slkData": {
+            "DA": 170,
+            "DB": 1360,
+            "DC": 375,
+            "DD": 300,
+            "DE": 21
+          }
+        }
+      ]
+    },
+    "andb": {
+      "id": "andb",
+      "slkAlias": "ANdb",
+      "slkCode": "ANdb",
+      "name": "Drunken Brawler",
+      "type": "passive",
+      "hero": true,
+      "ultimate": false,
+      "race": "neutral",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "evasion"
+            },
+            {
+              "kind": "crit",
+              "pct": null,
+              "mult": 2
+            }
+          ],
+          "slkData": {
+            "DA": 10,
+            "DB": 2,
+            "DC": 0,
+            "DD": 0.07,
+            "DE": 0
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": null,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "evasion"
+            },
+            {
+              "kind": "crit",
+              "pct": null,
+              "mult": 2
+            }
+          ],
+          "slkData": {
+            "DA": 10,
+            "DB": 3,
+            "DC": 0,
+            "DD": 0.14,
+            "DE": 0
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": null,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "evasion"
+            },
+            {
+              "kind": "crit",
+              "pct": null,
+              "mult": 2
+            }
+          ],
+          "slkData": {
+            "DA": 10,
+            "DB": 4,
+            "DC": 0,
+            "DD": 0.21,
+            "DE": 0
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": null,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "evasion"
+            },
+            {
+              "kind": "crit",
+              "pct": null,
+              "mult": 2
+            }
+          ],
+          "slkData": {
+            "DA": 10,
+            "DB": 5,
+            "DC": 0,
+            "DD": 0.2,
+            "DE": 0
+          }
+        }
+      ]
+    },
+    "anhs": {
+      "id": "anhs",
+      "slkAlias": "ANhs",
+      "slkCode": "ANhs",
+      "name": "Healing Spray",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "neutral",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 75,
+          "cooldown": 0,
+          "castRange": 12.5,
+          "aoeRadius": 3.906,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "air",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "heal"
+            }
+          ],
+          "slkData": {
+            "DA": 40,
+            "DB": 1,
+            "DC": 6,
+            "DD": 280,
+            "DE": 1,
+            "DF": 3
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 0,
+          "castRange": 12.5,
+          "aoeRadius": 3.906,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "air",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "heal"
+            }
+          ],
+          "slkData": {
+            "DA": 55,
+            "DB": 1,
+            "DC": 6,
+            "DD": 385,
+            "DE": 1,
+            "DF": 4
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 0,
+          "castRange": 12.5,
+          "aoeRadius": 3.906,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "air",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "heal"
+            }
+          ],
+          "slkData": {
+            "DA": 70,
+            "DB": 1,
+            "DC": 6,
+            "DD": 490,
+            "DE": 1,
+            "DF": 5
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 0,
+          "castRange": 12.5,
+          "aoeRadius": 3.125,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "air",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "heal"
+            }
+          ],
+          "slkData": {
+            "DA": 70,
+            "DB": 1,
+            "DC": 6,
+            "DD": 490,
+            "DE": 1,
+            "DF": 10
+          }
+        }
+      ]
+    },
+    "anab": {
+      "id": "anab",
+      "slkAlias": "ANab",
+      "slkCode": "ANab",
+      "name": "Acid Bomb",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "neutral",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 75,
+          "cooldown": 12,
+          "castRange": 10.938,
+          "aoeRadius": 3.125,
+          "duration": 15,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "enemy",
+            "neutral",
+            "organic",
+            "air"
+          ],
+          "effects": [
+            {
+              "kind": "buff",
+              "stat": "armor",
+              "amount": null,
+              "dur": 15
+            },
+            {
+              "kind": "damage",
+              "dtype": "spell",
+              "perSecond": true
+            }
+          ],
+          "slkData": {
+            "DA": 0,
+            "DB": 0,
+            "DC": 3,
+            "DD": 5,
+            "DE": 3,
+            "DF": 1
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 12,
+          "castRange": 10.938,
+          "aoeRadius": 3.125,
+          "duration": 15,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "enemy",
+            "neutral",
+            "organic",
+            "air"
+          ],
+          "effects": [
+            {
+              "kind": "buff",
+              "stat": "armor",
+              "amount": null,
+              "dur": 15
+            },
+            {
+              "kind": "damage",
+              "dtype": "spell",
+              "perSecond": true
+            }
+          ],
+          "slkData": {
+            "DA": 0,
+            "DB": 0,
+            "DC": 4,
+            "DD": 10,
+            "DE": 6.5,
+            "DF": 1
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 12,
+          "castRange": 10.938,
+          "aoeRadius": 3.125,
+          "duration": 15,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "enemy",
+            "neutral",
+            "organic",
+            "air"
+          ],
+          "effects": [
+            {
+              "kind": "buff",
+              "stat": "armor",
+              "amount": null,
+              "dur": 15
+            },
+            {
+              "kind": "damage",
+              "dtype": "spell",
+              "perSecond": true
+            }
+          ],
+          "slkData": {
+            "DA": 0,
+            "DB": 0,
+            "DC": 5,
+            "DD": 15,
+            "DE": 10,
+            "DF": 1
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 12,
+          "castRange": 10.938,
+          "aoeRadius": 3.125,
+          "duration": 15,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "enemy",
+            "neutral",
+            "organic",
+            "air"
+          ],
+          "effects": [
+            {
+              "kind": "buff",
+              "stat": "armor",
+              "amount": null,
+              "dur": 15
+            },
+            {
+              "kind": "damage",
+              "dtype": "spell",
+              "perSecond": true
+            }
+          ],
+          "slkData": {
+            "DA": 0,
+            "DB": 0,
+            "DC": 4,
+            "DD": 16,
+            "DE": 12,
+            "DF": 1
+          }
+        }
+      ]
+    },
+    "ancr": {
+      "id": "ancr",
+      "slkAlias": "ANcr",
+      "slkCode": "ANcr",
+      "name": "Chemical Rage",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "neutral",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 25,
+          "cooldown": 30,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": 15,
+          "castPoint": 0,
+          "targets": [
+            "self"
+          ],
+          "effects": [
+            {
+              "kind": "morph"
+            }
+          ],
+          "slkData": {
+            "DA": "Nalc",
+            "DB": 1,
+            "DC": 0,
+            "DE": 0.5,
+            "DF": 0.25
+          }
+        },
+        {
+          "manaCost": 25,
+          "cooldown": 30,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": 15,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "morph"
+            }
+          ],
+          "slkData": {
+            "DA": "Nalc",
+            "DB": 1,
+            "DC": 0,
+            "DE": 0.5,
+            "DF": 0.75
+          }
+        },
+        {
+          "manaCost": 25,
+          "cooldown": 30,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": 15,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "morph"
+            }
+          ],
+          "slkData": {
+            "DA": "Nalc",
+            "DB": 1,
+            "DC": 0,
+            "DE": 0.5,
+            "DF": 1.25
+          }
+        },
+        {
+          "manaCost": 25,
+          "cooldown": 30,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": 15,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "morph"
+            }
+          ],
+          "slkData": {
+            "DA": "Nalc",
+            "DB": 1,
+            "DC": 0,
+            "DE": 0.5,
+            "DF": 1.25
+          }
+        }
+      ]
+    },
+    "ansy": {
+      "id": "ansy",
+      "slkAlias": "ANsy",
+      "slkCode": "ANsy",
+      "name": "Summon Factory",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "neutral",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 125,
+          "cooldown": 35,
+          "castRange": 7.813,
+          "aoeRadius": null,
+          "duration": 40,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "ncgb",
+              "count": 1,
+              "life": 40
+            }
+          ],
+          "slkData": {
+            "DA": 5,
+            "DB": "ncgb",
+            "DC": 12,
+            "DD": 200,
+            "DE": 1100
+          }
+        },
+        {
+          "manaCost": 125,
+          "cooldown": 35,
+          "castRange": 7.813,
+          "aoeRadius": null,
+          "duration": 40,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "ncgb",
+              "count": 1,
+              "life": 40
+            }
+          ],
+          "slkData": {
+            "DA": 5,
+            "DB": "ncg1",
+            "DC": 12,
+            "DD": 200,
+            "DE": 1100
+          }
+        },
+        {
+          "manaCost": 125,
+          "cooldown": 35,
+          "castRange": 7.813,
+          "aoeRadius": null,
+          "duration": 40,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "ncgb",
+              "count": 1,
+              "life": 40
+            }
+          ],
+          "slkData": {
+            "DA": 5,
+            "DB": "ncg2",
+            "DC": 12,
+            "DD": 200,
+            "DE": 1100
+          }
+        },
+        {
+          "manaCost": 125,
+          "cooldown": 35,
+          "castRange": 7.813,
+          "aoeRadius": null,
+          "duration": 40,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "ncgb",
+              "count": 1,
+              "life": 40
+            }
+          ],
+          "slkData": {
+            "DA": 5,
+            "DB": "ncg3",
+            "DC": 12,
+            "DD": 200,
+            "DE": 1100
+          }
+        }
+      ]
+    },
+    "ancs": {
+      "id": "ancs",
+      "slkAlias": "ANcs",
+      "slkCode": "ANcs",
+      "name": "Cluster Rockets",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "neutral",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 70,
+          "cooldown": 6,
+          "castRange": 12.5,
+          "aoeRadius": 3.125,
+          "duration": 1.01,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "enemy",
+            "neutral",
+            "structure"
+          ],
+          "effects": [
+            {
+              "kind": "clusterRockets"
+            }
+          ],
+          "slkData": {
+            "DA": 8.75,
+            "DB": 0.25,
+            "DC": 6,
+            "DD": 105,
+            "DE": 1,
+            "DF": 1.01
+          }
+        },
+        {
+          "manaCost": 70,
+          "cooldown": 6,
+          "castRange": 12.5,
+          "aoeRadius": 3.125,
+          "duration": 1.01,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "enemy",
+            "neutral",
+            "structure"
+          ],
+          "effects": [
+            {
+              "kind": "clusterRockets"
+            }
+          ],
+          "slkData": {
+            "DA": 16.25,
+            "DB": 0.25,
+            "DC": 12,
+            "DD": 195,
+            "DE": 1,
+            "DF": 1.01
+          }
+        },
+        {
+          "manaCost": 70,
+          "cooldown": 6,
+          "castRange": 12.5,
+          "aoeRadius": 3.125,
+          "duration": 1.01,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "enemy",
+            "neutral",
+            "structure"
+          ],
+          "effects": [
+            {
+              "kind": "clusterRockets"
+            }
+          ],
+          "slkData": {
+            "DA": 25,
+            "DB": 0.25,
+            "DC": 18,
+            "DD": 300,
+            "DE": 1,
+            "DF": 1.01
+          }
+        },
+        {
+          "manaCost": 70,
+          "cooldown": 6,
+          "castRange": 12.5,
+          "aoeRadius": 3.125,
+          "duration": 1.01,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "enemy",
+            "neutral",
+            "structure"
+          ],
+          "effects": [
+            {
+              "kind": "clusterRockets"
+            }
+          ],
+          "slkData": {
+            "DA": 25,
+            "DB": 0.25,
+            "DC": 24,
+            "DD": 300,
+            "DE": 1,
+            "DF": 1.01
+          }
+        }
+      ]
+    },
+    "antm": {
+      "id": "antm",
+      "slkAlias": "ANtm",
+      "slkCode": "ANtm",
+      "name": "Transmute",
+      "type": "ultimate",
+      "hero": true,
+      "ultimate": true,
+      "race": "neutral",
+      "requiredHeroLevel": 6,
+      "slkLevels": 1,
+      "levels": [
+        {
+          "manaCost": 150,
+          "cooldown": 45,
+          "castRange": 10.156,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral",
+            "nonhero"
+          ],
+          "effects": [
+            {
+              "kind": "transmute"
+            }
+          ],
+          "slkData": {
+            "DA": 0.8,
+            "DB": 0,
+            "DC": 5,
+            "DD": 1
+          }
+        },
+        {
+          "manaCost": 200,
+          "cooldown": 45,
+          "castRange": 3.125,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "transmute"
+            }
+          ],
+          "slkData": {
+            "DA": 2,
+            "DB": 0,
+            "DC": 5,
+            "DD": 1
+          }
+        },
+        {
+          "manaCost": 200,
+          "cooldown": 45,
+          "castRange": 3.125,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "transmute"
+            }
+          ],
+          "slkData": {
+            "DA": 2,
+            "DB": 0,
+            "DC": 5,
+            "DD": 1
+          }
+        },
+        {
+          "manaCost": 200,
+          "cooldown": 45,
+          "castRange": 3.125,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "transmute"
+            }
+          ],
+          "slkData": {
+            "DA": 2,
+            "DB": 0,
+            "DC": 5,
+            "DD": 1
+          }
+        }
+      ]
+    },
+    "anms": {
+      "id": "anms",
+      "slkAlias": "ANms",
+      "slkCode": "ANms",
+      "name": "Mana Shield",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "neutral",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 25,
+          "cooldown": 10,
+          "castRange": 2,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "self"
+          ],
+          "effects": [
+            {
+              "kind": "manaShield"
+            }
+          ],
+          "slkData": {
+            "DA": 1,
+            "DB": 1
+          }
+        },
+        {
+          "manaCost": 25,
+          "cooldown": 10,
+          "castRange": 2,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "self"
+          ],
+          "effects": [
+            {
+              "kind": "manaShield"
+            }
+          ],
+          "slkData": {
+            "DA": 1.5,
+            "DB": 1
+          }
+        },
+        {
+          "manaCost": 25,
+          "cooldown": 10,
+          "castRange": 2,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "self"
+          ],
+          "effects": [
+            {
+              "kind": "manaShield"
+            }
+          ],
+          "slkData": {
+            "DA": 2,
+            "DB": 1
+          }
+        },
+        {
+          "manaCost": 25,
+          "cooldown": 10,
+          "castRange": 2,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "self"
+          ],
+          "effects": [
+            {
+              "kind": "manaShield"
+            }
+          ],
+          "slkData": {
+            "DA": 2,
+            "DB": 1
+          }
+        }
+      ]
+    },
+    "anto": {
+      "id": "anto",
+      "slkAlias": "ANto",
+      "slkCode": "ANto",
+      "name": "Tornado",
+      "type": "ultimate",
+      "hero": true,
+      "ultimate": true,
+      "race": "neutral",
+      "requiredHeroLevel": 6,
+      "slkLevels": 1,
+      "levels": [
+        {
+          "manaCost": 200,
+          "cooldown": 120,
+          "castRange": 10.938,
+          "aoeRadius": null,
+          "duration": 40,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "tornado",
+              "dur": 30,
+              "_note": "verify: parameters live in the tornado splint/unit data, not AbilityData."
+            }
+          ],
+          "slkData": {}
+        },
+        {
+          "manaCost": 150,
+          "cooldown": 120,
+          "castRange": 10.938,
+          "aoeRadius": null,
+          "duration": 30,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "tornado",
+              "dur": 30,
+              "_note": "verify: parameters live in the tornado splint/unit data, not AbilityData."
+            }
+          ],
+          "slkData": {}
+        },
+        {
+          "manaCost": 150,
+          "cooldown": 120,
+          "castRange": 10.938,
+          "aoeRadius": null,
+          "duration": 30,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "tornado",
+              "dur": 30,
+              "_note": "verify: parameters live in the tornado splint/unit data, not AbilityData."
+            }
+          ],
+          "slkData": {}
+        },
+        {
+          "manaCost": 150,
+          "cooldown": 120,
+          "castRange": 10.938,
+          "aoeRadius": null,
+          "duration": 30,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "tornado",
+              "dur": 30,
+              "_note": "verify: parameters live in the tornado splint/unit data, not AbilityData."
+            }
+          ],
+          "slkData": {}
+        }
+      ]
+    },
+    "anba": {
+      "id": "anba",
+      "slkAlias": "ANba",
+      "slkCode": "ANba",
+      "name": "Black Arrow",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "neutral",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 6,
+          "cooldown": 0,
+          "castRange": 9.375,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "organic",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "stun"
+            }
+          ],
+          "slkData": {
+            "DA": 2,
+            "DB": 1,
+            "DC": 80
+          }
+        },
+        {
+          "manaCost": 6,
+          "cooldown": 0,
+          "castRange": 10.938,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "organic",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "stun"
+            }
+          ],
+          "slkData": {
+            "DA": 10,
+            "DB": 1,
+            "DC": 80
+          }
+        },
+        {
+          "manaCost": 6,
+          "cooldown": 0,
+          "castRange": 10.938,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "organic",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "stun"
+            }
+          ],
+          "slkData": {
+            "DA": 20,
+            "DB": 1,
+            "DC": 80
+          }
+        },
+        {
+          "manaCost": 6,
+          "cooldown": 0,
+          "castRange": 10.938,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "organic",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "stun"
+            }
+          ],
+          "slkData": {
+            "DA": 20,
+            "DB": 1,
+            "DC": 80
+          }
+        }
+      ]
+    },
+    "ansi": {
+      "id": "ansi",
+      "slkAlias": "ANsi",
+      "slkCode": "ANsi",
+      "name": "Silence",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "neutral",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 75,
+          "cooldown": 15,
+          "castRange": 14.063,
+          "aoeRadius": 3.125,
+          "duration": 8,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "organic",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "silence"
+            }
+          ],
+          "slkData": {
+            "DA": 8,
+            "DB": 0,
+            "DC": 0,
+            "DD": 0
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 15,
+          "castRange": 14.063,
+          "aoeRadius": 4.297,
+          "duration": 10,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "organic",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "silence"
+            }
+          ],
+          "slkData": {
+            "DA": 8,
+            "DB": 0,
+            "DC": 0,
+            "DD": 0
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 15,
+          "castRange": 14.063,
+          "aoeRadius": 5.469,
+          "duration": 12,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "organic",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "silence"
+            }
+          ],
+          "slkData": {
+            "DA": 8,
+            "DB": 0,
+            "DC": 0,
+            "DD": 0
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 15,
+          "castRange": 14.063,
+          "aoeRadius": 5.469,
+          "duration": 12,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "organic",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "silence"
+            }
+          ],
+          "slkData": {
+            "DA": 8,
+            "DB": 0,
+            "DC": 0,
+            "DD": 0
+          }
+        }
+      ]
+    },
+    "anch": {
+      "id": "anch",
+      "slkAlias": "ANch",
+      "slkCode": "ANch",
+      "name": "Charm",
+      "type": "ultimate",
+      "hero": true,
+      "ultimate": true,
+      "race": "neutral",
+      "requiredHeroLevel": 6,
+      "slkLevels": 1,
+      "levels": [
+        {
+          "manaCost": 150,
+          "cooldown": 45,
+          "castRange": 10.938,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "nonhero",
+            "enemy",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "charm",
+              "controlSeconds": 60
+            }
+          ],
+          "slkData": {
+            "DA": 5
+          }
+        },
+        {
+          "manaCost": 125,
+          "cooldown": 30,
+          "castRange": 10.938,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "nonhero",
+            "enemy",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "charm",
+              "controlSeconds": 60
+            }
+          ],
+          "slkData": {
+            "DA": 5
+          }
+        },
+        {
+          "manaCost": 125,
+          "cooldown": 30,
+          "castRange": 10.938,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "nonhero",
+            "enemy",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "charm",
+              "controlSeconds": 60
+            }
+          ],
+          "slkData": {
+            "DA": 5
+          }
+        },
+        {
+          "manaCost": 125,
+          "cooldown": 30,
+          "castRange": 10.938,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "nonhero",
+            "enemy",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "charm",
+              "controlSeconds": 60
+            }
+          ],
+          "slkData": {
+            "DA": 5
+          }
+        }
+      ]
+    },
+    "andr": {
+      "id": "andr",
+      "slkAlias": "ANdr",
+      "slkCode": "AHdr",
+      "name": "Drain",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "neutral",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 75,
+          "cooldown": 8,
+          "castRange": 7.813,
+          "aoeRadius": 12.5,
+          "duration": 8,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "drain",
+              "target": "mana",
+              "dur": 8
+            }
+          ],
+          "slkData": {
+            "DA": 25,
+            "DB": 0,
+            "DC": 1,
+            "DD": 0,
+            "DE": 0,
+            "DF": 0,
+            "DG": 0,
+            "DH": 0,
+            "DI": 0
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 8,
+          "castRange": 7.813,
+          "aoeRadius": 12.5,
+          "duration": 8,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "drain",
+              "target": "mana",
+              "dur": 8
+            }
+          ],
+          "slkData": {
+            "DA": 40,
+            "DB": 0,
+            "DC": 1,
+            "DD": 0,
+            "DE": 0,
+            "DF": 0,
+            "DG": 0,
+            "DH": 0,
+            "DI": 0
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 8,
+          "castRange": 7.813,
+          "aoeRadius": 12.5,
+          "duration": 8,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "drain",
+              "target": "mana",
+              "dur": 8
+            }
+          ],
+          "slkData": {
+            "DA": 55,
+            "DB": 0,
+            "DC": 1,
+            "DD": 0,
+            "DE": 0,
+            "DF": 0,
+            "DG": 0,
+            "DH": 0,
+            "DI": 0
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 8,
+          "castRange": 7.813,
+          "aoeRadius": 12.5,
+          "duration": 8,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "drain",
+              "target": "mana",
+              "dur": 8
+            }
+          ],
+          "slkData": {
+            "DA": 50,
+            "DB": 0,
+            "DC": 1,
+            "DD": 0,
+            "DE": 0,
+            "DF": 0,
+            "DG": 0,
+            "DH": 0,
+            "DI": 0
+          }
+        }
+      ]
+    },
+    "anfl": {
+      "id": "anfl",
+      "slkAlias": "ANfl",
+      "slkCode": "ANfl",
+      "name": "Forked Lightning",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "neutral",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 110,
+          "cooldown": 11,
+          "castRange": 9.375,
+          "aoeRadius": 1.953,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "chainlightning",
+              "falloff": 0.66
+            }
+          ],
+          "slkData": {
+            "DA": 85,
+            "DB": 3,
+            "DC": 900,
+            "DD": 300
+          }
+        },
+        {
+          "manaCost": 110,
+          "cooldown": 11,
+          "castRange": 9.375,
+          "aoeRadius": 1.953,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "chainlightning",
+              "falloff": 0.66
+            }
+          ],
+          "slkData": {
+            "DA": 160,
+            "DB": 3,
+            "DC": 900,
+            "DD": 300
+          }
+        },
+        {
+          "manaCost": 110,
+          "cooldown": 11,
+          "castRange": 9.375,
+          "aoeRadius": 1.953,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "chainlightning",
+              "falloff": 0.66
+            }
+          ],
+          "slkData": {
+            "DA": 250,
+            "DB": 3,
+            "DC": 900,
+            "DD": 300
+          }
+        },
+        {
+          "manaCost": 110,
+          "cooldown": 11,
+          "castRange": 9.375,
+          "aoeRadius": 1.953,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "chainlightning",
+              "falloff": 0.66
+            }
+          ],
+          "slkData": {
+            "DA": 250,
+            "DB": 3,
+            "DC": 900,
+            "DD": 300
+          }
+        }
+      ]
+    },
+    "anfa": {
+      "id": "anfa",
+      "slkAlias": "ANfa",
+      "slkCode": "AHca",
+      "name": "Frost Arrows",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "neutral",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 10,
+          "cooldown": 0,
+          "castRange": 9.375,
+          "aoeRadius": null,
+          "duration": 1.5,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "buff",
+              "stat": "bonusDamage"
+            },
+            {
+              "kind": "slow",
+              "dur": 1.5
+            }
+          ],
+          "slkData": {
+            "DA": 5,
+            "DB": 0.3,
+            "DC": 0.3,
+            "DD": 7
+          }
+        },
+        {
+          "manaCost": 10,
+          "cooldown": 0,
+          "castRange": 9.375,
+          "aoeRadius": null,
+          "duration": 1.5,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "buff",
+              "stat": "bonusDamage"
+            },
+            {
+              "kind": "slow",
+              "dur": 1.5
+            }
+          ],
+          "slkData": {
+            "DA": 10,
+            "DB": 0.5,
+            "DC": 0.5,
+            "DD": 7
+          }
+        },
+        {
+          "manaCost": 10,
+          "cooldown": 0,
+          "castRange": 9.375,
+          "aoeRadius": null,
+          "duration": 1.5,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "buff",
+              "stat": "bonusDamage"
+            },
+            {
+              "kind": "slow",
+              "dur": 1.5
+            }
+          ],
+          "slkData": {
+            "DA": 15,
+            "DB": 0.7,
+            "DC": 0.7,
+            "DD": 7
+          }
+        },
+        {
+          "manaCost": 7,
+          "cooldown": 0,
+          "castRange": 9.375,
+          "aoeRadius": null,
+          "duration": 1.5,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "buff",
+              "stat": "bonusDamage"
+            },
+            {
+              "kind": "slow",
+              "dur": 1.5
+            }
+          ],
+          "slkData": {
+            "DA": 15,
+            "DB": 0.7,
+            "DC": 0.7,
+            "DD": 7
+          }
+        }
+      ]
+    },
+    "aofs": {
+      "id": "aofs",
+      "slkAlias": "AOfs",
+      "slkCode": "AOfs",
+      "name": "Far Sight",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "orc",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 75,
+          "cooldown": 0,
+          "castRange": 1562.484,
+          "aoeRadius": 9.375,
+          "duration": 8,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "reveal",
+              "radius": 600,
+              "dur": 8
+            }
+          ],
+          "slkData": {
+            "DA": 3
+          }
+        },
+        {
+          "manaCost": 60,
+          "cooldown": 0,
+          "castRange": 1562.484,
+          "aoeRadius": 28.125,
+          "duration": 8,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "reveal",
+              "radius": 1800,
+              "dur": 8
+            }
+          ],
+          "slkData": {
+            "DA": 3
+          }
+        },
+        {
+          "manaCost": 50,
+          "cooldown": 0,
+          "castRange": 1562.484,
+          "aoeRadius": 62.5,
+          "duration": 8,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "reveal",
+              "radius": 4000,
+              "dur": 8
+            }
+          ],
+          "slkData": {
+            "DA": 3
+          }
+        },
+        {
+          "manaCost": 50,
+          "cooldown": 0,
+          "castRange": 1562.484,
+          "aoeRadius": 62.5,
+          "duration": 8,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "reveal",
+              "radius": 4000,
+              "dur": 8
+            }
+          ],
+          "slkData": {
+            "DA": 3
+          }
+        }
+      ]
+    },
+    "ahwe": {
+      "id": "ahwe",
+      "slkAlias": "AHwe",
+      "slkCode": "AHwe",
+      "name": "Water Elemental",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "human",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 125,
+          "cooldown": 20,
+          "castRange": null,
+          "aoeRadius": 3.125,
+          "duration": 60,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "hwat",
+              "count": 1,
+              "life": 60
+            }
+          ],
+          "slkData": {
+            "DA": 1
+          }
+        },
+        {
+          "manaCost": 125,
+          "cooldown": 20,
+          "castRange": null,
+          "aoeRadius": 3.125,
+          "duration": 60,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "hwat",
+              "count": 1,
+              "life": 60
+            }
+          ],
+          "slkData": {
+            "DA": 1
+          }
+        },
+        {
+          "manaCost": 125,
+          "cooldown": 20,
+          "castRange": null,
+          "aoeRadius": 3.125,
+          "duration": 60,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "hwat",
+              "count": 1,
+              "life": 60
+            }
+          ],
+          "slkData": {
+            "DA": 1
+          }
+        },
+        {
+          "manaCost": 125,
+          "cooldown": 20,
+          "castRange": null,
+          "aoeRadius": 3.125,
+          "duration": 60,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "hwat",
+              "count": 1,
+              "life": 60
+            }
+          ],
+          "slkData": {
+            "DA": 1
+          }
+        }
+      ]
+    },
+    "ahmt": {
+      "id": "ahmt",
+      "slkAlias": "AHmt",
+      "slkCode": "AHmt",
+      "name": "Mass Teleport",
+      "type": "ultimate",
+      "hero": true,
+      "ultimate": true,
+      "race": "human",
+      "requiredHeroLevel": 6,
+      "slkLevels": 1,
+      "levels": [
+        {
+          "manaCost": 100,
+          "cooldown": 20,
+          "castRange": 1562.484,
+          "aoeRadius": 10.938,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "structure",
+            "vuln",
+            "invu",
+            "player",
+            "neutral",
+            "ally"
+          ],
+          "effects": [
+            {
+              "kind": "teleport",
+              "groupRadius": 8,
+              "castDelay": 12,
+              "fadeDelay": 3
+            }
+          ],
+          "slkData": {
+            "DA": 24,
+            "DB": 3,
+            "DC": 1
+          }
+        },
+        {
+          "manaCost": 100,
+          "cooldown": 20,
+          "castRange": 1562.484,
+          "aoeRadius": 10.938,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "structure",
+            "vuln",
+            "invu",
+            "player",
+            "neutral",
+            "ally"
+          ],
+          "effects": [
+            {
+              "kind": "teleport",
+              "groupRadius": 8,
+              "castDelay": 12,
+              "fadeDelay": 3
+            }
+          ],
+          "slkData": {
+            "DA": 12,
+            "DB": 5,
+            "DC": 1
+          }
+        },
+        {
+          "manaCost": 100,
+          "cooldown": 20,
+          "castRange": 1562.484,
+          "aoeRadius": 10.938,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "structure",
+            "vuln",
+            "invu",
+            "player",
+            "neutral",
+            "ally"
+          ],
+          "effects": [
+            {
+              "kind": "teleport",
+              "groupRadius": 8,
+              "castDelay": 12,
+              "fadeDelay": 3
+            }
+          ],
+          "slkData": {
+            "DA": 12,
+            "DB": 5,
+            "DC": 1
+          }
+        },
+        {
+          "manaCost": 100,
+          "cooldown": 20,
+          "castRange": 1562.484,
+          "aoeRadius": 10.938,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "structure",
+            "vuln",
+            "invu",
+            "player",
+            "neutral",
+            "ally"
+          ],
+          "effects": [
+            {
+              "kind": "teleport",
+              "groupRadius": 8,
+              "castDelay": 12,
+              "fadeDelay": 3
+            }
+          ],
+          "slkData": {
+            "DA": 12,
+            "DB": 5,
+            "DC": 1
+          }
+        }
+      ]
+    },
+    "ahab": {
+      "id": "ahab",
+      "slkAlias": "AHab",
+      "slkCode": "AHab",
+      "name": "Brilliance Aura",
+      "type": "aura",
+      "hero": true,
+      "ultimate": false,
+      "race": "human",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 14.063,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "self",
+            "vuln",
+            "invu"
+          ],
+          "effects": [
+            {
+              "kind": "aura",
+              "effect": {
+                "kind": "regenManaPct",
+                "amount": null
+              }
+            }
+          ],
+          "slkData": {
+            "DA": 0.75,
+            "DB": 0
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 14.063,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "self",
+            "vuln",
+            "invu"
+          ],
+          "effects": [
+            {
+              "kind": "aura",
+              "effect": {
+                "kind": "regenManaPct",
+                "amount": null
+              }
+            }
+          ],
+          "slkData": {
+            "DA": 1.5,
+            "DB": 0
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 14.063,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "self",
+            "vuln",
+            "invu"
+          ],
+          "effects": [
+            {
+              "kind": "aura",
+              "effect": {
+                "kind": "regenManaPct",
+                "amount": null
+              }
+            }
+          ],
+          "slkData": {
+            "DA": 2.25,
+            "DB": 0
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 14.063,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "self",
+            "vuln",
+            "invu"
+          ],
+          "effects": [
+            {
+              "kind": "aura",
+              "effect": {
+                "kind": "regenManaPct",
+                "amount": null
+              }
+            }
+          ],
+          "slkData": {
+            "DA": 2.25,
+            "DB": 0
+          }
+        }
+      ]
+    },
+    "ahad": {
+      "id": "ahad",
+      "slkAlias": "AHad",
+      "slkCode": "AHad",
+      "name": "Devotion Aura",
+      "type": "aura",
+      "hero": true,
+      "ultimate": false,
+      "race": "human",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 14.063,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "self",
+            "vuln",
+            "invu"
+          ],
+          "effects": [
+            {
+              "kind": "aura",
+              "effect": {
+                "kind": "armor"
+              }
+            }
+          ],
+          "slkData": {
+            "DA": 1.5,
+            "DB": 0
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 14.063,
+          "duration": 2,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "self",
+            "vuln",
+            "invu"
+          ],
+          "effects": [
+            {
+              "kind": "aura",
+              "effect": {
+                "kind": "armor"
+              }
+            }
+          ],
+          "slkData": {
+            "DA": 3,
+            "DB": 0
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 14.063,
+          "duration": 2,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "self",
+            "vuln",
+            "invu"
+          ],
+          "effects": [
+            {
+              "kind": "aura",
+              "effect": {
+                "kind": "armor"
+              }
+            }
+          ],
+          "slkData": {
+            "DA": 4.5,
+            "DB": 0
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 14.063,
+          "duration": 2,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "self",
+            "vuln",
+            "invu"
+          ],
+          "effects": [
+            {
+              "kind": "aura",
+              "effect": {
+                "kind": "armor"
+              }
+            }
+          ],
+          "slkData": {
+            "DA": 4.5
+          }
+        }
+      ]
+    },
+    "ahhb": {
+      "id": "ahhb",
+      "slkAlias": "AHhb",
+      "slkCode": "AHhb",
+      "name": "Holy Light",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "human",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 65,
+          "cooldown": 5,
+          "castRange": 12.5,
+          "aoeRadius": null,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "organic",
+            "notself",
+            "invu",
+            "vuln",
+            "nonancient"
+          ],
+          "effects": [
+            {
+              "kind": "heal"
+            },
+            {
+              "kind": "damageUndead"
+            }
+          ],
+          "slkData": {
+            "DA": 200
+          }
+        },
+        {
+          "manaCost": 65,
+          "cooldown": 5,
+          "castRange": 12.5,
+          "aoeRadius": null,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "organic",
+            "notself",
+            "invu",
+            "vuln",
+            "nonancient"
+          ],
+          "effects": [
+            {
+              "kind": "heal"
+            },
+            {
+              "kind": "damageUndead"
+            }
+          ],
+          "slkData": {
+            "DA": 400
+          }
+        },
+        {
+          "manaCost": 65,
+          "cooldown": 5,
+          "castRange": 12.5,
+          "aoeRadius": null,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "organic",
+            "notself",
+            "invu",
+            "vuln",
+            "nonancient"
+          ],
+          "effects": [
+            {
+              "kind": "heal"
+            },
+            {
+              "kind": "damageUndead"
+            }
+          ],
+          "slkData": {
+            "DA": 600
+          }
+        },
+        {
+          "manaCost": 65,
+          "cooldown": 5,
+          "castRange": 12.5,
+          "aoeRadius": null,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "organic",
+            "notself",
+            "invu",
+            "vuln",
+            "nonancient"
+          ],
+          "effects": [
+            {
+              "kind": "heal"
+            },
+            {
+              "kind": "damageUndead"
+            }
+          ],
+          "slkData": {
+            "DA": 600
+          }
+        }
+      ]
+    },
+    "ahds": {
+      "id": "ahds",
+      "slkAlias": "AHds",
+      "slkCode": "AHds",
+      "name": "Divine Shield",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "human",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 25,
+          "cooldown": 35,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": 15,
+          "castPoint": 0,
+          "targets": [
+            "invu",
+            "vuln"
+          ],
+          "effects": [
+            {
+              "kind": "invulnerable"
+            }
+          ],
+          "slkData": {
+            "DA": 0
+          }
+        },
+        {
+          "manaCost": 25,
+          "cooldown": 50,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": 30,
+          "castPoint": null,
+          "targets": [
+            "invu",
+            "vuln"
+          ],
+          "effects": [
+            {
+              "kind": "invulnerable"
+            }
+          ],
+          "slkData": {
+            "DA": 0
+          }
+        },
+        {
+          "manaCost": 25,
+          "cooldown": 65,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": 45,
+          "castPoint": null,
+          "targets": [
+            "invu",
+            "vuln"
+          ],
+          "effects": [
+            {
+              "kind": "invulnerable"
+            }
+          ],
+          "slkData": {
+            "DA": 0
+          }
+        },
+        {
+          "manaCost": 25,
+          "cooldown": 65,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": 45,
+          "castPoint": null,
+          "targets": [
+            "invu",
+            "vuln"
+          ],
+          "effects": [
+            {
+              "kind": "invulnerable"
+            }
+          ],
+          "slkData": {
+            "DA": 0
+          }
+        }
+      ]
+    },
+    "ahre": {
+      "id": "ahre",
+      "slkAlias": "AHre",
+      "slkCode": "AHre",
+      "name": "Resurrection",
+      "type": "ultimate",
+      "hero": true,
+      "ultimate": true,
+      "race": "human",
+      "requiredHeroLevel": 6,
+      "slkLevels": 1,
+      "levels": [
+        {
+          "manaCost": 200,
+          "cooldown": 240,
+          "castRange": 6.25,
+          "aoeRadius": 14.063,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "dead",
+            "friend"
+          ],
+          "effects": [
+            {
+              "kind": "resurrect",
+              "count": 6
+            }
+          ],
+          "slkData": {
+            "DA": 6,
+            "DB": 0
+          }
+        },
+        {
+          "manaCost": 250,
+          "cooldown": 240,
+          "castRange": 6.25,
+          "aoeRadius": 14.063,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "dead",
+            "friend"
+          ],
+          "effects": [
+            {
+              "kind": "resurrect",
+              "count": 6
+            }
+          ],
+          "slkData": {
+            "DA": 6,
+            "DB": 0
+          }
+        },
+        {
+          "manaCost": 250,
+          "cooldown": 240,
+          "castRange": 6.25,
+          "aoeRadius": 14.063,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "dead",
+            "friend"
+          ],
+          "effects": [
+            {
+              "kind": "resurrect",
+              "count": 6
+            }
+          ],
+          "slkData": {
+            "DA": 6,
+            "DB": 0
+          }
+        },
+        {
+          "manaCost": 250,
+          "cooldown": 240,
+          "castRange": 6.25,
+          "aoeRadius": 14.063,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "dead",
+            "friend"
+          ],
+          "effects": [
+            {
+              "kind": "resurrect",
+              "count": 6
+            }
+          ],
+          "slkData": {
+            "DA": 6,
+            "DB": 0
+          }
+        }
+      ]
+    },
+    "ahtc": {
+      "id": "ahtc",
+      "slkAlias": "AHtc",
+      "slkCode": "AHtc",
+      "name": "Thunder Clap",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "human",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 90,
+          "cooldown": 6,
+          "castRange": null,
+          "aoeRadius": 3.906,
+          "duration": 3,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "aoe",
+              "radius": 250
+            },
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "slow",
+              "dur": 3
+            }
+          ],
+          "slkData": {
+            "DA": 60,
+            "DB": 0,
+            "DC": 0.5,
+            "DD": 0.5
+          }
+        },
+        {
+          "manaCost": 90,
+          "cooldown": 6,
+          "castRange": null,
+          "aoeRadius": 4.688,
+          "duration": 3,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "aoe",
+              "radius": 300
+            },
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "slow",
+              "dur": 3
+            }
+          ],
+          "slkData": {
+            "DA": 100,
+            "DB": 0,
+            "DC": 0.5,
+            "DD": 0.5
+          }
+        },
+        {
+          "manaCost": 90,
+          "cooldown": 6,
+          "castRange": null,
+          "aoeRadius": 5.469,
+          "duration": 3,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "aoe",
+              "radius": 350
+            },
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "slow",
+              "dur": 3
+            }
+          ],
+          "slkData": {
+            "DA": 140,
+            "DB": 0,
+            "DC": 0.5,
+            "DD": 0.5
+          }
+        },
+        {
+          "manaCost": 90,
+          "cooldown": 6,
+          "castRange": null,
+          "aoeRadius": 5.469,
+          "duration": 3,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "aoe",
+              "radius": 350
+            },
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "slow",
+              "dur": 3
+            }
+          ],
+          "slkData": {
+            "DA": 150,
+            "DB": 0,
+            "DC": 0.5,
+            "DD": 0.5
+          }
+        }
+      ]
+    },
+    "ahtb": {
+      "id": "ahtb",
+      "slkAlias": "AHtb",
+      "slkCode": "AHtb",
+      "name": "Thunder Bolt",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "human",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 75,
+          "cooldown": 9,
+          "castRange": 9.375,
+          "aoeRadius": null,
+          "duration": 3,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "debris",
+            "enemy",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "stun",
+              "dur": 3
+            }
+          ],
+          "slkData": {
+            "DA": 100
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 9,
+          "castRange": 9.375,
+          "aoeRadius": null,
+          "duration": 3,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "debris",
+            "enemy",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "stun",
+              "dur": 3
+            }
+          ],
+          "slkData": {
+            "DA": 225
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 9,
+          "castRange": 9.375,
+          "aoeRadius": null,
+          "duration": 3,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "debris",
+            "enemy",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "stun",
+              "dur": 3
+            }
+          ],
+          "slkData": {
+            "DA": 350
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 9,
+          "castRange": 9.375,
+          "aoeRadius": null,
+          "duration": 3,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "debris",
+            "enemy",
+            "neutral",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "damage",
+              "dtype": "spell"
+            },
+            {
+              "kind": "stun",
+              "dur": 3
+            }
+          ],
+          "slkData": {
+            "DA": 300
+          }
+        }
+      ]
+    },
+    "ahbh": {
+      "id": "ahbh",
+      "slkAlias": "AHbh",
+      "slkCode": "AHbh",
+      "name": "Bash",
+      "type": "passive",
+      "hero": true,
+      "ultimate": false,
+      "race": "human",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 0,
+          "duration": 1,
+          "castPoint": 0,
+          "targets": [
+            "ground",
+            "air"
+          ],
+          "effects": [
+            {
+              "kind": "bash",
+              "stunDur": 1
+            }
+          ],
+          "slkData": {
+            "DA": 20,
+            "DB": 0,
+            "DC": 25,
+            "DD": 0
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 0,
+          "duration": 1,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "air"
+          ],
+          "effects": [
+            {
+              "kind": "bash",
+              "stunDur": 1
+            }
+          ],
+          "slkData": {
+            "DA": 30,
+            "DB": 0,
+            "DC": 25,
+            "DD": 0
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 0,
+          "duration": 1,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "air"
+          ],
+          "effects": [
+            {
+              "kind": "bash",
+              "stunDur": 1
+            }
+          ],
+          "slkData": {
+            "DA": 40,
+            "DB": 0,
+            "DC": 25,
+            "DD": 0
+          }
+        },
+        {
+          "manaCost": 0,
+          "cooldown": 0,
+          "castRange": null,
+          "aoeRadius": 0,
+          "duration": 1,
+          "castPoint": null,
+          "targets": [
+            "ground",
+            "air"
+          ],
+          "effects": [
+            {
+              "kind": "bash",
+              "stunDur": 1
+            }
+          ],
+          "slkData": {
+            "DA": 35,
+            "DB": 0,
+            "DC": 25,
+            "DD": 0
+          }
+        }
+      ]
+    },
+    "ahav": {
+      "id": "ahav",
+      "slkAlias": "AHav",
+      "slkCode": "AHav",
+      "name": "Avatar",
+      "type": "ultimate",
+      "hero": true,
+      "ultimate": true,
+      "race": "human",
+      "requiredHeroLevel": 6,
+      "slkLevels": 1,
+      "levels": [
+        {
+          "manaCost": 150,
+          "cooldown": 180,
+          "castRange": null,
+          "aoeRadius": 0.008,
+          "duration": 60,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "buff",
+              "stat": "strength"
+            },
+            {
+              "kind": "buff",
+              "stat": "armor"
+            },
+            {
+              "kind": "cleave",
+              "enabled": true
+            }
+          ],
+          "slkData": {
+            "DA": 5,
+            "DB": 500,
+            "DC": 20,
+            "DD": 0
+          }
+        },
+        {
+          "manaCost": 150,
+          "cooldown": 180,
+          "castRange": null,
+          "aoeRadius": 0.008,
+          "duration": 60,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "buff",
+              "stat": "strength"
+            },
+            {
+              "kind": "buff",
+              "stat": "armor"
+            },
+            {
+              "kind": "cleave",
+              "enabled": true
+            }
+          ],
+          "slkData": {
+            "DA": 5,
+            "DB": 500,
+            "DC": 20,
+            "DD": 0
+          }
+        },
+        {
+          "manaCost": 150,
+          "cooldown": 180,
+          "castRange": null,
+          "aoeRadius": 0.008,
+          "duration": 60,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "buff",
+              "stat": "strength"
+            },
+            {
+              "kind": "buff",
+              "stat": "armor"
+            },
+            {
+              "kind": "cleave",
+              "enabled": true
+            }
+          ],
+          "slkData": {
+            "DA": 5,
+            "DB": 500,
+            "DC": 20,
+            "DD": 0
+          }
+        },
+        {
+          "manaCost": 150,
+          "cooldown": 180,
+          "castRange": null,
+          "aoeRadius": 0.008,
+          "duration": 60,
+          "castPoint": null,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "buff",
+              "stat": "strength"
+            },
+            {
+              "kind": "buff",
+              "stat": "armor"
+            },
+            {
+              "kind": "cleave",
+              "enabled": true
+            }
+          ],
+          "slkData": {
+            "DA": 5,
+            "DB": 500,
+            "DC": 20,
+            "DD": 0
+          }
+        }
+      ]
+    },
+    "ahfs": {
+      "id": "ahfs",
+      "slkAlias": "AHfs",
+      "slkCode": "AHfs",
+      "name": "Flame Strike",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "human",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 135,
+          "cooldown": 10,
+          "castRange": 12.5,
+          "aoeRadius": 3.125,
+          "duration": 2.67,
+          "castPoint": 1.33,
+          "targets": [
+            "ground",
+            "enemy",
+            "neutral",
+            "friend",
+            "structure",
+            "self",
+            "tree",
+            "debris"
+          ],
+          "effects": [
+            {
+              "kind": "flameStrike",
+              "burnDur": 2.67
+            }
+          ],
+          "slkData": {
+            "DA": 15,
+            "DB": 0.33,
+            "DC": 4,
+            "DD": 1,
+            "DE": 0.75,
+            "DF": 90
+          }
+        },
+        {
+          "manaCost": 135,
+          "cooldown": 10,
+          "castRange": 12.5,
+          "aoeRadius": 3.125,
+          "duration": 2.67,
+          "castPoint": 1.33,
+          "targets": [
+            "ground",
+            "enemy",
+            "neutral",
+            "friend",
+            "structure",
+            "self",
+            "tree",
+            "debris"
+          ],
+          "effects": [
+            {
+              "kind": "flameStrike",
+              "burnDur": 2.67
+            }
+          ],
+          "slkData": {
+            "DA": 26.666,
+            "DB": 0.33,
+            "DC": 6,
+            "DD": 1,
+            "DE": 0.75,
+            "DF": 160
+          }
+        },
+        {
+          "manaCost": 135,
+          "cooldown": 10,
+          "castRange": 12.5,
+          "aoeRadius": 3.125,
+          "duration": 2.67,
+          "castPoint": 1.33,
+          "targets": [
+            "ground",
+            "enemy",
+            "neutral",
+            "friend",
+            "structure",
+            "self",
+            "tree",
+            "debris"
+          ],
+          "effects": [
+            {
+              "kind": "flameStrike",
+              "burnDur": 2.67
+            }
+          ],
+          "slkData": {
+            "DA": 36.666,
+            "DB": 0.33,
+            "DC": 8,
+            "DD": 1,
+            "DE": 0.75,
+            "DF": 220
+          }
+        },
+        {
+          "manaCost": 135,
+          "cooldown": 10,
+          "castRange": 12.5,
+          "aoeRadius": 3.125,
+          "duration": 2.67,
+          "castPoint": 1.33,
+          "targets": [
+            "ground",
+            "enemy",
+            "neutral",
+            "friend",
+            "structure",
+            "self",
+            "tree",
+            "debris"
+          ],
+          "effects": [
+            {
+              "kind": "flameStrike",
+              "burnDur": 2.67
+            }
+          ],
+          "slkData": {
+            "DA": 36.666,
+            "DB": 0.33,
+            "DC": 8,
+            "DD": 1,
+            "DE": 0.75,
+            "DF": 220
+          }
+        }
+      ]
+    },
+    "ahbn": {
+      "id": "ahbn",
+      "slkAlias": "AHbn",
+      "slkCode": "AHbn",
+      "name": "Banish",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "human",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 75,
+          "cooldown": 0,
+          "castRange": 12.5,
+          "aoeRadius": null,
+          "duration": 4,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "nonsapper",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "banish",
+              "dur": 4
+            }
+          ],
+          "slkData": {
+            "DA": 0.5,
+            "DB": 0
+          }
+        },
+        {
+          "manaCost": 60,
+          "cooldown": 0,
+          "castRange": 12.5,
+          "aoeRadius": null,
+          "duration": 5,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "nonsapper",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "banish",
+              "dur": 5
+            }
+          ],
+          "slkData": {
+            "DA": 0.5,
+            "DB": 0
+          }
+        },
+        {
+          "manaCost": 50,
+          "cooldown": 0,
+          "castRange": 12.5,
+          "aoeRadius": null,
+          "duration": 6,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "nonsapper",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "banish",
+              "dur": 6
+            }
+          ],
+          "slkData": {
+            "DA": 0.5,
+            "DB": 0
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 1,
+          "castRange": 12.5,
+          "aoeRadius": null,
+          "duration": 6,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "nonsapper",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "banish",
+              "dur": 6
+            }
+          ],
+          "slkData": {
+            "DA": 0.5,
+            "DB": 0
+          }
+        }
+      ]
+    },
+    "ahdr": {
+      "id": "ahdr",
+      "slkAlias": "AHdr",
+      "slkCode": "AHdr",
+      "name": "Siphon Mana",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "human",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 10,
+          "cooldown": 6,
+          "castRange": 9.375,
+          "aoeRadius": 12.5,
+          "duration": 6,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "organic",
+            "notself"
+          ],
+          "effects": [
+            {
+              "kind": "drain",
+              "target": "mana",
+              "transferHpRatio": null
+            }
+          ],
+          "slkData": {
+            "DA": 0,
+            "DB": 15,
+            "DC": 1,
+            "DD": 0,
+            "DE": 30,
+            "DF": 0,
+            "DG": 0,
+            "DH": 1,
+            "DI": 3
+          }
+        },
+        {
+          "manaCost": 10,
+          "cooldown": 6,
+          "castRange": 9.375,
+          "aoeRadius": 12.5,
+          "duration": 6,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "organic",
+            "notself"
+          ],
+          "effects": [
+            {
+              "kind": "drain",
+              "target": "mana",
+              "transferHpRatio": null
+            }
+          ],
+          "slkData": {
+            "DA": 0,
+            "DB": 30,
+            "DC": 1,
+            "DD": 0,
+            "DE": 60,
+            "DF": 0,
+            "DG": 0,
+            "DH": 1,
+            "DI": 3
+          }
+        },
+        {
+          "manaCost": 10,
+          "cooldown": 6,
+          "castRange": 9.375,
+          "aoeRadius": 12.5,
+          "duration": 6,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "organic",
+            "notself"
+          ],
+          "effects": [
+            {
+              "kind": "drain",
+              "target": "mana",
+              "transferHpRatio": null
+            }
+          ],
+          "slkData": {
+            "DA": 0,
+            "DB": 45,
+            "DC": 1,
+            "DD": 0,
+            "DE": 90,
+            "DF": 0,
+            "DG": 0,
+            "DH": 1,
+            "DI": 3
+          }
+        },
+        {
+          "manaCost": 10,
+          "cooldown": 6,
+          "castRange": 9.375,
+          "aoeRadius": 12.5,
+          "duration": 6,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "organic",
+            "notself"
+          ],
+          "effects": [
+            {
+              "kind": "drain",
+              "target": "mana",
+              "transferHpRatio": null
+            }
+          ],
+          "slkData": {
+            "DA": 0,
+            "DB": 55,
+            "DC": 1,
+            "DD": 0,
+            "DE": 50,
+            "DF": 0,
+            "DG": 0,
+            "DH": 1,
+            "DI": 3
+          }
+        }
+      ]
+    },
+    "ahpx": {
+      "id": "ahpx",
+      "slkAlias": "AHpx",
+      "slkCode": "AHpx",
+      "name": "Phoenix",
+      "type": "ultimate",
+      "hero": true,
+      "ultimate": true,
+      "race": "human",
+      "requiredHeroLevel": 6,
+      "slkLevels": 1,
+      "levels": [
+        {
+          "manaCost": 175,
+          "cooldown": 180,
+          "castRange": null,
+          "aoeRadius": 3.125,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "hphx",
+              "count": 1,
+              "life": null,
+              "permanent": true
+            }
+          ],
+          "slkData": {
+            "DA": 1
+          }
+        },
+        {
+          "manaCost": 125,
+          "cooldown": 120,
+          "castRange": null,
+          "aoeRadius": 3.125,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "hphx",
+              "count": 1,
+              "life": null,
+              "permanent": true
+            }
+          ],
+          "slkData": {
+            "DA": 1
+          }
+        },
+        {
+          "manaCost": 125,
+          "cooldown": 120,
+          "castRange": null,
+          "aoeRadius": 3.125,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "hphx",
+              "count": 1,
+              "life": null,
+              "permanent": true
+            }
+          ],
+          "slkData": {
+            "DA": 1
+          }
+        },
+        {
+          "manaCost": 125,
+          "cooldown": 120,
+          "castRange": null,
+          "aoeRadius": 3.125,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "hphx",
+              "count": 1,
+              "life": null,
+              "permanent": true
+            }
+          ],
+          "slkData": {
+            "DA": 1
+          }
+        }
+      ]
+    },
+    "aowk": {
+      "id": "aowk",
+      "slkAlias": "AOwk",
+      "slkCode": "AOwk",
+      "name": "Wind Walk",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "orc",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 75,
+          "cooldown": 5,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": 20,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "invisibility",
+              "dur": 20
+            }
+          ],
+          "slkData": {
+            "DA": 0.6,
+            "DB": 0.1,
+            "DC": 40,
+            "DD": 1
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 5,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": 35,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "invisibility",
+              "dur": 35
+            }
+          ],
+          "slkData": {
+            "DA": 0.6,
+            "DB": 0.4,
+            "DC": 70,
+            "DD": 1
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 5,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": 50,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "invisibility",
+              "dur": 50
+            }
+          ],
+          "slkData": {
+            "DA": 0.6,
+            "DB": 0.7,
+            "DC": 100,
+            "DD": 1
+          }
+        },
+        {
+          "manaCost": 75,
+          "cooldown": 5,
+          "castRange": null,
+          "aoeRadius": null,
+          "duration": 60,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "invisibility",
+              "dur": 60
+            }
+          ],
+          "slkData": {
+            "DA": 0.6,
+            "DB": 0.7,
+            "DC": 100,
+            "DD": 1
+          }
+        }
+      ]
+    },
+    "aohw": {
+      "id": "aohw",
+      "slkAlias": "AOhw",
+      "slkCode": "AOhw",
+      "name": "Healing Wave",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "orc",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 90,
+          "cooldown": 9,
+          "castRange": 10.938,
+          "aoeRadius": 7.813,
+          "duration": 0,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "self",
+            "vuln",
+            "invu",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "heal"
+            }
+          ],
+          "slkData": {
+            "DA": 130,
+            "DB": 3,
+            "DC": 0.25
+          }
+        },
+        {
+          "manaCost": 90,
+          "cooldown": 9,
+          "castRange": 10.938,
+          "aoeRadius": 7.813,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "self",
+            "vuln",
+            "invu",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "heal"
+            }
+          ],
+          "slkData": {
+            "DA": 215,
+            "DB": 4,
+            "DC": 0.25
+          }
+        },
+        {
+          "manaCost": 90,
+          "cooldown": 9,
+          "castRange": 10.938,
+          "aoeRadius": 7.813,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "self",
+            "vuln",
+            "invu",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "heal"
+            }
+          ],
+          "slkData": {
+            "DA": 300,
+            "DB": 5,
+            "DC": 0.25
+          }
+        },
+        {
+          "manaCost": 90,
+          "cooldown": 9,
+          "castRange": 10.938,
+          "aoeRadius": 7.813,
+          "duration": null,
+          "castPoint": null,
+          "targets": [
+            "air",
+            "ground",
+            "friend",
+            "self",
+            "vuln",
+            "invu",
+            "organic"
+          ],
+          "effects": [
+            {
+              "kind": "heal"
+            }
+          ],
+          "slkData": {
+            "DA": 300,
+            "DB": 5,
+            "DC": 0.25
+          }
+        }
+      ]
+    },
+    "aosw": {
+      "id": "aosw",
+      "slkAlias": "AOsw",
+      "slkCode": "AOwd",
+      "name": "Serpent Ward",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "orc",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 30,
+          "cooldown": 6.5,
+          "castRange": 7.813,
+          "aoeRadius": null,
+          "duration": 40,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "osp1",
+              "life": 40
+            }
+          ],
+          "slkData": {
+            "DA": 1
+          }
+        },
+        {
+          "manaCost": 30,
+          "cooldown": 6.5,
+          "castRange": 7.813,
+          "aoeRadius": null,
+          "duration": 40,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "osp1",
+              "life": 40
+            }
+          ],
+          "slkData": {
+            "DA": 1
+          }
+        },
+        {
+          "manaCost": 30,
+          "cooldown": 6.5,
+          "castRange": 7.813,
+          "aoeRadius": null,
+          "duration": 40,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "osp1",
+              "life": 40
+            }
+          ],
+          "slkData": {
+            "DA": 1
+          }
+        },
+        {
+          "manaCost": 30,
+          "cooldown": 6.5,
+          "castRange": 7.813,
+          "aoeRadius": null,
+          "duration": 40,
+          "castPoint": 0,
+          "targets": [],
+          "effects": [
+            {
+              "kind": "summon",
+              "unitId": "osp1",
+              "life": 40
+            }
+          ],
+          "slkData": {
+            "DA": 1
+          }
+        }
+      ]
+    },
+    "andh": {
+      "id": "andh",
+      "slkAlias": "ANdh",
+      "slkCode": "ANdh",
+      "name": "Drunken Haze",
+      "type": "active",
+      "hero": true,
+      "ultimate": false,
+      "race": "neutral",
+      "requiredHeroLevel": 1,
+      "slkLevels": 3,
+      "levels": [
+        {
+          "manaCost": 70,
+          "cooldown": 12,
+          "castRange": 8.594,
+          "aoeRadius": 3.125,
+          "duration": 5,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "organic",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "slow",
+              "dur": 5
+            },
+            {
+              "kind": "missChance"
+            }
+          ],
+          "slkData": {
+            "DA": 0,
+            "DB": 0.45,
+            "DC": 0.15,
+            "DD": 0
+          }
+        },
+        {
+          "manaCost": 70,
+          "cooldown": 12,
+          "castRange": 8.594,
+          "aoeRadius": 3.125,
+          "duration": 5,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "organic",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "slow",
+              "dur": 5
+            },
+            {
+              "kind": "missChance"
+            }
+          ],
+          "slkData": {
+            "DA": 0,
+            "DB": 0.65,
+            "DC": 0.3,
+            "DD": 0
+          }
+        },
+        {
+          "manaCost": 70,
+          "cooldown": 12,
+          "castRange": 8.594,
+          "aoeRadius": 3.125,
+          "duration": 5,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "organic",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "slow",
+              "dur": 5
+            },
+            {
+              "kind": "missChance"
+            }
+          ],
+          "slkData": {
+            "DA": 0,
+            "DB": 0.8,
+            "DC": 0.5,
+            "DD": 0
+          }
+        },
+        {
+          "manaCost": 70,
+          "cooldown": 12,
+          "castRange": 8.594,
+          "aoeRadius": 3.125,
+          "duration": 5,
+          "castPoint": 0,
+          "targets": [
+            "air",
+            "ground",
+            "enemy",
+            "organic",
+            "neutral"
+          ],
+          "effects": [
+            {
+              "kind": "slow",
+              "dur": 5
+            },
+            {
+              "kind": "missChance"
+            }
+          ],
+          "slkData": {
+            "DA": 0,
+            "DB": 0.8,
+            "DC": 0.5,
+            "DD": 0
+          }
+        }
+      ]
+    }
+  }
+}
